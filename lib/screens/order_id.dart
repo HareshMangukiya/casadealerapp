@@ -35,7 +35,7 @@ orderdetail? detail;
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
 
   int? sub_total;
-  int? gst;
+  double? gst;
   int? payable_amount;
 
   @override
@@ -773,448 +773,124 @@ double? gtotal =0.0;
                       ),
                     ),
                     SizedBox(height: 2.h),
-                    // Padding(
-                    //     padding: EdgeInsets.symmetric(horizontal: 3.h),
-                    //     child: DottedLine(
-                    //       direction: Axis.horizontal,
-                    //       lineLength: double.infinity,
-                    //       lineThickness: 1.0,
-                    //       dashLength: 5.0,
-                    //       dashColor: Color(0xff8d8d8d),
-                    //       // dashGradient: [Colors.red, Colors.blue],
-                    //       dashRadius: 0.0,
-                    //       dashGapLength: 4.0,
-                    //       dashGapColor: Colors.transparent,
-                    //       // dashGapGradient: [Colors.red, Colors.blue],
-                    //       dashGapRadius: 0.0,
-                    //     )),
-                    // SizedBox(height: 2.h),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                    //   child: Container(
-                    //     child: Row(
-                    //       children: [
-                    //         Text('Gender',
-                    //             style: TextStyle(
-                    //               color: Color(0xff848484),
-                    //             )),
-                    //         SizedBox(
-                    //           width: 2.w,
-                    //         ),
-                    //         Text(
-                    //           'Women',
-                    //           style: TextStyle(
-                    //               fontSize: 2.3.h,
-                    //               color: Color(0xff35358a),
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(height: 2.h),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                    //   child: Row(
-                    //     mainAxisAlignment:
-                    //         MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           'XS',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           'S',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           'M',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           'L',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           'XL',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    //
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                    //   child: Row(
-                    //     mainAxisAlignment:
-                    //         MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 2.h,
-                    // ),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                    //   child: Row(
-                    //     mainAxisAlignment:
-                    //         MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           '2XL',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           '3XL',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           '4XL',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         child: Text(
-                    //           '5XL',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.only(
-                    //               topLeft: Radius.circular(10),
-                    //               topRight: Radius.circular(10)),
-                    //           color: Color(0Xffeaeaf3),
-                    //         ),
-                    //         child: Text(
-                    //           'TOTAL',
-                    //           style: TextStyle(
-                    //               fontSize: 1.5.h,
-                    //               color: Color(0XFF50509a),
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                    //   child: Row(
-                    //     crossAxisAlignment: CrossAxisAlignment.center,
-                    //     mainAxisAlignment:
-                    //         MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Container(
-                    //         height: 0.1.h,
-                    //         width: 15.w,
-                    //         // color: Colors.black,
-                    //       ),
-                    //       Container(
-                    //         height: 0.1.h,
-                    //         width: 15.w,
-                    //         // color: Colors.black,
-                    //       ),
-                    //       Container(
-                    //         height: 0.1.h,
-                    //         width: 15.w,
-                    //         // color: Colors.black,
-                    //       ),
-                    //       Container(
-                    //         height: 0.1.h,
-                    //         width: 15.w,
-                    //         // color: Colors.black,
-                    //       ),
-                    //       Container(
-                    //         height: 0.1.h,
-                    //         width: 15.w,
-                    //         color: Colors.black,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                    //   child: Row(
-                    //     mainAxisAlignment:
-                    //         MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.4.h,
-                    //         width: 16.w,
-                    //         decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(5),
-                    //             // border: Border.all(color: Colors.black),
-                    //             border: Border.all()),
-                    //         child: TextField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 3.5.h,
-                    //         width: 15.w,
-                    //         decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.only(
-                    //               bottomRight: Radius.circular(10),
-                    //               bottomLeft: Radius.circular(10)),
-                    //           color: Color(0Xffeaeaf3),
-                    //         ),
-                    //         child: Text(
-                    //           '8888',
-                    //           style: TextStyle(
-                    //               fontSize: 2.h,
-                    //               color: Color(0Xff50509a),
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 2.h,
-                    // ),
                     Container(
-                      alignment: Alignment.centerLeft,
-                      height: 6.h,
+                      height: 20.h,
                       width: MediaQuery.of(context).size.width,
-                      color: Color(0xfffeaeaf3),
+                      color: Color(0xfff5f5f5),
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 3.h),
-                        child: Row(
+                        child: Column(
                           children: [
-                            Text(
-                              ' Grand Total:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 2.h),
+                            SizedBox(height: 2.h),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Payment Summary',
+                                style: TextStyle(
+                                  // fontWeight: FontWeight.bold,
+                                    fontSize: 1.8.h,
+                                    color: Color(0xff333389)),
+                              ),
                             ),
-                            Text(
-                              '   ₹99,99,999 + GST',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 2.h,
-                                  color: Color(0xff333389)),
+                            SizedBox(height: 2.h),
+                            DottedLine(
+                              direction: Axis.horizontal,
+                              lineLength: double.infinity,
+                              lineThickness: 1.0,
+                              dashLength: 5.0,
+                              dashColor: Color(0xff8d8d8d),
+                              // dashGradient: [Colors.red, Colors.blue],
+                              dashRadius: 0.0,
+                              dashGapLength: 4.0,
+                              dashGapColor: Colors.transparent,
+                              // dashGapGradient: [Colors.red, Colors.blue],
+                              dashGapRadius: 0.0,
+                            ),
+                            SizedBox(height: 2.h),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Sub Total :',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 1.9.h,
+                                        color: Colors.black),
+                                  ),
+                                  Text(
+                                    // '₹' + (detail?.orderData?.price).toString() ?? "",
+
+                                    // '₹99,99,999',
+                                    // (detail?.data?[0].).toString() ??
+                                    price.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 1.9.h,
+                                      color: Color(0xff50509a),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 2.h),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'GST',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 1.9.h,
+                                        color: Colors.black),
+                                  ),
+                                  Text(
+
+                                   gst.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 1.9.h,
+                                      color: Color(0xff50509a),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 2.h),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Payable Amount',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 1.9.h,
+                                        color: Colors.black),
+                                  ),
+                                  Text(
+                                    "₹" + gtotal.toString(),
+                                    // '₹1,00,12,455',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 1.9.h,
+                                      color: Color(0xff50509a),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 3.h),
                   ],
                 );
               },
@@ -1295,7 +971,24 @@ double? gtotal =0.0;
           if (response.statusCode == 200 && detail?.status == "success") {
             setState(() {
             });
-
+            for(int  index=0 ; index >(detail?.productData?.length ?? 0) ;index++ ){
+              int total1  = int.parse((detail?.productData?[index].s).toString()) +
+                  int.parse((detail?.productData?[index].xs).toString()) +
+                  int.parse((detail?.productData?[index].m).toString())+
+                  int.parse((detail?.productData?[index].l).toString()) +
+                  int.parse((detail?.productData?[index].xl).toString()) +
+                  int.parse((detail?.productData?[index].xxl).toString()) +
+                  int.parse((detail?.productData?[index].s3xl).toString()) ;
+              int total2= int.parse((detail?.productData?[index].s4xl).toString()) +
+                  int.parse((detail?.productData?[index].s5xl).toString());
+              price =double.parse(total1.toString())* double.parse((detail?.productData?[index].minPrice).toString()) +double.parse(total2.toString()) * double.parse((detail?.productData?[index].maxPrice).toString());
+              gtotal = price! * 118/100;
+              setState(() {
+                gtotal = price;
+                price;
+                gst = price! * 18/100;
+              });
+            }
 
             if (kDebugMode) {
               // isloading = false;

@@ -23,6 +23,10 @@ int? total5xl = 0;
 int? totalxs = 0;
 int sumindex1 = 0;
 int sumindex = 0;
+int? total1=0;
+int? total2 = 0;
+double? price =0.0;
+double? gtotal =0.0;
 void main() {
   runApp(const MyApp());
 }

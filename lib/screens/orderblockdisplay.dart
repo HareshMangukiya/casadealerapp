@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:casadealerapp/main.dart';
 import 'package:casadealerapp/modal_class/convertblockorder.dart';
 import 'package:casadealerapp/modal_class/order_detail_class.dart';
 import 'package:casadealerapp/modal_class/oredrdetail.dart';
@@ -27,10 +28,7 @@ class orderblockdisplay extends StatefulWidget {
 }
 
 class _orderblockdisplayState extends State<orderblockdisplay> {
-int? total1=0;
-int? total2 = 0;
-double? price =0.0;
-double? gtotal =0.0;
+
 
 convertblockorder? convertorder;
 
@@ -1176,7 +1174,7 @@ convertblockorder? convertorder;
                                         fontSize: 2.h),
                                   ),
                                   Text(
-                                    '   ₹99,99,999 + GST',
+                                    '   ₹' + gtotal.toString(),
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 2.h,
@@ -1376,21 +1374,45 @@ convertblockorder? convertorder;
     final Map<String, String> data = {};
     data['action'] = 'order_details';
     data['order_no'] = widget.id.toString();
-
-    print(data);
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider()
             .oredrdetailap(data)
             .then((Response response) async {
           detail = orderdetail.fromJson(json.decode(response.body));
-
-
           if (response.statusCode == 200 && detail?.status == "success") {
             setState(() {
             });
-
-
+            for(int index = 0; index > (detail?.productData?.length ?? 0); index++){
+              total1 = int.parse(
+                  detail?.productData?[index]
+                      .xs ?? "0") +
+                  int.parse(detail?.productData?[index]
+                      .s ?? "0") +
+                  int.parse(detail?.productData?[index]
+                      .m ?? "0") +
+                  int.parse(detail?.productData?[index]
+                      .l ?? "0") +
+                  int.parse(detail?.productData?[index]
+                      .xl ?? "0") +
+                  int.parse(detail?.productData?[index]
+                      .xxl ?? "0") +
+                  int.parse(detail?.productData?[index]
+                      .s3xl ?? "0");
+              total2 = int.parse(
+                  detail?.productData?[index]
+                      .s4xl ?? "0") +
+                  int.parse(detail?.productData?[index]
+                      .s5xl ?? "0");
+              setState((){
+                price = double.parse(total1.toString()) * double.parse(detail?.productData?[index]
+                    .minPrice ?? "0") + double.parse(total2.toString()) * double.parse(detail?.productData?[index]
+                    .maxPrice ?? "0");
+                gtotal = price! *118/100;
+                print(price);
+                print(gtotal);
+              });
+            }
             if (kDebugMode) {
               // isloading = false;
             }
@@ -1414,13 +1436,10 @@ converttoorder(){
           .convertblockorderapi(data)
           .then((Response response) async {
         convertorder = convertblockorder.fromJson(json.decode(response.body));
-
-        print(convertorder?.status);
         if (response.statusCode == 200 && convertorder?.status == "success") {
           setState(() {
           });
           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>your_order()));
-
           if (kDebugMode) {
             // isloading = false;
           }
