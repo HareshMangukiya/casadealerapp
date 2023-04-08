@@ -8,6 +8,7 @@ import 'package:casadealerapp/modal_class/view_order.dart';
 import 'package:casadealerapp/provider/productprovider.dart';
 
 import 'package:casadealerapp/screens/order_detail.dart';
+import 'package:casadealerapp/screens/orderblockdisplay.dart';
 import 'package:casadealerapp/screens/products_1.dart';
 import 'package:casadealerapp/widget/CONST.dart';
 import 'package:casadealerapp/widget/drawer.dart';
@@ -31,7 +32,7 @@ class _your_block_orderState extends State<your_block_order> {
   search? searchproperty;
 
   viewBlockOrder? blockview2;
-  view_orders? view;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -218,7 +219,9 @@ class _your_block_orderState extends State<your_block_order> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => order_detail_c()));
+                                    builder: (context) => orderblockdisplay(
+                                      id:blockview2?.data?[index].ordNo
+                                    )));
                           },
                           child: Container(
                             // padding: EdgeInsets.all(0),
@@ -259,9 +262,6 @@ class _your_block_orderState extends State<your_block_order> {
 
                                               )
                                       ),
-
-
-
                                     ),
                                     SizedBox(
                                       width: 2.w,
@@ -277,7 +277,7 @@ class _your_block_orderState extends State<your_block_order> {
                                           Row(
                                             children: [
                                               Text(
-                                                'Order ID # ' + (blockview2?.data?[index]?.id ?? "N/A"),
+                                                'Order ID # ' + (blockview2?.data?[index].ordNo.toString() ?? "N/A"),
                                                 // +  (view?.data?[index].productNumberOrder).toString() ?? "" ,
 
                                                 style: TextStyle(
@@ -300,8 +300,8 @@ class _your_block_orderState extends State<your_block_order> {
                                               Text(
                                                 // (view?.data?[index].productNumberOrder).toString() ?? "" ,
 
-                                                 // (blockview2?.data?[index]?.productNumberOrder ?? ""),
-                                                '550',
+                                                 (blockview2?.data?[index]?.numberOfProduct.toString() ?? ""),
+
                                                 style: TextStyle(
                                                   color: Color(0xff5a5a9f),
                                                 ),
@@ -312,38 +312,38 @@ class _your_block_orderState extends State<your_block_order> {
                                             alignment: Alignment.center,
                                             height: 3.4.h,
                                             width: 18.w,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                color:
-                                                    (view?.data?[index].status ==
-                                                            "1")
-                                                        ? Color(0xfffaede7)
-                                                        : (view?.data?[index]
-                                                                    .status ==
-                                                                "2")
-                                                            ? Color(0xffe1f5e2)
-                                                            : Color(0xfffae7e7)),
-                                            child: Text(
-                                              (blockview2?.data?[index].status == "1")
-                                                  ? "Placed"
-                                                  : (blockview2?.data?[index].status ==
-                                                          "2")
-                                                      ? "Confirmed"
-                                                      : "Cancle",
-                                              // 'Placed',
-                                              style: TextStyle(
-                                                  color: (blockview2?.data?[index]
-                                                              .status ==
-                                                          "1")
-                                                      ? Color(0xfff98b54)
-                                                      : (blockview2?.data?[index]
-                                                                  .status ==
-                                                              "2")
-                                                          ? Color(0xff48d34d)
-                                                          : Color(0xfff97070),
-                                                  fontWeight: FontWeight.bold),
-                                            ),
+                                          //   decoration: BoxDecoration(
+                                          //       borderRadius:
+                                          //           BorderRadius.circular(15),
+                                          //       color:
+                                          //           (blockview2?.data?[index].status ==
+                                          //                   "1")
+                                          //               ? Color(0xfffaede7)
+                                          //               : (blockview2?.data?[index]
+                                          //                           .status ==
+                                          //                       "2")
+                                          //                   ? Color(0xffe1f5e2)
+                                          //                   : Color(0xfffae7e7)),
+                                          //   child: Text(
+                                          //     (blockview2?.data?[index].status == "1")
+                                          //         ? "Placed"
+                                          //         : (blockview2?.data?[index].status ==
+                                          //                 "2")
+                                          //             ? "Confirmed"
+                                          //             : "Cancle",
+                                          //     // 'Placed',
+                                          //     style: TextStyle(
+                                          //         color: (blockview2?.data?[index]
+                                          //                     .status ==
+                                          //                 "1")
+                                          //             ? Color(0xfff98b54)
+                                          //             : (blockview2?.data?[index]
+                                          //                         .status ==
+                                          //                     "2")
+                                          //                 ? Color(0xff48d34d)
+                                          //                 : Color(0xfff97070),
+                                          //         fontWeight: FontWeight.bold),
+                                          //   ),
                                           )
                                         ],
                                       ),

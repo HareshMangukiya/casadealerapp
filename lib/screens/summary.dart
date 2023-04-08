@@ -83,8 +83,9 @@ class _summaryState extends State<summary> {
 
     super.initState();
     setState(() {
-      print(widget.cart);
+
       sumindex = widget.cart == 0? 0 :1;
+      print(sumindex);
     });
     sumindex == 0 ? viewBlockSummary() :viewcart();
   }
@@ -1265,11 +1266,1059 @@ class _summaryState extends State<summary> {
            Container(
              width: MediaQuery.of(context).size.width,
              height: 70.h,
-             child: viewcartpage(),
+             child: SingleChildScrollView(
+                 child: Container(
+                   width: MediaQuery.of(context).size.width,
+                   height: 70.h,
+                   child:(viewaddtocart?.status == "fail")?Center(child: Text("No Product Added To Cart.",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontFamily: "Poppins",fontWeight: FontWeight.bold),)):ListView.builder(
+                       itemCount:viewaddtocart?.dataProduct?.length,
+                       scrollDirection: Axis.vertical,
+                       itemBuilder:(context,index){
+
+                         return Column(
+                           children: [
+                             // SizedBox(height: 1.h),
+                             Padding(
+                               padding:
+                               EdgeInsets.symmetric(horizontal: 3.h),
+                               child: Row(
+                                 crossAxisAlignment:
+                                 CrossAxisAlignment.start,
+                                 mainAxisAlignment:
+                                 MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Text('Product Name',
+                                       style: TextStyle(
+                                         color: Color(0xff848484),
+                                         fontSize: 1.5.h,
+                                       )),
+                                   Text('Color',
+                                       style: TextStyle(
+                                         color: Color(0xff848484),
+                                         fontSize: 1.5.h,
+                                       )),
+                                 ],
+                               ),
+                             ),
+                             SizedBox(
+                               height: 1.h,
+                             ),
+                             Padding(
+                               padding:
+                               EdgeInsets.symmetric(horizontal: 3.h),
+                               child: Row(
+                                 crossAxisAlignment:
+                                 CrossAxisAlignment.start,
+                                 mainAxisAlignment:
+                                 MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Text(
+                                       viewaddtocart?.dataProduct?[index].productName ?? "N/A",
+
+                                       style: TextStyle(
+                                           color: Color(0xff35358a),
+                                           fontSize: 2.h,
+                                           fontWeight: FontWeight.bold)),
+                                   Text( viewaddtocart?.dataProduct?[index].colorName ?? "N/A",
+                                       style: TextStyle(
+                                         color: Color(0xff35358a),
+                                         fontSize: 2.h,
+                                         fontWeight: FontWeight.bold,
+                                       )),
+                                 ],
+                               ),
+                             ),
+                             SizedBox(height: 3.h),
+                             Padding(
+                               padding:
+                               EdgeInsets.symmetric(horizontal: 3.h),
+                               child: Container(
+                                 alignment: Alignment.centerLeft,
+                                 child: Text(
+                                   'Price',
+                                   style:
+                                   TextStyle(color: Color(0xff848484)),
+                                 ),
+                               ),
+                             ),
+                             SizedBox(
+                               height: 1.h,
+                             ),
+                             Padding(
+                               padding:
+                               EdgeInsets.symmetric(horizontal: 3.h),
+                               child: Row(
+                                 crossAxisAlignment:
+                                 CrossAxisAlignment.start,
+                                 mainAxisAlignment:
+                                 MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Container(
+                                     alignment: Alignment.center,
+                                     height: 3.h,
+                                     child: Row(
+                                       children: [
+                                         Text('XS - 3XL :',
+                                             style: TextStyle(
+                                                 color: Colors.black,
+                                                 fontWeight:
+                                                 FontWeight.bold)),
+                                         Text(  viewaddtocart?.dataProduct?[index].mumbaiStock?.length ==0 ? (viewaddtocart?.dataProduct?[index].tirupurStock?[0].price?[0].minPrice) != 0 ? (viewaddtocart?.dataProduct?[index].tirupurStock?[0].price?[0].minPrice).toString() : "N/A" :
+                                         viewaddtocart?.dataProduct?[index].mumbaiStock?[0].price?[0].minPrice != 0 ? (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].price?[0].minPrice).toString() : "N/A",
+                                             style: TextStyle(
+                                                 color: Color(0xff35358a),
+                                                 fontWeight:
+                                                 FontWeight.bold)),
+                                       ],
+                                     ),
+                                   ),
+                                   Container(
+                                     alignment: Alignment.center,
+                                     height: 3.h,
+                                     child: Row(
+                                       children: [
+                                         Text(
+                                           '4XL- 5XL :',
+                                           style: TextStyle(
+                                             color: Colors.black,
+                                             fontWeight: FontWeight.bold,
+                                           ),
+                                         ),
+                                         Text(
+                                           viewaddtocart?.dataProduct?[index].mumbaiStock?.length ==0 ? (viewaddtocart?.dataProduct?[index].tirupurStock?[0].price?[0].maxPrice) != 0 ? (viewaddtocart?.dataProduct?[index].tirupurStock?[0].price?[0].maxPrice).toString() : "N/A" :
+                                           viewaddtocart?.dataProduct?[index].mumbaiStock?[0].price?[0].maxPrice != 0 ? (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].price?[0].maxPrice).toString() : "N/A",
+                                           style: TextStyle(
+                                             color: Color(0xff35358a),
+                                             fontWeight: FontWeight.bold,
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+                                   ),
+                                   GestureDetector(
+                                     onTap: () {
+                                       Navigator.push(
+                                           context,
+                                           MaterialPageRoute(
+                                               builder: (context) =>
+
+                                                   summary_b_edit(
+                                                     select: 1,
+                                                     index:index,
+                                                     totalm : pricevm,
+                                                     totalt : pricevt,
+                                                     grandtotal : gtotalv,
+                                                   )));
+
+                                     },
+                                     child: Container(
+                                       alignment: Alignment.center,
+                                       height: 3.5.h,
+                                       width: 20.5.w,
+                                       child: Text(
+                                         'Edit',
+                                         style: TextStyle(
+                                             color: Colors.white,
+                                             fontSize: 1.5.h),
+                                       ),
+                                       decoration: BoxDecoration(
+                                           color: Color(0xff333389),
+                                           borderRadius:
+                                           BorderRadius.circular(15)),
+                                     ),
+                                   )
+                                 ],
+                               ),
+                             ),
+                             Padding(
+                               padding:
+                               EdgeInsets.symmetric(horizontal: 3.h),
+                               child: Divider(
+                                 height: 3.h,
+                                 thickness: 0.3.w,
+                                 color: Color(0xff50509a),
+                               ),
+                             ),
+                             Padding(
+                               padding:
+                               EdgeInsets.symmetric(horizontal: 3.h),
+                               child: Container(
+                                 child: Row(
+                                   children: [
+                                     Text('Gender',
+                                         style: TextStyle(
+                                           color: Color(0xff848484),
+                                         )),
+                                     SizedBox(
+                                       width: 2.w,
+                                     ),
+                                     Text(
+                                       viewaddtocart?.dataProduct?[index].gender ?? "",
+                                       style: TextStyle(
+                                           fontSize: 2.3.h,
+                                           color: Color(0xff35358a),
+                                           fontWeight: FontWeight.bold),
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             ),
+                             SizedBox(height: 2.h),
+                             Padding(
+                               padding:
+                               EdgeInsets.symmetric(horizontal: 3.h),
+                               child: Container(
+                                 child: Row(
+                                   children: [
+                                     Text('State',
+                                         style: TextStyle(
+                                           color: Color(0xff848484),
+                                         )),
+                                     SizedBox(
+                                       width: 2.w,
+                                     ),
+                                     Text(
+                                       "Mumbai",
+                                       style: TextStyle(
+                                           fontSize: 2.3.h,
+                                           color: Color(0xff35358a),
+                                           fontWeight: FontWeight.bold),
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             ),
+                             SizedBox(height: 2.h),
+                             viewaddtocart?.dataProduct?[index].mumbaiStock?.length ==0  ?Text("No Mumbai stock Added to cart"):Column(
+                               children: [
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         // color: Colors.red,
+                                         child: Text(
+                                           'XS',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           'S',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           'M',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           'L',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           'XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     crossAxisAlignment:
+                                     CrossAxisAlignment.center,
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].xsBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].sBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].mBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].lBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].xlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 SizedBox(
+                                   height: 2.h,
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           '2XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           '3XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           '4XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           '5XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.only(
+                                               topLeft: Radius.circular(10),
+                                               topRight: Radius.circular(10)),
+                                           color: Color(0Xffeaeaf3),
+                                         ),
+                                         child: Text(
+                                           'TOTAL',
+                                           style: TextStyle(
+                                               fontSize: 1.5.h,
+                                               color: Color(0XFF50509a),
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     crossAxisAlignment:
+                                     CrossAxisAlignment.center,
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].xxlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].s3xlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].s4xlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].mumbaiStock?[0].s5xlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.only(
+                                               bottomRight: Radius.circular(10),
+                                               bottomLeft: Radius.circular(10)),
+                                           color: Color(0Xffeaeaf3),
+                                         ),
+                                         child: Text(
+                                           pricevm.toString(),
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Color(0Xff50509a),
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                               ],
+                             ),
+                             SizedBox(height: 2.h),
+                             Padding(
+                                 padding:
+                                 EdgeInsets.symmetric(horizontal: 3.h),
+                                 child: DottedLine(
+                                   direction: Axis.horizontal,
+                                   lineLength: double.infinity,
+                                   lineThickness: 1.0,
+                                   dashLength: 5.0,
+                                   dashColor: Color(0xff8d8d8d),
+                                   // dashGradient: [Colors.red, Colors.blue],
+                                   dashRadius: 0.0,
+                                   dashGapLength: 4.0,
+                                   dashGapColor: Colors.transparent,
+                                   // dashGapGradient: [Colors.red, Colors.blue],
+                                   dashGapRadius: 0.0,
+                                 )),
+                             SizedBox(height: 2.h),
+                             Padding(
+                               padding:
+                               EdgeInsets.symmetric(horizontal: 3.h),
+                               child: Container(
+                                 child: Row(
+                                   children: [
+                                     Text('State',
+                                         style: TextStyle(
+                                           color: Color(0xff848484),
+                                         )),
+                                     SizedBox(
+                                       width: 2.w,
+                                     ),
+                                     Text(
+                                       "Tirupur",
+                                       style: TextStyle(
+                                           fontSize: 2.3.h,
+                                           color: Color(0xff35358a),
+                                           fontWeight: FontWeight.bold),
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             ),
+                             SizedBox(height: 2.h),
+                             viewaddtocart?.dataProduct?[index].tirupurStock?.length ==0  ?Text("No Tirupur stock Added to cart"): Column(
+                               children: [
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         // color: Colors.red,
+                                         child: Text(
+                                           'XS',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           'S',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           'M',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           'L',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           'XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     crossAxisAlignment:
+                                     CrossAxisAlignment.center,
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].xsBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].sBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].mBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].lBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].xlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 SizedBox(
+                                   height: 2.h,
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           '2XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           '3XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           '4XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           '5XL',
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.only(
+                                               topLeft: Radius.circular(10),
+                                               topRight: Radius.circular(10)),
+                                           color: Color(0Xffeaeaf3),
+                                         ),
+                                         child: Text(
+                                           'TOTAL',
+                                           style: TextStyle(
+                                               fontSize: 1.5.h,
+                                               color: Color(0XFF50509a),
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     crossAxisAlignment:
+                                     CrossAxisAlignment.center,
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                       Container(
+                                         height: 0.1.h,
+                                         width: 15.w,
+                                         color: Colors.black,
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding:
+                                   EdgeInsets.symmetric(horizontal: 3.h),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceAround,
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].xxlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].s3xlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].s4xlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         child: Text(
+                                           (viewaddtocart?.dataProduct?[index].tirupurStock?[0].s5xlBlock).toString(),
+                                           style: TextStyle(
+                                               fontSize: 1.9.h,
+                                               color: Colors.black,
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                       Container(
+                                         alignment: Alignment.center,
+                                         height: 3.5.h,
+                                         width: 15.w,
+                                         decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.only(
+                                               bottomRight: Radius.circular(10),
+                                               bottomLeft: Radius.circular(10)),
+                                           color: Color(0Xffeaeaf3),
+                                         ),
+                                         child: Text(
+                                           pricevt.toString(),
+                                           style: TextStyle(
+                                               fontSize: 2.h,
+                                               color: Color(0Xff50509a),
+                                               fontWeight: FontWeight.bold),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                               ],
+                             ),
+
+                             SizedBox(height: 2.h),
+
+                             Container(
+                               alignment: Alignment.centerLeft,
+                               height: 6.h,
+                               width: MediaQuery.of(context).size.width,
+                               color: Color(0xfffeaeaf3),
+                               child: Padding(
+                                 padding:
+                                 EdgeInsets.symmetric(horizontal: 2.h),
+                                 child: Row(
+                                   children: [
+                                     Text(
+                                       ' Grand Total :',
+                                       style: TextStyle(
+                                           fontWeight: FontWeight.bold,
+                                           fontSize: 2.h),
+                                     ),
+                                     Text(
+                                       "₹" + gtotalv.toString() ,
+                                       style: TextStyle(
+                                           fontWeight: FontWeight.bold,
+                                           fontSize: 2.h,
+                                           color: Color(0xff333389)),
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             ),
+                             SizedBox(height: 3.h),
+
+                           ],
+                         );
+                       }),
+                 )
+
+             ),
            ),
-
-
-
             Container(
               width: MediaQuery.of(context).size.width,
               height: 9.h,
@@ -1319,14 +2368,14 @@ class _summaryState extends State<summary> {
                       ),
                       GestureDetector(
                         onTap: () {
-
                           setState(() {
                             cart = 0;
                           });
-                          viewBlockSummary();
-                          viewcart();
+                          // viewcart();
+                          // viewBlockSummary();
+                        sumindex  == 0?   confirmblock(): confirmaddcart();
                           // sumindex == 0? print("block ") : print("cart");
-                          sumindex == 0? confirmblock() : confirmaddcart();
+
                         },
                         child: Container(
                           padding: EdgeInsets.all(0.1.h),
@@ -1512,6 +2561,7 @@ class _summaryState extends State<summary> {
                 });
               }
             }
+
             setState(() {
             });
             if (kDebugMode) {
@@ -1598,23 +2648,24 @@ class _summaryState extends State<summary> {
     });
   }
   confirmblock() async {
+    print("block");
     final Map<String, String> data = {};
     data['action'] = 'confirm_block_order';
     data['price_of_total'] = grandtotal.toString();
     data['gst_price'] = gst.toString();
     data['d_id'] = (userData?.logindata?.dId).toString();
-      print(data);
+
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider().comfirmblockapi(data).then((Response response) async {
           confirm = confirmblockdata.fromJson(json.decode(response.body));
-          print(confirm?.status);
+
           if (response.statusCode == 200 &&
-              confirm?.status == "success") {
+              confirm?.status == "successs") {
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>your_block_order()));
           }
           else {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>your_block_order()));
+
           }
         });
       } else {
@@ -1623,12 +2674,14 @@ class _summaryState extends State<summary> {
     });
   }
   confirmaddcart()async{
+    print("cart");
     final Map<String, String> data = {};
     data['action'] = 'confirm_add_to_cart_order';
     data['price_of_total'] = grandtotalv.toString() ;
     data['gst_price'] = gstv.toString();
 
     data['d_id'] = (userData?.logindata?.dId).toString();
+    print(data);
 
     checkInternet().then((internet) async {
       if (internet) {
@@ -1636,16 +2689,12 @@ class _summaryState extends State<summary> {
           confirm = confirmblockdata.fromJson(json.decode(response.body));
           print(confirm?.status);
           if (response.statusCode == 200 &&
-              confirm?.status == "success") {
+              confirm?.status == "successs") {
 
             setState(() {
 
             });
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        your_block_order()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>your_order()));
           } else {
 
           }

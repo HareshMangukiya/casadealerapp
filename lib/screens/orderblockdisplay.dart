@@ -5,9 +5,11 @@ import 'package:casadealerapp/modal_class/order_detail_class.dart';
 import 'package:casadealerapp/modal_class/oredrdetail.dart';
 import 'package:casadealerapp/provider/productprovider.dart';
 import 'package:casadealerapp/screens/alert_screen.dart';
+import 'package:casadealerapp/screens/order_detail.dart';
 
 import 'package:casadealerapp/screens/order_id.dart';
-import 'package:casadealerapp/screens/orderblockdisplay.dart';
+import 'package:casadealerapp/screens/summary_b_edit.dart';
+import 'package:casadealerapp/screens/your_order.dart';
 import 'package:casadealerapp/widget/CONST.dart';
 import 'package:casadealerapp/widget/drawer.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -16,27 +18,23 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sizer/sizer.dart';
 
-class order_detail_c extends StatefulWidget {
-  String? oreder;
-  int? id;
-   order_detail_c({Key? key,this.id,this.oreder}) : super(key: key);
+class orderblockdisplay extends StatefulWidget {
+  String? id;
+  orderblockdisplay({Key? key,this.id}) : super(key: key);
 
   @override
-  State<order_detail_c> createState() => _order_detail_cState();
+  State<orderblockdisplay> createState() => _orderblockdisplayState();
 }
 
-class _order_detail_cState extends State<order_detail_c> {
-  TextEditingController _xs =TextEditingController();
-  TextEditingController _s =TextEditingController();
-  TextEditingController _l =TextEditingController();
-  TextEditingController _m =TextEditingController();
-  TextEditingController _xl =TextEditingController();
-  TextEditingController _xxl =TextEditingController();
-  TextEditingController _3xl =TextEditingController();
-  TextEditingController _4xl =TextEditingController();
-  TextEditingController _5xl =TextEditingController();
+class _orderblockdisplayState extends State<orderblockdisplay> {
+int? total1=0;
+int? total2 = 0;
+double? price =0.0;
+double? gtotal =0.0;
 
-  convertblockorder? edit;
+convertblockorder? convertorder;
+
+
   orderdetail? detail;
   @override
   void initState() {
@@ -88,7 +86,7 @@ class _order_detail_cState extends State<order_detail_c> {
                               child: Text(
                                 "Order Details",
                                 style:
-                                    TextStyle(fontSize: 2.h, color: Colors.white),
+                                TextStyle(fontSize: 2.h, color: Colors.white),
                               ),
                             ),
                           ],
@@ -152,7 +150,7 @@ class _order_detail_cState extends State<order_detail_c> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("ORDER ID : "+widget.oreder.toString(),
+                      Text("ORDER ID : "+widget.id.toString(),
                           style: TextStyle(
                               fontSize: 2.h,
                               fontWeight: FontWeight.bold,
@@ -181,7 +179,7 @@ class _order_detail_cState extends State<order_detail_c> {
                 Container(
                   height: 69.h,
                   child: ListView.builder(
-                    itemCount: 1,
+                    itemCount: detail?.productData?.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Column(
                         children: [
@@ -190,7 +188,7 @@ class _order_detail_cState extends State<order_detail_c> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Product Name',
                                     style: TextStyle(
@@ -213,14 +211,14 @@ class _order_detail_cState extends State<order_detail_c> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(detail?.productData?[int.parse(widget.id.toString())].productName.toString() ?? "N/A",
+                                Text(detail?.productData?[index].productName.toString() ?? "N/A",
                                     style: TextStyle(
                                         color: Color(0xff35358a),
                                         fontSize: 2.h,
                                         fontWeight: FontWeight.bold)),
-                                Text(detail?.productData?[int.parse(widget.id.toString())].colorName.toString() ?? "N/A",
+                                Text(detail?.productData?[index].colorName.toString() ?? "N/A",
                                     style: TextStyle(
                                       color: Color(0xff35358a),
                                       fontSize: 2.h,
@@ -248,7 +246,7 @@ class _order_detail_cState extends State<order_detail_c> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
                                   alignment: Alignment.center,
@@ -259,7 +257,7 @@ class _order_detail_cState extends State<order_detail_c> {
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold)),
-                                      Text(detail?.productData?[int.parse(widget.id.toString())].minPrice.toString() ?? "N/A",
+                                      Text(detail?.productData?[index].minPrice.toString() ?? "N/A",
                                           style: TextStyle(
                                               color: Color(0xff35358a),
                                               fontWeight: FontWeight.bold)),
@@ -279,7 +277,7 @@ class _order_detail_cState extends State<order_detail_c> {
                                         ),
                                       ),
                                       Text(
-                                          detail?.productData?[int.parse(widget.id.toString())].maxPrice.toString() ?? "N/A",
+                                        detail?.productData?[index].maxPrice.toString() ?? "N/A",
                                         style: TextStyle(
                                           color: Color(0xff35358a),
                                           fontWeight: FontWeight.bold,
@@ -290,15 +288,21 @@ class _order_detail_cState extends State<order_detail_c> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    orderdetailblockeditapi();
-
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                order_detail_c(
+                                                  oreder :widget.id.toString(),
+                                                  id:index
+                                                )));
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
                                     height: 3.5.h,
                                     width: 20.5.w,
                                     child: Text(
-                                      'update',
+                                      'Edit',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 1.5.h),
@@ -306,7 +310,7 @@ class _order_detail_cState extends State<order_detail_c> {
                                     decoration: BoxDecoration(
                                         color: Color(0xff333389),
                                         borderRadius:
-                                            BorderRadius.circular(15)),
+                                        BorderRadius.circular(15)),
                                   ),
                                 )
                               ],
@@ -369,11 +373,13 @@ class _order_detail_cState extends State<order_detail_c> {
                             ),
                           ),
                           SizedBox(height: 2.h),
+                          SizedBox(height: 2.h),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
                             child: Row(
                               mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
                                   alignment: Alignment.center,
@@ -440,97 +446,105 @@ class _order_detail_cState extends State<order_detail_c> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
                             child: Row(
                               mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _xs,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].xs).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _s,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].s).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _m,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].m).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _l,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].l).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _xl,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].l).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -542,10 +556,11 @@ class _order_detail_cState extends State<order_detail_c> {
                             height: 2.h,
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
                             child: Row(
                               mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
                                   alignment: Alignment.center,
@@ -617,31 +632,33 @@ class _order_detail_cState extends State<order_detail_c> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
                               mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
                                   height: 0.1.h,
                                   width: 15.w,
-                                  // color: Colors.black,
+                                  color: Colors.black,
                                 ),
                                 Container(
                                   height: 0.1.h,
                                   width: 15.w,
-                                  // color: Colors.black,
+                                  color: Colors.black,
                                 ),
                                 Container(
                                   height: 0.1.h,
                                   width: 15.w,
-                                  // color: Colors.black,
+                                  color: Colors.black,
                                 ),
                                 Container(
                                   height: 0.1.h,
                                   width: 15.w,
-                                  // color: Colors.black,
+                                  color: Colors.black,
                                 ),
                                 Container(
                                   height: 0.1.h,
@@ -652,79 +669,56 @@ class _order_detail_cState extends State<order_detail_c> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
                             child: Row(
                               mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _xxl,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].xxl).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _3xl,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].s3xl).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _4xl,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].s4xl).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.4.h,
-                                  width: 16.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      // border: Border.all(color: Colors.black),
-                                      border: Border.all()),
-                                  child: TextField(
-                                    controller: _5xl,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].s5xl).toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.9.h,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -740,7 +734,7 @@ class _order_detail_cState extends State<order_detail_c> {
                                     color: Color(0Xffeaeaf3),
                                   ),
                                   child: Text(
-                                    '8888',
+                                    "₹" + price.toString(),
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Color(0Xff50509a),
@@ -1304,76 +1298,73 @@ class _order_detail_cState extends State<order_detail_c> {
                 //   ),
                 // ),
 
-                // Padding(
-                //   padding: EdgeInsets.all(2.h),
-                //   child: Container(
-                //     child: Row(
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //       children: [
-                //         GestureDetector(
-                //           onTap: () {
-                //             Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                     builder: (context) => order_id()));
-                //             setState(() {});
-                //           },
-                //           child: Container(
-                //             padding: EdgeInsets.all(0.1.h),
-                //             alignment: Alignment.center,
-                //             width: 40.w,
-                //             height: 6.h,
-                //             decoration: BoxDecoration(
-                //                 color: Color(0xfff333389),
-                //                 borderRadius: BorderRadius.circular(8),
-                //                 border: Border.all(color: Color(0xff333389))),
-                //             child: Text(
-                //               'Convert to Order',
-                //               style: TextStyle(
-                //                   color: Colors.white,
-                //
-                //                   // fontWeight: FontWeight.bold,
-                //                   fontSize: 2.h),
-                //             ),
-                //           ),
-                //         ),
-                //         // SizedBox(
-                //         //   width: 0.6.h,
-                //         // ),
-                //         GestureDetector(
-                //           onTap: () {
-                //             setState(() {});
-                //             Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                     builder: (context) => alert_screen()));
-                //           },
-                //           child: Container(
-                //             padding: EdgeInsets.all(0.1.h),
-                //             alignment: Alignment.center,
-                //             width: 40.w,
-                //             height: 6.h,
-                //             decoration: BoxDecoration(
-                //                 color: Color(0xfff333389),
-                //                 // color:_selectedColor,
-                //
-                //                 borderRadius: BorderRadius.circular(8),
-                //                 border: Border.all(color: Color(0xff333389))),
-                //             child: Text(
-                //               'Unblock Order',
-                //               style: TextStyle(
-                //                   color: Colors.white,
-                //
-                //                   // fontWeight: FontWeight.bold,
-                //                   fontSize: 2.h),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
+                Padding(
+                  padding: EdgeInsets.all(2.h),
+                  child: Container(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                          converttoorder();
+
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(0.1.h),
+                            alignment: Alignment.center,
+                            width: 40.w,
+                            height: 6.h,
+                            decoration: BoxDecoration(
+                                color: Color(0xfff333389),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Color(0xff333389))),
+                            child: Text(
+                              'Convert to Order',
+                              style: TextStyle(
+                                  color: Colors.white,
+
+                                  // fontWeight: FontWeight.bold,
+                                  fontSize: 2.h),
+                            ),
+                          ),
+                        ),
+                        // SizedBox(
+                        //   width: 0.6.h,
+                        // ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {});
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => alert_screen(id: widget.id)));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(0.1.h),
+                            alignment: Alignment.center,
+                            width: 40.w,
+                            height: 6.h,
+                            decoration: BoxDecoration(
+                                color: Color(0xfff333389),
+                                // color:_selectedColor,
+
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Color(0xff333389))),
+                            child: Text(
+                              'Unblock Order',
+                              style: TextStyle(
+                                  color: Colors.white,
+
+                                  // fontWeight: FontWeight.bold,
+                                  fontSize: 2.h),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             )
           ],
@@ -1384,7 +1375,9 @@ class _order_detail_cState extends State<order_detail_c> {
   orederdetailapiblock(){
     final Map<String, String> data = {};
     data['action'] = 'order_details';
-    data['order_no'] = widget.oreder.toString();
+    data['order_no'] = widget.id.toString();
+
+    print(data);
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider()
@@ -1395,16 +1388,6 @@ class _order_detail_cState extends State<order_detail_c> {
 
           if (response.statusCode == 200 && detail?.status == "success") {
             setState(() {
-              _s.text =detail?.productData?[int.parse(widget.id.toString())].s.toString() ?? "0";
-              _xs.text =detail?.productData?[int.parse(widget.id.toString())].xs.toString() ?? "0";
-              _m.text =detail?.productData?[int.parse(widget.id.toString())].m.toString() ?? "0";
-              _l.text =detail?.productData?[int.parse(widget.id.toString())].l.toString() ?? "0";
-              _xl.text =detail?.productData?[int.parse(widget.id.toString())].xl.toString() ?? "0";
-              _xxl.text =detail?.productData?[int.parse(widget.id.toString())].xxl.toString() ?? "0";
-              _3xl.text =detail?.productData?[int.parse(widget.id.toString())].s3xl.toString() ?? "0";
-              _4xl.text =detail?.productData?[int.parse(widget.id.toString())].s4xl.toString() ?? "0";
-              _5xl.text =detail?.productData?[int.parse(widget.id.toString())].s5xl.toString() ?? "0";
-
             });
 
 
@@ -1420,48 +1403,34 @@ class _order_detail_cState extends State<order_detail_c> {
       }
     });
   }
-  orderdetailblockeditapi(){
-    final Map<String, String> data = {};
-    data['action'] = 'order_edit_stock';
-    data['order_no'] = widget.oreder.toString();
-    data['ap_id']= detail?.productData?[int.parse(widget.id.toString())].apId.toString() ?? "0" ;
-    data['apd_id']= detail?.productData?[int.parse(widget.id.toString())].apId.toString() ?? "0" ;
-    data['xs_order_q'] = _xs.text== "" ? "0" : _xs.text.toString() ;
-    data['s_order_q'] = _xs.text== "" ? "0" : _s.text.toString() ;
-    data['m_order_q'] = _m.text== "" ? "0" : _m.text.toString() ;
-    data['l_order_q'] = _l.text== "" ? "0" : _l.text.toString() ;
-    data['xl_order_q'] = _xl.text== "" ? "0" : _xl.text.toString() ;
-    data['xxl_order_q'] = _xxl.text== "" ? "0" : _xxl.text.toString() ;
-    data['3xl_order_q'] = _3xl.text== "" ? "0" : _3xl.text.toString() ;
-    data['4xl_order_q'] = _4xl.text== "" ? "0" : _4xl.text.toString() ;
-    data['5xl_order_q'] = _5xl.text== "" ? "0" : _5xl.text.toString() ;
-print(data);
-   checkInternet().then((internet) async {
-      if (internet) {
-        Productprovider()
-            .orderdetaildetailedit(data)
-            .then((Response response) async {
-          edit = convertblockorder.fromJson(json.decode(response.body));
+converttoorder(){
+  final Map<String, String> data = {};
+  data['action'] = 'block_order_convert_confirm';
+  data['d_id'] =(userData?.logindata?.dId).toString();
+  data['order_no'] = widget.id.toString();
+  checkInternet().then((internet) async {
+    if (internet) {
+      Productprovider()
+          .convertblockorderapi(data)
+          .then((Response response) async {
+        convertorder = convertblockorder.fromJson(json.decode(response.body));
 
-print(edit?.status);
-          if (response.statusCode == 200 && edit?.status == "success") {
-            setState(() {
+        print(convertorder?.status);
+        if (response.statusCode == 200 && convertorder?.status == "success") {
+          setState(() {
+          });
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>your_order()));
 
-            });
-
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>orderblockdisplay(id: widget?.oreder.toString(),)));
-            if (kDebugMode) {
-              // isloading = false;
-            }
-          } else {
+          if (kDebugMode) {
             // isloading = false;
           }
-        });
-      } else {
-        // isloading = false;
-      }
-    });
-
-  }
-
+        } else {
+          // isloading = false;
+        }
+      });
+    } else {
+      // isloading = false;
+    }
+  });
+}
 }

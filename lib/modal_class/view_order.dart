@@ -1,10 +1,10 @@
-class view_orders {
+class viewOrders {
   String? status;
   List<Data>? data;
 
-  view_orders({this.status, this.data});
+  viewOrders({this.status, this.data});
 
-  view_orders.fromJson(Map<String, dynamic> json) {
+  viewOrders.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
       data = <Data>[];
@@ -27,6 +27,7 @@ class view_orders {
 class Data {
   String? imageOne;
   String? fullName;
+  int? numberOfProduct;
   String? id;
   String? ordNo;
   String? price;
@@ -35,6 +36,7 @@ class Data {
   Data(
       {this.imageOne,
         this.fullName,
+        this.numberOfProduct,
         this.id,
         this.ordNo,
         this.price,
@@ -43,6 +45,7 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     imageOne = json['image_one'];
     fullName = json['full_name'];
+    numberOfProduct = json['number_of_product'];
     id = json['id'];
     ordNo = json['ord_no'];
     price = json['price'];
@@ -53,6 +56,7 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['image_one'] = this.imageOne;
     data['full_name'] = this.fullName;
+    data['number_of_product'] = this.numberOfProduct;
     data['id'] = this.id;
     data['ord_no'] = this.ordNo;
     data['price'] = this.price;

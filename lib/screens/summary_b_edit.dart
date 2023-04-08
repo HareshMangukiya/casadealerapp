@@ -156,7 +156,7 @@ class _summary_b_editState extends State<summary_b_edit> {
                           setState(() {
                             sumindex1 = index;
                           });
-                          sumindex1 == 0 ? viewBlockSummary(): viewcart();
+                          // sumindex1 == 0 ? viewBlockSummary(): viewcart();
                         },
                         child: Column(
                           // crossAxisAlignment: CrossAxisAlignment.center,

@@ -1086,7 +1086,7 @@ class _viewcartpageState extends State<viewcartpage> {
                                 fontSize: 2.h),
                           ),
                           Text(
-                               "₹" + gtotalv.toString() + '+ GST',
+                               "₹" + gtotalv.toString() ,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 2.h,
@@ -1246,7 +1246,9 @@ class _viewcartpageState extends State<viewcartpage> {
                       100; // for confirm block api without gst
                 });
               }
+
             }
+
             setState(() {
             });
             if (kDebugMode) {

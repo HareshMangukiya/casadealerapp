@@ -380,5 +380,84 @@ class Productprovider with ChangeNotifier {
     responseJson = responses(response);
     return responseJson;
   }
+  Future<http.Response> oredrdetailap(Map<String, dynamic> bodyData) async {
+    const url = 'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php?action=order_details';
 
+    var responseJson;
+
+    final response = await http
+        .post(Uri.parse(url), body: bodyData, headers: headers)
+        .timeout(
+      const Duration(seconds: 30),
+      onTimeout: () {
+        throw const SocketException('Something went wrong');
+      },
+    );
+    responseJson = responses(response);
+    return responseJson;
+  }
+  Future<http.Response> convertblockorderapi(Map<String, dynamic> bodyData) async {
+    const url = 'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php?action=block_order_convert_confirm';
+
+    var responseJson;
+
+    final response = await http
+        .post(Uri.parse(url), body: bodyData, headers: headers)
+        .timeout(
+      const Duration(seconds: 30),
+      onTimeout: () {
+        throw const SocketException('Something went wrong');
+      },
+    );
+    responseJson = responses(response);
+    return responseJson;
+  }
+  Future<http.Response> unblockblockorderapi(Map<String, dynamic> bodyData) async {
+    const url = 'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php?action=unblock_blockorder';
+
+    var responseJson;
+
+    final response = await http
+        .post(Uri.parse(url), body: bodyData, headers: headers)
+        .timeout(
+      const Duration(seconds: 30),
+      onTimeout: () {
+        throw const SocketException('Something went wrong');
+      },
+    );
+    responseJson = responses(response);
+    return responseJson;
+  }
+  Future<http.Response> orderdetaildetailedit(Map<String, dynamic> bodyData) async {
+    const url = 'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php?action=order_edit_stock';
+
+    var responseJson;
+
+    final response = await http
+        .post(Uri.parse(url), body: bodyData, headers: headers)
+        .timeout(
+      const Duration(seconds: 30),
+      onTimeout: () {
+        throw const SocketException('Something went wrong');
+      },
+    );
+    responseJson = responses(response);
+    return responseJson;
+  }
+  Future<http.Response> canclerequestapi(Map<String, dynamic> bodyData) async {
+    const url = 'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php?action=cancle_order_request';
+
+    var responseJson;
+
+    final response = await http
+        .post(Uri.parse(url), body: bodyData, headers: headers)
+        .timeout(
+      const Duration(seconds: 30),
+      onTimeout: () {
+        throw const SocketException('Something went wrong');
+      },
+    );
+    responseJson = responses(response);
+    return responseJson;
+  }
 }

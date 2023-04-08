@@ -1,17 +1,27 @@
+import 'dart:convert';
+
+import 'package:casadealerapp/modal_class/convertblockorder.dart';
+import 'package:casadealerapp/provider/productprovider.dart';
 import 'package:casadealerapp/screens/order_detail.dart';
 import 'package:casadealerapp/screens/order_id.dart';
 import 'package:casadealerapp/screens/summary_b_edit.dart';
+import 'package:casadealerapp/screens/your_block_order.dart';
+import 'package:casadealerapp/widget/CONST.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:sizer/sizer.dart';
 
 class alert_screen extends StatefulWidget {
-  const alert_screen({Key? key}) : super(key: key);
+  String? id;
+   alert_screen({Key? key,this.id}) : super(key: key);
 
   @override
   State<alert_screen> createState() => _alert_screenState();
 }
 
 class _alert_screenState extends State<alert_screen> {
+  convertblockorder? convertorder;
   int al = 0;
   @override
   Widget build(BuildContext context) {
@@ -145,10 +155,11 @@ class _alert_screenState extends State<alert_screen> {
                                   setState(() {
                                     al = 0;
                                   });
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => order_id()));
+                                  unblockorder();
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => order_id()));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(0.1.h),
@@ -186,5 +197,38 @@ class _alert_screenState extends State<alert_screen> {
         ],
       ),
     );
+  }
+  unblockorder(){
+    final Map<String, String> data = {};
+    data['action'] = 'unblock_blockorder';
+    data['d_id'] =(userData?.logindata?.dId).toString();
+    data['order_no'] = widget.id.toString();
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider()
+            .unblockblockorderapi(data)
+            .then((Response response) async {
+          convertorder = convertblockorder.fromJson(json.decode(response.body));
+
+          print(convertorder?.status);
+          if (response.statusCode == 200 && convertorder?.status == "success") {
+            setState(() {
+            });
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => your_block_order()));
+
+            if (kDebugMode) {
+              // isloading = false;
+            }
+          } else {
+            // isloading = false;
+          }
+        });
+      } else {
+        // isloading = false;
+      }
+    });
   }
 }

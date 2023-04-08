@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-
-import 'package:casadealerapp/modal_class/singlepro_class.dart';
 import 'package:casadealerapp/modal_class/view_order.dart';
+
+
 import 'package:casadealerapp/provider/productprovider.dart';
 
 import 'package:casadealerapp/screens/order_id.dart';
@@ -21,26 +21,10 @@ class your_order extends StatefulWidget {
 }
 
 class _your_orderState extends State<your_order> {
-  view_orders? view;
+  viewOrders? view;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // List<String> tabs = ["Blocked", "Cart"];
-  // List<bool> checkbox = [
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false
-  // ];
-  //
-  // int cart = 0;
-  //
   TextEditingController _search = TextEditingController();
   bool se_icon = false;
   bool isloading = true;
@@ -215,19 +199,21 @@ class _your_orderState extends State<your_order> {
             children: [
               Container(
                 height: 88.h,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => order_id()));
-                  },
-                  child: ListView.builder(
-                    // padding: EdgeInsets.all(0),
-                    // visualDensity: VisualDensity(horizontal: 4, vertical: 4),
-                    // horizontalTitleGap: 0.0,
+                child: ListView.builder(
+                  // padding: EdgeInsets.all(0),
+                  // visualDensity: VisualDensity(horizontal: 4, vertical: 4),
+                  // horizontalTitleGap: 0.0,
 
-                    itemCount: view?.data?.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
+                  itemCount: view?.data?.length,
+                  itemBuilder: ( context,  index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => order_id(id:view?.data?[index].ordNo,
+                            index1:index,
+                            )));
+                      },
+                      child: Container(
                         // padding: EdgeInsets.all(0),
                         // alignment: Alignment.center,
                         height: 11.h,
@@ -265,12 +251,7 @@ class _your_orderState extends State<your_order> {
                                       )
                               ),
 
-                              // Image.asset(
-                              //   'assets/product_1_img2.png',
-                              //   height: 11.h,
-                              //   width: 20.w,
-                              //   fit: BoxFit.cover,
-                              // ),
+
                             ),
                             // SizedBox(width: 5.w,),
 
@@ -285,7 +266,7 @@ class _your_orderState extends State<your_order> {
                                     children: [
                                       Text(
                                         'Order ID # ' +
-                                                (view?.data?[index].id)
+                                                (view?.data?[index].ordNo)
                                                     .toString() ??
                                             "",
                                         style: TextStyle(
@@ -306,12 +287,8 @@ class _your_orderState extends State<your_order> {
                                         ),
                                       ),
                                       Text(
-                                        // (view?.data?[index]
-                                        //             .productNumberOrder)
-                                        //         .toString() == null ?"N/A": (view?.data?[index]
-                                        //     .productNumberOrder)
-                                        //     .toString(),
-                                        '550',
+                                        view?.data?[index].numberOfProduct.toString() ?? "",
+
                                         style: TextStyle(
                                           color: Color(0xff5a5a9f),
                                         ),
@@ -368,9 +345,9 @@ class _your_orderState extends State<your_order> {
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
               // Container(
@@ -470,14 +447,12 @@ class _your_orderState extends State<your_order> {
     final Map<String, String> data = {};
     data['action'] = 'view_order';
     data['d_id'] = (userData?.logindata?.dId).toString();
-
-    print(data);
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider()
             .view_product_order(data)
             .then((Response response) async {
-          view = view_orders.fromJson(json.decode(response.body));
+          view = viewOrders.fromJson(json.decode(response.body));
           // isloading = false;
 
           if (response.statusCode == 200 && view?.status == "success") {
