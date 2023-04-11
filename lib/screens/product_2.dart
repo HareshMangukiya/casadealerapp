@@ -5,12 +5,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:casadealerapp/main.dart';
+import 'package:casadealerapp/modal_class/ViewCart.dart';
 import 'package:casadealerapp/modal_class/add_to_cart_modal.dart';
 import 'package:casadealerapp/modal_class/block_product_modal.dart';
 import 'package:casadealerapp/modal_class/category_wise_display.dart';
 import 'package:casadealerapp/modal_class/color_display_all_class.dart';
 import 'package:casadealerapp/modal_class/color_modal.dart';
 import 'package:casadealerapp/modal_class/product2_image_modal.dart';
+import 'package:casadealerapp/modal_class/search_class.dart';
 import 'package:casadealerapp/modal_class/select_image_class.dart';
 import 'package:casadealerapp/provider/login_authprovider.dart';
 import 'package:casadealerapp/modal_class/productapiclass.dart';
@@ -36,9 +38,9 @@ import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
 
-
-
 import 'package:http/http.dart' as http;
+import 'package:badges/badges.dart' as badges;
+
 
 class product_2 extends StatefulWidget {
   String? pronamenevigatior;
@@ -114,6 +116,8 @@ class _product_2State extends State<product_2> {
   int selectbtn = 0;
   int selectgender = 0;
   int def = 0;
+  search? searchproperty;
+  bool check = false;
 
   //Api Total
 
@@ -144,6 +148,7 @@ class _product_2State extends State<product_2> {
   }
 
   getdata() async {
+    await viewcart();
     await displaycolor();
     // await imageapi();
     await colorapi();
@@ -173,7 +178,7 @@ class _product_2State extends State<product_2> {
                           Padding(
                             padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Row(
                                   children: [
@@ -201,7 +206,7 @@ class _product_2State extends State<product_2> {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: 14.h,
+                                  width: 28.w,
                                 ),
                                 Row(
                                   children: [
@@ -221,16 +226,19 @@ class _product_2State extends State<product_2> {
                                     SizedBox(
                                       width: 1.h,
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        // _scaffoldKey.currentState?.openDrawer();
-                                      },
-                                      icon: Icon(
-                                        Icons.shopping_bag_outlined,
-                                        color: Colors.white,
-                                        size: 3.h,
-                                      ),
-                                    ),
+                                    badges.Badge(
+                                        onTap: (){
+
+                                        },
+                                        badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
+                                          style: TextStyle(color: Colors.white),
+
+                                            ),
+                                        child: Icon(Icons.shopping_bag_outlined,
+                                            color: Colors.white,
+                                            size: 3.h)
+                                    )
+
                                   ],
                                 ),
                               ],
@@ -248,4360 +256,4642 @@ class _product_2State extends State<product_2> {
                     (!se_icon)
                         ? Container()
                         : Container(
-                            margin: EdgeInsets.symmetric(horizontal: 2.h),
-                            padding: EdgeInsets.symmetric(horizontal: 2.h),
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.075,
-                            child: TextField(
-                              onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  // searchapi(value);
-                                } else if (value.isEmpty) {
-                                  // Navigator.of(context).pushReplacement(
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => products_1()));
-                                } else {
-                                  // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
-                                }
-                              },
-                              controller: _search,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.all(3.h),
-                                hintText: 'Search',
-                                suffixIcon: Icon(
-                                  Icons.search,
-                                  color: Color(0xfff333389),
-                                  size: 3.h,
-                                ),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              color: Color(0xfff3faff),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
-                                // ),
-                              ),
-                            ),
+                      margin: EdgeInsets.symmetric(horizontal: 2.h),
+                      padding: EdgeInsets.symmetric(horizontal: 2.h),
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      height:
+                      MediaQuery.of(context).size.height * 0.075,
+                      child: TextFormField(
+                        // validator: (value) {
+                        //   if (value!.isEmpty) {
+                        //     return "";
+                        //   }
+                        //   return null;
+                        // },
+                        onChanged: (value) {
+
+                          if (value.isNotEmpty) {
+                            setState(() {
+                              check=true;
+                            });
+                            searchapi(value);
+                          } else if (value.isEmpty) {
+                            setState(() {
+                              check=false;
+                            });
+                            // Navigator.of(context).pushReplacement(
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             products_1()));
+                          } else {
+                            // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
+                          }
+                        },
+                        controller: _search,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(3.h),
+                          hintText: 'Search',
+                          suffixIcon: Icon(
+                            Icons.search,
+                            color: Color(0xfff333389),
+                            size: 3.h,
                           ),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        // shape: BoxShape.circle,
+                        color: Color(0xfff3faff),
+                        // image: DecorationImage(
+                        //     image: AssetImage("assets/product_1_img.png"),
+                        //     fit: BoxFit.fitWidth)
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                          // ),
+                        ),
+                      ),
+                    ),
                     displayallcolor?.status == "fail"
                         ? Text('No Data Found',
                             style: TextStyle(
                                 fontSize: 2.h, fontWeight: FontWeight.bold))
                         : Expanded(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Column(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        height: 55.h,
-                                        width: MediaQuery.of(context).size.width,
-                                        // color: Colors.red,
-                                      ),
-                                      Positioned(
-                                        top: 0.0,
-                                        left: 0.0,
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(28),
-                                              // color: Colors.green,
-                                            ),
-                                            height: 55.h,
-                                            width:
-                                                MediaQuery.of(context).size.width,
-                                            child: (displayallcolor
-                                                        ?.mumbaiStock?.length !=
-                                                    0)
-                                                ? (displayallcolor
-                                                            ?.mumbaiStock?[0]
-                                                            .menImageArray
-                                                            ?.length ==
-                                                        0)
-                                                    ? CarouselSlider(
-                                                        items: images.map((e) {
-                                                          return ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          28),
-                                                              child: Stack(
-                                                                children: [
-                                                                  Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              28),
-                                                                    ),
-                                                                    height: 54.h,
-                                                                    width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width,
-                                                                    margin: EdgeInsets
-                                                                        .symmetric(
-                                                                            horizontal:
-                                                                                5.w),
-                                                                    child:
-                                                                        ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              28),
-                                                                      child: Image
-                                                                          .asset(
-                                                                        "assets/default_product_image.png",
-                                                                        fit: BoxFit
-                                                                            .cover,
+                            child: Stack(
+                              children: [
+                                SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          height: 55.h,
+                                          width: MediaQuery.of(context).size.width,
+                                          // color: Colors.red,
+                                        ),
+                                        Positioned(
+                                          top: 0.0,
+                                          left: 0.0,
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(28),
+                                                // color: Colors.green,
+                                              ),
+                                              height: 55.h,
+                                              width:
+                                                  MediaQuery.of(context).size.width,
+                                              child: (displayallcolor
+                                                          ?.mumbaiStock?.length !=
+                                                      0)
+                                                  ? (displayallcolor
+                                                              ?.mumbaiStock?[0]
+                                                              .menImageArray
+                                                              ?.length ==
+                                                          0)
+                                                      ? CarouselSlider(
+                                                          items: images.map((e) {
+                                                            return ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            28),
+                                                                child: Stack(
+                                                                  children: [
+                                                                    Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                28),
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                  Opacity(
-                                                                    opacity: 0.8,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              5.w),
-                                                                      child:
-                                                                          Align(
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .bottomCenter,
-                                                                        child:
-                                                                            Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            gradient: LinearGradient(
-                                                                                begin: Alignment.topRight,
-                                                                                colors: [
-                                                                                  Colors.transparent,
-                                                                                  Colors.black
-                                                                                ]),
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              bottomRight:
-                                                                                  Radius.circular(28),
-                                                                              bottomLeft:
-                                                                                  Radius.circular(28),
-                                                                              topRight:
-                                                                                  Radius.circular(28),
-                                                                              topLeft:
-                                                                                  Radius.circular(28),
-                                                                            ),
-                                                                          ),
-                                                                          height:
-                                                                              23.h,
-                                                                          width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Positioned(
-                                                                    top: 35.h,
-                                                                    left: 8.w,
-                                                                    right: 8.w,
-                                                                    child:
-                                                                        Container(
-                                                                      // height: 10.h,
+                                                                      height: 54.h,
                                                                       width: MediaQuery.of(
                                                                               context)
                                                                           .size
                                                                           .width,
-                                                                      // color:Colors.red,
+                                                                      margin: EdgeInsets
+                                                                          .symmetric(
+                                                                              horizontal:
+                                                                                  5.w),
                                                                       child:
-                                                                          Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .center,
-                                                                        children: [
-                                                                          Container(
-                                                                            width: MediaQuery.of(context)
-                                                                                .size
-                                                                                .width,
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisAlignment:
-                                                                                  MainAxisAlignment.spaceBetween,
-                                                                              children: [
-                                                                                Column(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                  children: [
-                                                                                    // Container(
-                                                                                    //   alignment: Alignment.center,
-                                                                                    //   width: MediaQuery.of(context).size.width * 0.2,
-                                                                                    //   height: MediaQuery.of(context).size.height * 0.03,
-                                                                                    //   decoration: BoxDecoration(
-                                                                                    //     color: Color(0xfff7c7773),
-                                                                                    //     borderRadius: BorderRadius.all(
-                                                                                    //       Radius.circular(8),
-                                                                                    //     ),
-                                                                                    //   ),
-                                                                                    //   child: Padding(
-                                                                                    //     padding: EdgeInsets.all(0.5.h),
-                                                                                    //     child: Text(
-                                                                                    //       "Brand Name",
-                                                                                    //       style: TextStyle(
-                                                                                    //         fontSize: 1.3.h,
-                                                                                    //         color: Colors.white,
-                                                                                    //       ),
-                                                                                    //     ),
-                                                                                    //   ),
-                                                                                    // ),
-                                                                                    // SizedBox(
-                                                                                    //   height: 1.h,
-                                                                                    // ),
-                                                                                    Container(
-                                                                                      child: Text(
-                                                                                        widget.pronamenevigatior ?? 'N/A',
-                                                                                        style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
-                                                                                      ),
-                                                                                    ),
-                                                                                    // Container(
-                                                                                    //   child: Text(
-                                                                                    //     "Artist Name",
-                                                                                    //     style: TextStyle(fontSize: 1.9.h, color: Colors.grey.shade300),
-                                                                                    //   ),
-                                                                                    // ),
-                                                                                  ],
-                                                                                ),
-                                                                                Row(
-                                                                                  children: [
-                                                                                    SizedBox(width: 3.w),
-                                                                                    Container(
-                                                                                      alignment: Alignment.center,
-                                                                                      height: 4.h,
-                                                                                      width: 9.w,
-                                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
-                                                                                      child: IconButton(
-                                                                                        icon: Icon(
-                                                                                          Icons.share,
-                                                                                          color: Colors.grey,
-                                                                                          size: 2.h,
-                                                                                        ),
-                                                                                        onPressed: () {},
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          // SizedBox()
-                                                                        ],
+                                                                          ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                28),
+                                                                        child: Image
+                                                                            .asset(
+                                                                          "assets/default_product_image.png",
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                ],
-                                                              ));
-                                                        }).toList(),
-                                                        options: CarouselOptions(
-                                                          height: 45.h,
-                                                          enlargeCenterPage:
-                                                              false,
-                                                          autoPlay: true,
-                                                          aspectRatio: 16 / 9,
-                                                          autoPlayCurve: Curves
-                                                              .fastOutSlowIn,
-                                                          enableInfiniteScroll:
-                                                              true,
-                                                          autoPlayAnimationDuration:
-                                                              Duration(
-                                                                  milliseconds:
-                                                                      800),
-                                                          viewportFraction: 1,
-                                                        ),
-                                                      )
-                                                    : CarouselSlider(
-                                                        items: (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                        0]
-                                                                    .menImageArray ??
-                                                                [])
-                                                            .map((e) {
-                                                          return ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          28),
-                                                              child: Stack(
-                                                                children: [
-                                                                  Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              28),
-                                                                    ),
-                                                                    height: 54.h,
-                                                                    width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width,
-                                                                    margin: EdgeInsets
-                                                                        .symmetric(
+                                                                    Opacity(
+                                                                      opacity: 0.8,
+                                                                      child:
+                                                                          Padding(
+                                                                        padding: EdgeInsets.symmetric(
                                                                             horizontal:
                                                                                 5.w),
-                                                                    child: ClipRRect(
-                                                                        borderRadius: BorderRadius.circular(28),
-                                                                        child: CachedNetworkImage(
-                                                                          imageUrl:
-                                                                              e,
-                                                                          imageBuilder:
-                                                                              (context, imageProvider) =>
-                                                                                  Container(
+                                                                        child:
+                                                                            Align(
+                                                                          alignment:
+                                                                              Alignment
+                                                                                  .bottomCenter,
+                                                                          child:
+                                                                              Container(
                                                                             decoration:
                                                                                 BoxDecoration(
-                                                                              image:
-                                                                                  DecorationImage(
-                                                                                image: imageProvider,
-                                                                                fit: BoxFit.cover,
+                                                                              gradient: LinearGradient(
+                                                                                  begin: Alignment.topRight,
+                                                                                  colors: [
+                                                                                    Colors.transparent,
+                                                                                    Colors.black
+                                                                                  ]),
+                                                                              borderRadius:
+                                                                                  BorderRadius.only(
+                                                                                bottomRight:
+                                                                                    Radius.circular(28),
+                                                                                bottomLeft:
+                                                                                    Radius.circular(28),
+                                                                                topRight:
+                                                                                    Radius.circular(28),
+                                                                                topLeft:
+                                                                                    Radius.circular(28),
                                                                               ),
                                                                             ),
+                                                                            height:
+                                                                                23.h,
+                                                                            width: MediaQuery.of(context)
+                                                                                .size
+                                                                                .width,
                                                                           ),
-                                                                          placeholder:
-                                                                              (context, url) =>
-                                                                                  Center(child: CircularProgressIndicator()),
-                                                                          errorWidget: (context,
-                                                                                  url,
-                                                                                  error) =>
-                                                                              Image.asset(
-                                                                            "assets/default_product_image.png",
-                                                                            fit: BoxFit
-                                                                                .cover,
-                                                                          ),
-                                                                        )),
-                                                                  ),
-                                                                  Opacity(
-                                                                    opacity: 0.8,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              5.w),
-                                                                      child:
-                                                                          Align(
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .bottomCenter,
-                                                                        child:
-                                                                            Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            gradient: LinearGradient(
-                                                                                begin: Alignment.topRight,
-                                                                                colors: [
-                                                                                  Colors.transparent,
-                                                                                  Colors.black
-                                                                                ]),
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              bottomRight:
-                                                                                  Radius.circular(28),
-                                                                              bottomLeft:
-                                                                                  Radius.circular(28),
-                                                                              topRight:
-                                                                                  Radius.circular(28),
-                                                                              topLeft:
-                                                                                  Radius.circular(28),
-                                                                            ),
-                                                                          ),
-                                                                          height:
-                                                                              23.h,
-                                                                          width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width,
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                  Positioned(
-                                                                    top: 35.h,
-                                                                    left: 8.w,
-                                                                    right: 8.w,
-                                                                    child:
-                                                                        Container(
-                                                                      // height: 10.h,
+                                                                    Positioned(
+                                                                      top: 35.h,
+                                                                      left: 8.w,
+                                                                      right: 8.w,
+                                                                      child:
+                                                                          Container(
+                                                                        // height: 10.h,
+                                                                        width: MediaQuery.of(
+                                                                                context)
+                                                                            .size
+                                                                            .width,
+                                                                        // color:Colors.red,
+                                                                        child:
+                                                                            Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment
+                                                                                  .center,
+                                                                          children: [
+                                                                            Container(
+                                                                              width: MediaQuery.of(context)
+                                                                                  .size
+                                                                                  .width,
+                                                                              child:
+                                                                                  Row(
+                                                                                mainAxisAlignment:
+                                                                                    MainAxisAlignment.spaceBetween,
+                                                                                children: [
+                                                                                  Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: [
+                                                                                      // Container(
+                                                                                      //   alignment: Alignment.center,
+                                                                                      //   width: MediaQuery.of(context).size.width * 0.2,
+                                                                                      //   height: MediaQuery.of(context).size.height * 0.03,
+                                                                                      //   decoration: BoxDecoration(
+                                                                                      //     color: Color(0xfff7c7773),
+                                                                                      //     borderRadius: BorderRadius.all(
+                                                                                      //       Radius.circular(8),
+                                                                                      //     ),
+                                                                                      //   ),
+                                                                                      //   child: Padding(
+                                                                                      //     padding: EdgeInsets.all(0.5.h),
+                                                                                      //     child: Text(
+                                                                                      //       "Brand Name",
+                                                                                      //       style: TextStyle(
+                                                                                      //         fontSize: 1.3.h,
+                                                                                      //         color: Colors.white,
+                                                                                      //       ),
+                                                                                      //     ),
+                                                                                      //   ),
+                                                                                      // ),
+                                                                                      // SizedBox(
+                                                                                      //   height: 1.h,
+                                                                                      // ),
+                                                                                      Container(
+                                                                                        child: Text(
+                                                                                          widget.pronamenevigatior ?? 'N/A',
+                                                                                          style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
+                                                                                        ),
+                                                                                      ),
+                                                                                      // Container(
+                                                                                      //   child: Text(
+                                                                                      //     "Artist Name",
+                                                                                      //     style: TextStyle(fontSize: 1.9.h, color: Colors.grey.shade300),
+                                                                                      //   ),
+                                                                                      // ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      SizedBox(width: 3.w),
+                                                                                      Container(
+                                                                                        alignment: Alignment.center,
+                                                                                        height: 4.h,
+                                                                                        width: 9.w,
+                                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
+                                                                                        child: IconButton(
+                                                                                          icon: Icon(
+                                                                                            Icons.share,
+                                                                                            color: Colors.grey,
+                                                                                            size: 2.h,
+                                                                                          ),
+                                                                                          onPressed: () {},
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            // SizedBox()
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ));
+                                                          }).toList(),
+                                                          options: CarouselOptions(
+                                                            height: 45.h,
+                                                            enlargeCenterPage:
+                                                                false,
+                                                            autoPlay: true,
+                                                            aspectRatio: 16 / 9,
+                                                            autoPlayCurve: Curves
+                                                                .fastOutSlowIn,
+                                                            enableInfiniteScroll:
+                                                                true,
+                                                            autoPlayAnimationDuration:
+                                                                Duration(
+                                                                    milliseconds:
+                                                                        800),
+                                                            viewportFraction: 1,
+                                                          ),
+                                                        )
+                                                      : CarouselSlider(
+                                                          items: (displayallcolor
+                                                                      ?.mumbaiStock?[
+                                                                          0]
+                                                                      .menImageArray ??
+                                                                  [])
+                                                              .map((e) {
+                                                            return ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            28),
+                                                                child: Stack(
+                                                                  children: [
+                                                                    Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                28),
+                                                                      ),
+                                                                      height: 54.h,
                                                                       width: MediaQuery.of(
                                                                               context)
                                                                           .size
                                                                           .width,
-                                                                      // color:Colors.red,
-                                                                      child:
-                                                                          Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .center,
-                                                                        children: [
-                                                                          Container(
-                                                                            width: MediaQuery.of(context)
-                                                                                .size
-                                                                                .width,
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisAlignment:
-                                                                                  MainAxisAlignment.spaceBetween,
-                                                                              children: [
-                                                                                Column(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                  children: [
-                                                                                    // Container(
-                                                                                    //   alignment: Alignment.center,
-                                                                                    //   width: MediaQuery.of(context).size.width * 0.2,
-                                                                                    //   height: MediaQuery.of(context).size.height * 0.03,
-                                                                                    //   decoration: BoxDecoration(
-                                                                                    //     color: Color(0xfff7c7773),
-                                                                                    //     borderRadius: BorderRadius.all(
-                                                                                    //       Radius.circular(8),
-                                                                                    //     ),
-                                                                                    //   ),
-                                                                                    //   child: Padding(
-                                                                                    //     padding: EdgeInsets.all(0.5.h),
-                                                                                    //     child: Text(
-                                                                                    //       "Brand Name",
-                                                                                    //       style: TextStyle(
-                                                                                    //         fontSize: 1.3.h,
-                                                                                    //         color: Colors.white,
-                                                                                    //       ),
-                                                                                    //     ),
-                                                                                    //   ),
-                                                                                    // ),
-                                                                                    // SizedBox(
-                                                                                    //   height: 1.h,
-                                                                                    // ),
-                                                                                    Container(
-                                                                                      child: Text(
-                                                                                        widget.pronamenevigatior ?? 'N/A',
-                                                                                        style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
-                                                                                      ),
-                                                                                    ),
-                                                                                    // Container(
-                                                                                    //   child: Text(
-                                                                                    //     "Artist Name",
-                                                                                    //     style: TextStyle(fontSize: 1.9.h, color: Colors.grey.shade300),
-                                                                                    //   ),
-                                                                                    // ),
-                                                                                  ],
-                                                                                ),
-                                                                                Row(
-                                                                                  children: [
-                                                                                    Container(
-                                                                                      alignment: Alignment.center,
-                                                                                      height: 4.h,
-                                                                                      width: 9.w,
-                                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
-                                                                                      child: IconButton(
-                                                                                        icon: Icon(
-                                                                                          Icons.share,
-                                                                                          color: Colors.grey,
-                                                                                          size: 2.h,
-                                                                                        ),
-                                                                                        onPressed: () {},
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          // SizedBox()
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ));
-                                                        }).toList(),
-                                                        options: CarouselOptions(
-                                                          height: 45.h,
-                                                          enlargeCenterPage:
-                                                              false,
-                                                          autoPlay: true,
-                                                          aspectRatio: 16 / 9,
-                                                          autoPlayCurve: Curves
-                                                              .fastOutSlowIn,
-                                                          enableInfiniteScroll:
-                                                              true,
-                                                          autoPlayAnimationDuration:
-                                                              Duration(
-                                                                  milliseconds:
-                                                                      800),
-                                                          viewportFraction: 1,
-                                                        ),
-                                                      )
-                                                : (displayallcolor?.tripurStock
-                                                            ?.length !=
-                                                        0)
-                                                    ? (displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .menImageArray
-                                                                ?.length ==
-                                                            0)
-                                                        ? CarouselSlider(
-                                                            items:
-                                                                images.map((e) {
-                                                              return ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              28),
-                                                                  child: Stack(
-                                                                    children: [
-                                                                      Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(28),
-                                                                        ),
-                                                                        height:
-                                                                            54.h,
-                                                                        width: MediaQuery.of(
-                                                                                context)
-                                                                            .size
-                                                                            .width,
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                5.w),
-                                                                        child:
-                                                                            ClipRRect(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(28),
-                                                                          child: Image
-                                                                              .asset(
-                                                                            "assets/default_product_image.png",
-                                                                            fit: BoxFit
-                                                                                .cover,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Opacity(
-                                                                        opacity:
-                                                                            0.8,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              EdgeInsets.symmetric(horizontal: 5.w),
-                                                                          child:
-                                                                              Align(
-                                                                            alignment:
-                                                                                Alignment.bottomCenter,
-                                                                            child:
-                                                                                Container(
-                                                                              decoration:
-                                                                                  BoxDecoration(
-                                                                                gradient: LinearGradient(begin: Alignment.topRight, colors: [
-                                                                                  Colors.transparent,
-                                                                                  Colors.black
-                                                                                ]),
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  bottomRight: Radius.circular(28),
-                                                                                  bottomLeft: Radius.circular(28),
-                                                                                  topRight: Radius.circular(28),
-                                                                                  topLeft: Radius.circular(28),
-                                                                                ),
-                                                                              ),
-                                                                              height:
-                                                                                  23.h,
-                                                                              width:
-                                                                                  MediaQuery.of(context).size.width,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Positioned(
-                                                                        top: 35.h,
-                                                                        left: 8.w,
-                                                                        right:
-                                                                            8.w,
-                                                                        child:
-                                                                            Container(
-                                                                          // height: 10.h,
-                                                                          width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width,
-                                                                          // color:Colors.red,
-                                                                          child:
-                                                                              Column(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: [
-                                                                              Container(
-                                                                                width: MediaQuery.of(context).size.width,
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                  children: [
-                                                                                    Column(
-                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                      children: [
-                                                                               
-                                                                                        Container(
-                                                                                          child: Text(
-                                                                                            widget.pronamenevigatior ?? 'N/A',
-                                                                                            style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
-                                                                                          ),
-                                                                                        ),
-                                                                           
-                                                                                      ],
-                                                                                    ),
-
-                                                                             
-
-                                                                                    Row(
-                                                                                      children: [
-                                                                                        SizedBox(width: 3.w),
-                                                                                        Container(
-                                                                                          alignment: Alignment.center,
-                                                                                          height: 4.h,
-                                                                                          width: 9.w,
-                                                                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
-                                                                                          child: IconButton(
-                                                                                            icon: Icon(
-                                                                                              Icons.share,
-                                                                                              color: Colors.grey,
-                                                                                              size: 2.h,
-                                                                                            ),
-                                                                                            onPressed: () {},
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                       
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ));
-                                                            }).toList(),
-                                                            options:
-                                                                CarouselOptions(
-                                                              height: 45.h,
-                                                              enlargeCenterPage:
-                                                                  false,
-                                                              autoPlay: true,
-                                                              aspectRatio: 16 / 9,
-                                                              autoPlayCurve: Curves
-                                                                  .fastOutSlowIn,
-                                                              enableInfiniteScroll:
-                                                                  true,
-                                                              autoPlayAnimationDuration:
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          800),
-                                                              viewportFraction: 1,
-                                                            ),
-                                                          )
-                                                        : CarouselSlider(
-                                                            items: (displayallcolor
-                                                                        ?.mumbaiStock?[
-                                                                            0]
-                                                                        .menImageArray ??
-                                                                    [])
-                                                                .map((e) {
-                                                              return ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              28),
-                                                                  child: Stack(
-                                                                    children: [
-                                                                      Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(28),
-                                                                        ),
-                                                                        height:
-                                                                            54.h,
-                                                                        width: MediaQuery.of(
-                                                                                context)
-                                                                            .size
-                                                                            .width,
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                5.w),
-                                                                        child:
-                                                                            ClipRRect(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(28),
-                                                                          child:
-                                                                              CachedNetworkImage(
+                                                                      margin: EdgeInsets
+                                                                          .symmetric(
+                                                                              horizontal:
+                                                                                  5.w),
+                                                                      child: ClipRRect(
+                                                                          borderRadius: BorderRadius.circular(28),
+                                                                          child: CachedNetworkImage(
                                                                             imageUrl:
                                                                                 e,
-                                                                            imageBuilder: (context, imageProvider) =>
-                                                                                Container(
+                                                                            imageBuilder:
+                                                                                (context, imageProvider) =>
+                                                                                    Container(
                                                                               decoration:
                                                                                   BoxDecoration(
-                                                                                image: DecorationImage(
+                                                                                image:
+                                                                                    DecorationImage(
                                                                                   image: imageProvider,
                                                                                   fit: BoxFit.cover,
                                                                                 ),
                                                                               ),
                                                                             ),
-                                                                            placeholder: (context, url) =>
-                                                                                CircularProgressIndicator(),
-                                                                            errorWidget: (context, url, error) =>
+                                                                            placeholder:
+                                                                                (context, url) =>
+                                                                                    Center(child: CircularProgressIndicator()),
+                                                                            errorWidget: (context,
+                                                                                    url,
+                                                                                    error) =>
                                                                                 Image.asset(
                                                                               "assets/default_product_image.png",
-                                                                          
-                                                                              fit:
-                                                                                  BoxFit.cover,
+                                                                              fit: BoxFit
+                                                                                  .cover,
                                                                             ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Opacity(
-                                                                        opacity:
-                                                                            0.8,
+                                                                          )),
+                                                                    ),
+                                                                    Opacity(
+                                                                      opacity: 0.8,
+                                                                      child:
+                                                                          Padding(
+                                                                        padding: EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                5.w),
                                                                         child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              EdgeInsets.symmetric(horizontal: 5.w),
+                                                                            Align(
+                                                                          alignment:
+                                                                              Alignment
+                                                                                  .bottomCenter,
                                                                           child:
-                                                                              Align(
-                                                                            alignment:
-                                                                                Alignment.bottomCenter,
-                                                                            child:
-                                                                                Container(
-                                                                              decoration:
-                                                                                  BoxDecoration(
-                                                                                gradient: LinearGradient(begin: Alignment.topRight, colors: [
-                                                                                  Colors.transparent,
-                                                                                  Colors.black
-                                                                                ]),
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  bottomRight: Radius.circular(28),
-                                                                                  bottomLeft: Radius.circular(28),
-                                                                                  topRight: Radius.circular(28),
-                                                                                  topLeft: Radius.circular(28),
-                                                                                ),
+                                                                              Container(
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              gradient: LinearGradient(
+                                                                                  begin: Alignment.topRight,
+                                                                                  colors: [
+                                                                                    Colors.transparent,
+                                                                                    Colors.black
+                                                                                  ]),
+                                                                              borderRadius:
+                                                                                  BorderRadius.only(
+                                                                                bottomRight:
+                                                                                    Radius.circular(28),
+                                                                                bottomLeft:
+                                                                                    Radius.circular(28),
+                                                                                topRight:
+                                                                                    Radius.circular(28),
+                                                                                topLeft:
+                                                                                    Radius.circular(28),
                                                                               ),
-                                                                              height:
-                                                                                  23.h,
-                                                                              width:
-                                                                                  MediaQuery.of(context).size.width,
                                                                             ),
+                                                                            height:
+                                                                                23.h,
+                                                                            width: MediaQuery.of(context)
+                                                                                .size
+                                                                                .width,
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      Positioned(
-                                                                        top: 35.h,
-                                                                        left: 8.w,
-                                                                        right:
-                                                                            8.w,
+                                                                    ),
+                                                                    Positioned(
+                                                                      top: 35.h,
+                                                                      left: 8.w,
+                                                                      right: 8.w,
+                                                                      child:
+                                                                          Container(
+                                                                        // height: 10.h,
+                                                                        width: MediaQuery.of(
+                                                                                context)
+                                                                            .size
+                                                                            .width,
+                                                                        // color:Colors.red,
                                                                         child:
+                                                                            Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment
+                                                                                  .center,
+                                                                          children: [
                                                                             Container(
-                                                                          // height: 10.h,
-                                                                          width: MediaQuery.of(context)
+                                                                              width: MediaQuery.of(context)
+                                                                                  .size
+                                                                                  .width,
+                                                                              child:
+                                                                                  Row(
+                                                                                mainAxisAlignment:
+                                                                                    MainAxisAlignment.spaceBetween,
+                                                                                children: [
+                                                                                  Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: [
+                                                                                      // Container(
+                                                                                      //   alignment: Alignment.center,
+                                                                                      //   width: MediaQuery.of(context).size.width * 0.2,
+                                                                                      //   height: MediaQuery.of(context).size.height * 0.03,
+                                                                                      //   decoration: BoxDecoration(
+                                                                                      //     color: Color(0xfff7c7773),
+                                                                                      //     borderRadius: BorderRadius.all(
+                                                                                      //       Radius.circular(8),
+                                                                                      //     ),
+                                                                                      //   ),
+                                                                                      //   child: Padding(
+                                                                                      //     padding: EdgeInsets.all(0.5.h),
+                                                                                      //     child: Text(
+                                                                                      //       "Brand Name",
+                                                                                      //       style: TextStyle(
+                                                                                      //         fontSize: 1.3.h,
+                                                                                      //         color: Colors.white,
+                                                                                      //       ),
+                                                                                      //     ),
+                                                                                      //   ),
+                                                                                      // ),
+                                                                                      // SizedBox(
+                                                                                      //   height: 1.h,
+                                                                                      // ),
+                                                                                      Container(
+                                                                                        child: Text(
+                                                                                          widget.pronamenevigatior ?? 'N/A',
+                                                                                          style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
+                                                                                        ),
+                                                                                      ),
+                                                                                      // Container(
+                                                                                      //   child: Text(
+                                                                                      //     "Artist Name",
+                                                                                      //     style: TextStyle(fontSize: 1.9.h, color: Colors.grey.shade300),
+                                                                                      //   ),
+                                                                                      // ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      Container(
+                                                                                        alignment: Alignment.center,
+                                                                                        height: 4.h,
+                                                                                        width: 9.w,
+                                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
+                                                                                        child: IconButton(
+                                                                                          icon: Icon(
+                                                                                            Icons.share,
+                                                                                            color: Colors.grey,
+                                                                                            size: 2.h,
+                                                                                          ),
+                                                                                          onPressed: () {},
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            // SizedBox()
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ));
+                                                          }).toList(),
+                                                          options: CarouselOptions(
+                                                            height: 45.h,
+                                                            enlargeCenterPage:
+                                                                false,
+                                                            autoPlay: true,
+                                                            aspectRatio: 16 / 9,
+                                                            autoPlayCurve: Curves
+                                                                .fastOutSlowIn,
+                                                            enableInfiniteScroll:
+                                                                true,
+                                                            autoPlayAnimationDuration:
+                                                                Duration(
+                                                                    milliseconds:
+                                                                        800),
+                                                            viewportFraction: 1,
+                                                          ),
+                                                        )
+                                                  : (displayallcolor?.tripurStock
+                                                              ?.length !=
+                                                          0)
+                                                      ? (displayallcolor
+                                                                  ?.tripurStock?[0]
+                                                                  .menImageArray
+                                                                  ?.length ==
+                                                              0)
+                                                          ? CarouselSlider(
+                                                              items:
+                                                                  images.map((e) {
+                                                                return ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                28),
+                                                                    child: Stack(
+                                                                      children: [
+                                                                        Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(28),
+                                                                          ),
+                                                                          height:
+                                                                              54.h,
+                                                                          width: MediaQuery.of(
+                                                                                  context)
                                                                               .size
                                                                               .width,
-                                                                          // color:Colors.red,
+                                                                          margin: EdgeInsets.symmetric(
+                                                                              horizontal:
+                                                                                  5.w),
                                                                           child:
-                                                                              Column(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: [
-                                                                              Container(
-                                                                                width: MediaQuery.of(context).size.width,
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                  children: [
-                                                                                    Column(
-                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                      children: [
-                                                                                        Container(
-                                                                                          child: Text(
-                                                                                            widget.pronamenevigatior ?? 'N/A',
-                                                                                           
-                                                                                            style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
-                                                                                          ),
-                                                                                        ),
-                                                                                        // Container(
-                                                                                        //   child: Text(
-                                                                                        //     "Artist Name",
-                                                                                        //     style: TextStyle(
-                                                                                        //         fontSize: 1.9.h,
-                                                                                        //         // fontWeight:
-                                                                                        //         //     FontWeight
-                                                                                        //         //         .bold,
-                                                                                        //         color: Colors.grey.shade300),
-                                                                                        //   ),
-                                                                                        // ),
-                                                                                      ],
-                                                                                    ),
-
-                                                                                    // SizedBox(
-                                                                                    //   width: 20.w,
-                                                                                    // ),
-
-                                                                                    Row(
-                                                                                      children: [
-                                                                                       
-                                                                                        SizedBox(width: 3.w),
-                                                                                        Container(
-                                                                                          alignment: Alignment.center,
-                                                                                          height: 4.h,
-                                                                                          width: 9.w,
-                                                                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
-                                                                                          child: IconButton(
-                                                                                            icon: Icon(
-                                                                                              Icons.share,
-                                                                                              color: Colors.grey,
-                                                                                              size: 2.h,
-                                                                                            ),
-                                                                                            onPressed: () {},
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                              // SizedBox()
-                                                                            ],
+                                                                              ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(28),
+                                                                            child: Image
+                                                                                .asset(
+                                                                              "assets/default_product_image.png",
+                                                                              fit: BoxFit
+                                                                                  .cover,
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                    ],
-                                                                  ));
-                                                            }).toList(),
-                                                            options:
-                                                                CarouselOptions(
-                                                              height: 45.h,
-                                                              enlargeCenterPage:
-                                                                  false,
-                                                              autoPlay: true,
-                                                              aspectRatio: 16 / 9,
-                                                              autoPlayCurve: Curves
-                                                                  .fastOutSlowIn,
-                                                              enableInfiniteScroll:
-                                                                  true,
-                                                              autoPlayAnimationDuration:
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          800),
-                                                              viewportFraction: 1,
-                                                            ),
-                                                          )
-                                                    : Text("No data found")
-                                            // :Image.asset("assets/product_1_img.png")
+                                                                        Opacity(
+                                                                          opacity:
+                                                                              0.8,
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(horizontal: 5.w),
+                                                                            child:
+                                                                                Align(
+                                                                              alignment:
+                                                                                  Alignment.bottomCenter,
+                                                                              child:
+                                                                                  Container(
+                                                                                decoration:
+                                                                                    BoxDecoration(
+                                                                                  gradient: LinearGradient(begin: Alignment.topRight, colors: [
+                                                                                    Colors.transparent,
+                                                                                    Colors.black
+                                                                                  ]),
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    bottomRight: Radius.circular(28),
+                                                                                    bottomLeft: Radius.circular(28),
+                                                                                    topRight: Radius.circular(28),
+                                                                                    topLeft: Radius.circular(28),
+                                                                                  ),
+                                                                                ),
+                                                                                height:
+                                                                                    23.h,
+                                                                                width:
+                                                                                    MediaQuery.of(context).size.width,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Positioned(
+                                                                          top: 35.h,
+                                                                          left: 8.w,
+                                                                          right:
+                                                                              8.w,
+                                                                          child:
+                                                                              Container(
+                                                                            // height: 10.h,
+                                                                            width: MediaQuery.of(context)
+                                                                                .size
+                                                                                .width,
+                                                                            // color:Colors.red,
+                                                                            child:
+                                                                                Column(
+                                                                              crossAxisAlignment:
+                                                                                  CrossAxisAlignment.center,
+                                                                              children: [
+                                                                                Container(
+                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    children: [
+                                                                                      Column(
+                                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                        children: [
+
+                                                                                          Container(
+                                                                                            child: Text(
+                                                                                              widget.pronamenevigatior ?? 'N/A',
+                                                                                              style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
+                                                                                            ),
+                                                                                          ),
+
+                                                                                        ],
+                                                                                      ),
+
+
+
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          SizedBox(width: 3.w),
+                                                                                          Container(
+                                                                                            alignment: Alignment.center,
+                                                                                            height: 4.h,
+                                                                                            width: 9.w,
+                                                                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
+                                                                                            child: IconButton(
+                                                                                              icon: Icon(
+                                                                                                Icons.share,
+                                                                                                color: Colors.grey,
+                                                                                                size: 2.h,
+                                                                                              ),
+                                                                                              onPressed: () {},
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ));
+                                                              }).toList(),
+                                                              options:
+                                                                  CarouselOptions(
+                                                                height: 45.h,
+                                                                enlargeCenterPage:
+                                                                    false,
+                                                                autoPlay: true,
+                                                                aspectRatio: 16 / 9,
+                                                                autoPlayCurve: Curves
+                                                                    .fastOutSlowIn,
+                                                                enableInfiniteScroll:
+                                                                    true,
+                                                                autoPlayAnimationDuration:
+                                                                    Duration(
+                                                                        milliseconds:
+                                                                            800),
+                                                                viewportFraction: 1,
+                                                              ),
+                                                            )
+                                                          : CarouselSlider(
+                                                              items: (displayallcolor
+                                                                          ?.mumbaiStock?[
+                                                                              0]
+                                                                          .menImageArray ??
+                                                                      [])
+                                                                  .map((e) {
+                                                                return ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                28),
+                                                                    child: Stack(
+                                                                      children: [
+                                                                        Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(28),
+                                                                          ),
+                                                                          height:
+                                                                              54.h,
+                                                                          width: MediaQuery.of(
+                                                                                  context)
+                                                                              .size
+                                                                              .width,
+                                                                          margin: EdgeInsets.symmetric(
+                                                                              horizontal:
+                                                                                  5.w),
+                                                                          child:
+                                                                              ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(28),
+                                                                            child:
+                                                                                CachedNetworkImage(
+                                                                              imageUrl:
+                                                                                  e,
+                                                                              imageBuilder: (context, imageProvider) =>
+                                                                                  Container(
+                                                                                decoration:
+                                                                                    BoxDecoration(
+                                                                                  image: DecorationImage(
+                                                                                    image: imageProvider,
+                                                                                    fit: BoxFit.cover,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              placeholder: (context, url) =>
+                                                                                  CircularProgressIndicator(),
+                                                                              errorWidget: (context, url, error) =>
+                                                                                  Image.asset(
+                                                                                "assets/default_product_image.png",
+
+                                                                                fit:
+                                                                                    BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Opacity(
+                                                                          opacity:
+                                                                              0.8,
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(horizontal: 5.w),
+                                                                            child:
+                                                                                Align(
+                                                                              alignment:
+                                                                                  Alignment.bottomCenter,
+                                                                              child:
+                                                                                  Container(
+                                                                                decoration:
+                                                                                    BoxDecoration(
+                                                                                  gradient: LinearGradient(begin: Alignment.topRight, colors: [
+                                                                                    Colors.transparent,
+                                                                                    Colors.black
+                                                                                  ]),
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    bottomRight: Radius.circular(28),
+                                                                                    bottomLeft: Radius.circular(28),
+                                                                                    topRight: Radius.circular(28),
+                                                                                    topLeft: Radius.circular(28),
+                                                                                  ),
+                                                                                ),
+                                                                                height:
+                                                                                    23.h,
+                                                                                width:
+                                                                                    MediaQuery.of(context).size.width,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Positioned(
+                                                                          top: 35.h,
+                                                                          left: 8.w,
+                                                                          right:
+                                                                              8.w,
+                                                                          child:
+                                                                              Container(
+                                                                            // height: 10.h,
+                                                                            width: MediaQuery.of(context)
+                                                                                .size
+                                                                                .width,
+                                                                            // color:Colors.red,
+                                                                            child:
+                                                                                Column(
+                                                                              crossAxisAlignment:
+                                                                                  CrossAxisAlignment.center,
+                                                                              children: [
+                                                                                Container(
+                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    children: [
+                                                                                      Column(
+                                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            child: Text(
+                                                                                              widget.pronamenevigatior ?? 'N/A',
+
+                                                                                              style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
+                                                                                            ),
+                                                                                          ),
+                                                                                          // Container(
+                                                                                          //   child: Text(
+                                                                                          //     "Artist Name",
+                                                                                          //     style: TextStyle(
+                                                                                          //         fontSize: 1.9.h,
+                                                                                          //         // fontWeight:
+                                                                                          //         //     FontWeight
+                                                                                          //         //         .bold,
+                                                                                          //         color: Colors.grey.shade300),
+                                                                                          //   ),
+                                                                                          // ),
+                                                                                        ],
+                                                                                      ),
+
+                                                                                      // SizedBox(
+                                                                                      //   width: 20.w,
+                                                                                      // ),
+
+                                                                                      Row(
+                                                                                        children: [
+
+                                                                                          SizedBox(width: 3.w),
+                                                                                          Container(
+                                                                                            alignment: Alignment.center,
+                                                                                            height: 4.h,
+                                                                                            width: 9.w,
+                                                                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
+                                                                                            child: IconButton(
+                                                                                              icon: Icon(
+                                                                                                Icons.share,
+                                                                                                color: Colors.grey,
+                                                                                                size: 2.h,
+                                                                                              ),
+                                                                                              onPressed: () {},
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                                // SizedBox()
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ));
+                                                              }).toList(),
+                                                              options:
+                                                                  CarouselOptions(
+                                                                height: 45.h,
+                                                                enlargeCenterPage:
+                                                                    false,
+                                                                autoPlay: true,
+                                                                aspectRatio: 16 / 9,
+                                                                autoPlayCurve: Curves
+                                                                    .fastOutSlowIn,
+                                                                enableInfiniteScroll:
+                                                                    true,
+                                                                autoPlayAnimationDuration:
+                                                                    Duration(
+                                                                        milliseconds:
+                                                                            800),
+                                                                viewportFraction: 1,
+                                                              ),
+                                                            )
+                                                      : Text("No data found")
+                                              // :Image.asset("assets/product_1_img.png")
+                                              ),
+                                        ),
+                                        Positioned(
+                                          top: 48.5.h,
+                                          left: 41.w,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            width:30.w,
+                                            height:
+                                                MediaQuery.of(context).size.height *
+                                                    0.025,
+                                            decoration: BoxDecoration(
+                                              // border: Border.all(color: Colors.grey.shade200,),
+                                              color: Color(0xff333389),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
                                             ),
-                                      ),
-                                      Positioned(
-                                        top: 48.5.h,
-                                        left: 41.w,
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width:30.w,
-                                          height:
-                                              MediaQuery.of(context).size.height *
-                                                  0.025,
-                                          decoration: BoxDecoration(
-                                            // border: Border.all(color: Colors.grey.shade200,),
-                                            color: Color(0xff333389),
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(10),
+                                            child: SmoothPageIndicator(
+                                              controller: controller,
+                                              count: displayallcolor
+                                                  ?.mumbaiStock?[0].menImageArray?.length ?? 0,
+                                              axisDirection: Axis.horizontal,
+                                              effect: SlideEffect(
+                                                  spacing: 8.0,
+                                                  radius: 15.0,
+                                                  dotWidth: 7.0,
+                                                  dotHeight: 8.0,
+                                                  paintStyle: PaintingStyle.fill,
+                                                  strokeWidth: 1.5,
+                                                  dotColor: Colors.grey.shade300,
+                                                  activeDotColor: Colors.white),
                                             ),
-                                          ),
-                                          child: SmoothPageIndicator(
-                                            controller: controller,
-                                            count: displayallcolor
-                                                ?.mumbaiStock?[0].menImageArray?.length ?? 0,
-                                            axisDirection: Axis.horizontal,
-                                            effect: SlideEffect(
-                                                spacing: 8.0,
-                                                radius: 15.0,
-                                                dotWidth: 7.0,
-                                                dotHeight: 8.0,
-                                                paintStyle: PaintingStyle.fill,
-                                                strokeWidth: 1.5,
-                                                dotColor: Colors.grey.shade300,
-                                                activeDotColor: Colors.white),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 2.h,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 2.h),
-                              
-                                  ),
-                                  Container(
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 2.h),
-                                          child: Container(
-                                              alignment: Alignment.centerLeft,
-                                              margin: EdgeInsets.only(top: 1.h),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    "Select Color",
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 2.4.h,
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 2.h),
+
+                                    ),
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 2.h),
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                margin: EdgeInsets.only(top: 1.h),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      "Select Color",
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 2.4.h,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        height: 4.5.h,
-                                                        width: 9.w,
-                                                        child: CircleAvatar(
-                                                          // radius: 7.w,
-                                                          child: ClipOval(
-                                                            child: Image.network(
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          height: 4.5.h,
+                                                          width: 9.w,
+                                                          child: CircleAvatar(
+                                                            // radius: 7.w,
+                                                            child: ClipOval(
+                                                              child: Image.network(
+                                                                product2color
+                                                                        ?.data?[
+                                                                            selectbtn]
+                                                                        .colorImage ??
+                                                                    '',
+                                                                width: 12.w,
+                                                                height: 13.w,
+                                                                fit: BoxFit.cover,
+                                                              ),
+
+                                                            ),
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                              shape:
+                                                                  BoxShape.circle,
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xffbababa))),
+                                                        ),
+                                                        SizedBox(width: 4.w),
+                                                        Container(
+                                                          width: 40.w,
+                                                          child: Text(
                                                               product2color
                                                                       ?.data?[
                                                                           selectbtn]
-                                                                      .colorImage ??
+                                                                      .colorName ??
                                                                   '',
-                                                              width: 12.w,
-                                                              height: 13.w,
-                                                              fit: BoxFit.cover,
+                                                              maxLines: 2,
+                                                              // 'Red',
+                                                              style: TextStyle(
+                                                                fontSize: 2.5.h,
+                                                                fontWeight:
+                                                                    FontWeight.bold,
+                                                              )),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 2.h, right: 2.h),
+                                            child: Divider(
+                                                color: Colors.grey.shade400),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 2.h),
+                                            child: Container(
+                                                height: 18.18.h,
+                                                width: 90.w,
+                                                padding: EdgeInsets.all(9.0),
+                                                child: GridView.builder(
+                                                  itemCount:
+                                                      product2color?.data?.length,
+                                                  gridDelegate:
+                                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 7,
+                                                          crossAxisSpacing: 12.0,
+                                                          childAspectRatio: 3 / 3,
+                                                          mainAxisSpacing: 6.0),
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            btn = index;
+                                                            selectbtn = index;
+                                                          });
+                                                          selectimageapi();
+                                                          displaycolor();
+                                                        },
+                                                        child: Stack(
+                                                          children: [
+                                                            Container(
+                                                              height: 10.h,
+                                                              width: 20.w,
+                                                              child: CircleAvatar(
+                                                                // radius: 7.w,
+                                                                child: ClipOval(
+                                                                  child:
+                                                                      Image.network(
+                                                                    product2color
+                                                                            ?.data?[
+                                                                                index]
+                                                                            .colorImage ??
+                                                                        "",
+
+                                                                    // 'assets/Red_Color.jpg',
+                                                                    width: 10.w,
+                                                                    height: 13.w,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+
+                                                                ),
+                                                              ),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      // color: tripur[index],
+                                                                      border: Border.all(
+                                                                          color: Color(
+                                                                              0xffbababa))),
                                                             ),
-                                                          
+                                                            (btn == index)
+                                                                ? Container(
+                                                                    height: 10.h,
+                                                                    width: 20.w,
+                                                                    decoration: BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color: Colors
+                                                                            .transparent),
+                                                                    child: Icon(
+                                                                      Icons.check,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: 15.sp,
+                                                                    ),
+                                                                  )
+                                                                : Container()
+                                                          ],
+                                                        ));
+                                                  },
+                                                )),
+                                          ),
+
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 2.h),
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  "Select Gender",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 2.4.h,
+                                                  ),
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 2.h),
+                                            child: Divider(
+                                                color: Colors.grey.shade400),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(2.h),
+                                            child: Container(
+                                              child: Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        gen = 0;
+                                                      });
+                                                      displaycolor();
+                                                    },
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.all(0.1.h),
+                                                      alignment: Alignment.center,
+                                                      width: 10.h,
+                                                      height: 5.h,
+                                                      decoration: BoxDecoration(
+                                                          color: (gen == 1)
+                                                              ? Colors.white
+                                                              : Color(0xfff333389),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10),
+                                                          border: Border.all(
+                                                              color: Color(
+                                                                  0xff333389))),
+                                                      child: Text(
+                                                        'Men',
+                                                        style: TextStyle(
+                                                            color: (gen == 1)
+                                                                ? Color(0xff333389)
+                                                                : Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 2.h),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 0.6.h,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        gen = 1;
+                                                        displaycolor();
+                                                        _s.text = "";
+                                                        _ts.text = "";
+                                                        _totalms.text = "";
+
+                                                        _xs.text = "";
+                                                        _txs.text = "";
+                                                        _totalxs.text = "";
+
+                                                        _m.text = "";
+                                                        _tm.text = "";
+                                                        _totalmm.text = "";
+
+                                                        _l.text = "";
+                                                        _tl.text = "";
+                                                        _total_ll.text = "";
+
+                                                        _xl.text = "";
+                                                        _txl.text = "";
+                                                        _total_xl.text = "";
+
+                                                        _xxl.text = "";
+                                                        _txxl.text = "";
+                                                        _total_xxl.text = "";
+
+                                                        _3xl.text = "";
+                                                        _t3xl.text = "";
+                                                        _total_3xl.text = "";
+
+                                                        _4xl.text = "";
+                                                        _t4xl.text = "";
+                                                        _total_4xl.text = "";
+
+                                                        _5xl.text = "";
+                                                        _t5xl.text = "";
+                                                        _total_5xl.text = "";
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.all(0.1.h),
+                                                      alignment: Alignment.center,
+                                                      width: 14.h,
+                                                      height: 5.h,
+                                                      decoration: BoxDecoration(
+                                                          color: (gen == 0)
+                                                              ? Colors.white
+                                                              : Color(0xfff333389),
+                                                          // color:_selectedColor,
+
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10),
+                                                          border: Border.all(
+                                                              color: Color(
+                                                                  0xff333389))),
+                                                      child: Text(
+                                                        'Women',
+                                                        style: TextStyle(
+                                                            color: (gen == 0)
+                                                                ? Color(0xff333389)
+                                                                : Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 2.h),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 2.h),
+                                          Container(
+                                              alignment: Alignment.center,
+                                              height: 10.h,
+                                              width:
+                                                  MediaQuery.of(context).size.width,
+                                              color: Color(0xfffeaeaf3),
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 2.h),
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(height: 2.h),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          width: 30.w,
+                                                          child: Text(
+                                                            "Color :",
+                                                            style: TextStyle(
+                                                              fontSize: 1.8.h,
+                                                            ),
                                                           ),
                                                         ),
-                                                        decoration: BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xffbababa))),
-                                                      ),
-                                                      SizedBox(width: 4.w),
-                                                      Container(
-                                                        width: 40.w,
-                                                        child: Text(
+                                                        Container(
+                                                          width: 30.w,
+                                                          child: Text(
+                                                            "S - XL :",
+                                                            style: TextStyle(
+                                                              fontSize: 1.8.h,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        // SizedBox(
+                                                        //   width: 6.h,
+                                                        // ),
+
+                                                        Container(
+                                                          width: 30.w,
+                                                          child: Text(
+                                                            " 2XL - 3XL :",
+                                                            style: TextStyle(
+                                                              fontSize: 1.8.h,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          width: 30.w,
+                                                          child: Text(
+                                                            // "Red",
                                                             product2color
                                                                     ?.data?[
                                                                         selectbtn]
                                                                     .colorName ??
                                                                 '',
-                                                            maxLines: 2,
-                                                            // 'Red',
                                                             style: TextStyle(
-                                                              fontSize: 2.5.h,
-                                                              fontWeight:
-                                                                  FontWeight.bold,
-                                                            )),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              )),
-                                        ),
-                                        SizedBox(
-                                          height: 1.h,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 2.h, right: 2.h),
-                                          child: Divider(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 2.h),
-                                          child: Container(
-                                              height: 18.18.h,
-                                              width: 90.w,
-                                              padding: EdgeInsets.all(9.0),
-                                              child: GridView.builder(
-                                                itemCount:
-                                                    product2color?.data?.length,
-                                                gridDelegate:
-                                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 7,
-                                                        crossAxisSpacing: 12.0,
-                                                        childAspectRatio: 3 / 3,
-                                                        mainAxisSpacing: 6.0),
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          btn = index;
-                                                          selectbtn = index;
-                                                        });
-                                                        selectimageapi();
-                                                        displaycolor();
-                                                      },
-                                                      child: Stack(
-                                                        children: [
-                                                          Container(
-                                                            height: 10.h,
-                                                            width: 20.w,
-                                                            child: CircleAvatar(
-                                                              // radius: 7.w,
-                                                              child: ClipOval(
-                                                                child:
-                                                                    Image.network(
-                                                                  product2color
-                                                                          ?.data?[
-                                                                              index]
-                                                                          .colorImage ??
-                                                                      "",
-
-                                                                  // 'assets/Red_Color.jpg',
-                                                                  width: 10.w,
-                                                                  height: 13.w,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                ),
-                                                              
-                                                              ),
-                                                            ),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    // color: tripur[index],
-                                                                    border: Border.all(
-                                                                        color: Color(
-                                                                            0xffbababa))),
+                                                                fontSize: 2.h,
+                                                                fontWeight:
+                                                                    FontWeight.bold,
+                                                                color: Color(
+                                                                    0xfff333389)),
+                                                            maxLines: 2,
                                                           ),
-                                                          (btn == index)
-                                                              ? Container(
-                                                                  height: 10.h,
-                                                                  width: 20.w,
-                                                                  decoration: BoxDecoration(
-                                                                      shape: BoxShape
-                                                                          .circle,
-                                                                      color: Colors
-                                                                          .transparent),
-                                                                  child: Icon(
-                                                                    Icons.check,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    size: 15.sp,
-                                                                  ),
+                                                        ),
+                                                        Container(
+                                                          width: 30.w,
+                                                          child: displayallcolor
+                                                                          ?.priceArray?[
+                                                                              0]
+                                                                          .minPrice ==
+                                                                      0 ||
+                                                                  displayallcolor
+                                                                          ?.priceArray?[
+                                                                              0]
+                                                                          .minPrice ==
+                                                                      null
+                                                              ? Text(
+                                                                  "N/A",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          2.6.h,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Color(
+                                                                          0xfff333389)),
                                                                 )
-                                                              : Container()
-                                                        ],
-                                                      ));
-                                                },
-                                              )),
-                                        ),
+                                                              : Text(
+                                                                  '₹' +
+                                                                      (displayallcolor
+                                                                              ?.priceArray?[
+                                                                                  0]
+                                                                              .minPrice)
+                                                                          .toString(),
+                                                                  // "₹125",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          2.6.h,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Color(
+                                                                          0xfff333389)),
+                                                                ),
+                                                        ),
+                                                        // SizedBox(
+                                                        //   width: 6.h,
+                                                        // ),
 
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 2.h),
-                                          child: Container(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                "Select Gender",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 2.4.h,
-                                                ),
-                                              )),
-                                        ),
-                                        SizedBox(
-                                          height: 1.h,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 2.h),
-                                          child: Divider(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.all(2.h),
-                                          child: Container(
-                                            child: Row(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      gen = 0;
-                                                    });
-                                                    displaycolor();
-                                                  },
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.all(0.1.h),
-                                                    alignment: Alignment.center,
-                                                    width: 10.h,
-                                                    height: 5.h,
-                                                    decoration: BoxDecoration(
-                                                        color: (gen == 1)
-                                                            ? Colors.white
-                                                            : Color(0xfff333389),
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10),
-                                                        border: Border.all(
-                                                            color: Color(
-                                                                0xff333389))),
-                                                    child: Text(
-                                                      'Men',
-                                                      style: TextStyle(
-                                                          color: (gen == 1)
-                                                              ? Color(0xff333389)
-                                                              : Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 2.h),
+                                                        Container(
+                                                          width: 30.w,
+                                                          child: displayallcolor
+                                                                          ?.priceArray?[
+                                                                              0]
+                                                                          .minPrice ==
+                                                                      0 ||
+                                                                  displayallcolor
+                                                                          ?.priceArray?[
+                                                                              0]
+                                                                          .minPrice ==
+                                                                      null
+                                                              ? Text(
+                                                                  "N/A",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          2.6.h,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Color(
+                                                                          0xfff333389)),
+                                                                )
+                                                              : Text(
+                                                                  '₹' +
+                                                                      (displayallcolor
+                                                                              ?.priceArray?[
+                                                                                  0]
+                                                                              .maxPrice)
+                                                                          .toString(),
+                                                                  // " ₹150",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          2.6.h,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Color(
+                                                                          0xfff333389)),
+                                                                ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
+                                                  ],
                                                 ),
-                                                SizedBox(
-                                                  width: 0.6.h,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      gen = 1;
-                                                      displaycolor();
-                                                      _s.text = "";
-                                                      _ts.text = "";
-                                                      _totalms.text = "";
-
-                                                      _xs.text = "";
-                                                      _txs.text = "";
-                                                      _totalxs.text = "";
-
-                                                      _m.text = "";
-                                                      _tm.text = "";
-                                                      _totalmm.text = "";
-
-                                                      _l.text = "";
-                                                      _tl.text = "";
-                                                      _total_ll.text = "";
-
-                                                      _xl.text = "";
-                                                      _txl.text = "";
-                                                      _total_xl.text = "";
-
-                                                      _xxl.text = "";
-                                                      _txxl.text = "";
-                                                      _total_xxl.text = "";
-
-                                                      _3xl.text = "";
-                                                      _t3xl.text = "";
-                                                      _total_3xl.text = "";
-
-                                                      _4xl.text = "";
-                                                      _t4xl.text = "";
-                                                      _total_4xl.text = "";
-
-                                                      _5xl.text = "";
-                                                      _t5xl.text = "";
-                                                      _total_5xl.text = "";
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.all(0.1.h),
-                                                    alignment: Alignment.center,
-                                                    width: 14.h,
-                                                    height: 5.h,
-                                                    decoration: BoxDecoration(
-                                                        color: (gen == 0)
-                                                            ? Colors.white
-                                                            : Color(0xfff333389),
-                                                        // color:_selectedColor,
-
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10),
-                                                        border: Border.all(
-                                                            color: Color(
-                                                                0xff333389))),
-                                                    child: Text(
-                                                      'Women',
-                                                      style: TextStyle(
-                                                          color: (gen == 0)
-                                                              ? Color(0xff333389)
-                                                              : Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 2.h),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              )),
+                                          SizedBox(
+                                            height: 3.5.h,
                                           ),
-                                        ),
-                                        SizedBox(height: 2.h),
-                                        Container(
-                                            alignment: Alignment.center,
-                                            height: 10.h,
-                                            width:
-                                                MediaQuery.of(context).size.width,
-                                            color: Color(0xfffeaeaf3),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 2.h),
-                                              child: Column(
+
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                right: 7.w, left: 3.w, bottom: 2.h),
+                                            child: Container(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  SizedBox(height: 2.h),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        width: 30.w,
-                                                        child: Text(
-                                                          "Color :",
-                                                          style: TextStyle(
-                                                            fontSize: 1.8.h,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 30.w,
-                                                        child: Text(
-                                                          "S - XL :",
-                                                          style: TextStyle(
-                                                            fontSize: 1.8.h,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      // SizedBox(
-                                                      //   width: 6.h,
-                                                      // ),
-
-                                                      Container(
-                                                        width: 30.w,
-                                                        child: Text(
-                                                          " 2XL - 3XL :",
-                                                          style: TextStyle(
-                                                            fontSize: 1.8.h,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
+                                                  Text(
+                                                    "Size",
+                                                    style: TextStyle(fontSize: 2.h),
                                                   ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        width: 30.w,
-                                                        child: Text(
-                                                          // "Red",
-                                                          product2color
-                                                                  ?.data?[
-                                                                      selectbtn]
-                                                                  .colorName ??
-                                                              '',
-                                                          style: TextStyle(
-                                                              fontSize: 2.h,
-                                                              fontWeight:
-                                                                  FontWeight.bold,
-                                                              color: Color(
-                                                                  0xfff333389)),
-                                                          maxLines: 2,
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 30.w,
-                                                        child: displayallcolor
-                                                                        ?.priceArray?[
-                                                                            0]
-                                                                        .minPrice ==
-                                                                    0 ||
-                                                                displayallcolor
-                                                                        ?.priceArray?[
-                                                                            0]
-                                                                        .minPrice ==
-                                                                    null
-                                                            ? Text(
-                                                                "N/A",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        2.6.h,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Color(
-                                                                        0xfff333389)),
-                                                              )
-                                                            : Text(
-                                                                '₹' +
-                                                                    (displayallcolor
-                                                                            ?.priceArray?[
-                                                                                0]
-                                                                            .minPrice)
-                                                                        .toString(),
-                                                                // "₹125",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        2.6.h,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Color(
-                                                                        0xfff333389)),
-                                                              ),
-                                                      ),
-                                                      // SizedBox(
-                                                      //   width: 6.h,
-                                                      // ),
-
-                                                      Container(
-                                                        width: 30.w,
-                                                        child: displayallcolor
-                                                                        ?.priceArray?[
-                                                                            0]
-                                                                        .minPrice ==
-                                                                    0 ||
-                                                                displayallcolor
-                                                                        ?.priceArray?[
-                                                                            0]
-                                                                        .minPrice ==
-                                                                    null
-                                                            ? Text(
-                                                                "N/A",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        2.6.h,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Color(
-                                                                        0xfff333389)),
-                                                              )
-                                                            : Text(
-                                                                '₹' +
-                                                                    (displayallcolor
-                                                                            ?.priceArray?[
-                                                                                0]
-                                                                            .maxPrice)
-                                                                        .toString(),
-                                                                // " ₹150",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        2.6.h,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Color(
-                                                                        0xfff333389)),
-                                                              ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                  // SizedBox(width: 1.8.h),
+                                                  Text("Mumbai",
+                                                      style:
+                                                          TextStyle(fontSize: 2.h)),
+                                                  // SizedBox(width: 1.8.h),
+                                                  Text("Tripur",
+                                                      style:
+                                                          TextStyle(fontSize: 2.h)),
+                                                  // SizedBox(width: 1.8.h),
+                                                  Text("Total",
+                                                      style:
+                                                          TextStyle(fontSize: 2.h)),
                                                 ],
                                               ),
-                                            )),
-                                        SizedBox(
-                                          height: 3.5.h,
-                                        ),
-
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              right: 7.w, left: 3.w, bottom: 2.h),
-                                          child: Container(
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "Size",
-                                                  style: TextStyle(fontSize: 2.h),
-                                                ),
-                                                // SizedBox(width: 1.8.h),
-                                                Text("Mumbai",
-                                                    style:
-                                                        TextStyle(fontSize: 2.h)),
-                                                // SizedBox(width: 1.8.h),
-                                                Text("Tripur",
-                                                    style:
-                                                        TextStyle(fontSize: 2.h)),
-                                                // SizedBox(width: 1.8.h),
-                                                Text("Total",
-                                                    style:
-                                                        TextStyle(fontSize: 2.h)),
-                                              ],
                                             ),
                                           ),
-                                        ),
-                                        // Padding(
-                                        //   padding: EdgeInsets.all(8.0),
-                                        //   child:
-                                        //       Divider(color: Colors.grey.shade400),
-                                        // ),
+                                          // Padding(
+                                          //   padding: EdgeInsets.all(8.0),
+                                          //   child:
+                                          //       Divider(color: Colors.grey.shade400),
+                                          // ),
 
-                                        Container(
-                                          height: 12.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          color: Color(0xfff9f9f9),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(2.h),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "XS",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                                      0]
-                                                                  .xs)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .xs)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.mumbaiStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .xs ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      // '432',
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color:
-                                                                 Color(
-                                                                    0xfff333389))),
-                                                        child:TextFormField(
-                                                          readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                              0]
-                                                                  .xs)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.mumbaiStock?[0]
-                                                              .xs)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          validator:(value){
-                                                            if(value!.isEmpty){
-
-                                                            }
-                                                          },
-
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _xs,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // contentPadding: EdgeInsets.only(top: 0.1.w),
-
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.tripurStock?[
-                                                                      0]
-                                                                  .xs)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .xs)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.tripurStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .xs ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      // '432',
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                           readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.tripurStock?[
-                                                              0]
-                                                                  .xs)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.tripurStock?[0]
-                                                              .xs)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _txs,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      totalxs.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-
-                                                          controller: _totalxs,
-
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.all(2.h),
-                                          child: Container(
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "S ",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                                      0]
-                                                                  .s)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .s)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.mumbaiStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .s ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      // '432',
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          readOnly: regex.hasMatch(
-                                                                  (displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .s)
-                                                                      .toString())
-                                                              ? (int.parse((displayallcolor
-                                                                              ?.mumbaiStock?[0]
-                                                                              .s)
-                                                                          .toString()) >
-                                                                      0)
-                                                                  ? false
-                                                                  : true
-                                                              : true,
-                                                          controller: _s,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // contentPadding: EdgeInsets.only(top: 0.1.w),
-
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.tripurStock?[
-                                                                      0]
-                                                                  .s)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .s)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.tripurStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .s ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      // '432',
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                                readOnly: regex.hasMatch(
+                                          Container(
+                                            height: 12.h,
+                                            width:
+                                                MediaQuery.of(context).size.width,
+                                            color: Color(0xfff9f9f9),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(2.h),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "XS",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                        0]
+                                                                    .xs)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .xs)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.mumbaiStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .xs ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        // '432',
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color:
+                                                                   Color(
+                                                                      0xfff333389))),
+                                                          child:TextFormField(
+                                                            readOnly: regex.hasMatch(
                                                                 (displayallcolor
-                                                                    ?.tripurStock?[
+                                                                    ?.mumbaiStock?[
                                                                 0]
-                                                                    .s)
+                                                                    .xs)
                                                                     .toString())
                                                                 ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .s)
+                                                                ?.mumbaiStock?[0]
+                                                                .xs)
                                                                 .toString()) >
                                                                 0)
                                                                 ? false
                                                                 : true
                                                                 : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
+                                                            validator:(value){
+                                                              if(value!.isEmpty){
 
-                                                          controller: _ts,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
+                                                              }
+                                                            },
 
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      totals.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
+                                                            onChanged: (value) {
 
-                                                          controller: _totalms,
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
 
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          height: 12.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          color: Color(0xfff9f9f9),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(2.h),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "M ",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                                      0]
-                                                                  .m)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .m)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.mumbaiStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .m ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      // '432',
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                              0]
-                                                                  .m)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.mumbaiStock?[0]
-                                                              .m)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _m,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.tripurStock?[
-                                                                      0]
-                                                                  .m)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .m)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.tripurStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .m ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.tripurStock?[
-                                                              0]
-                                                                  .m)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.tripurStock?[0]
-                                                              .m)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _tm,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      totalm.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
 
-                                                          controller: _totalmm,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.all(2.h),
-                                          child: Container(
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "L ",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                                      0]
-                                                                  .l)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .l)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.mumbaiStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .l ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                              0]
-                                                                  .l)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.mumbaiStock?[0]
-                                                              .l)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _l,
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _xs,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
 
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.tripurStock?[
-                                                                      0]
-                                                                  .l)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .l)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.tripurStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .l ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.tripurStock?[
-                                                              0]
-                                                                  .l)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.tripurStock?[0]
-                                                              .l)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _tl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      totall.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _total_ll,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          height: 12.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          color: Color(0xfff9f9f9),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(2.h),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "XL",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                                      0]
-                                                                  .xl)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .xl)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.mumbaiStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .xl ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                              0]
-                                                                  .xl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.mumbaiStock?[0]
-                                                              .xl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _xl,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // contentPadding: EdgeInsets.only(top: 0.1.w),
 
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                                  ?.tripurStock?[
-                                                                      0]
-                                                                  .xl)
-                                                              .toString())
-                                                          ? int.parse((displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .xl)
-                                                                      .toString()) >=
-                                                                  0
-                                                              ? (displayallcolor
-                                                                          ?.tripurStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                          ?.tripurStock?[
-                                                                              0]
-                                                                          .xl ??
-                                                                      '')
-                                                                  : ""
-                                                              : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.tripurStock?[
-                                                              0]
-                                                                  .xl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.tripurStock?[0]
-                                                              .xl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _txl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      totalxl.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _total_xl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.all(2.h),
-                                          child: Container(
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "2XL",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      regex.hasMatch((displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .xxl)
-                                                          .toString())
-                                                          ? int.parse((displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .xxl)
-                                                          .toString()) >=
-                                                          0
-                                                          ? (displayallcolor
-                                                          ?.mumbaiStock
-                                                          ?.length !=
-                                                          0)
-                                                          ? (displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .xxl ??
-                                                          '')
-                                                          : ""
-                                                          : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                              0]
-                                                                  .xxl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.mumbaiStock?[0]
-                                                              .xxl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _xxl,
-
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .xxl)
-                                                          .toString())
-                                                          ? int.parse((displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .xs)
-                                                          .toString()) >=
-                                                          0
-                                                          ? (displayallcolor
-                                                          ?.tripurStock
-                                                          ?.length !=
-                                                          0)
-                                                          ? (displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .xxl ??
-                                                          '')
-                                                          : ""
-                                                          : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.tripurStock?[
-                                                              0]
-                                                                  .xxl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.tripurStock?[0]
-                                                              .xxl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _txxl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      total2xl.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _total_xxl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          height: 12.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          color: Color(0xfff9f9f9),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(2.h),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "3XL",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s3xl)
-                                                          .toString())
-                                                          ? int.parse((displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s3xl)
-                                                          .toString()) >=
-                                                          0
-                                                          ? (displayallcolor
-                                                          ?.mumbaiStock
-                                                          ?.length !=
-                                                          0)
-                                                          ? (displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s3xl ??
-                                                          '')
-                                                          : ""
-                                                          : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                              0]
-                                                                  .s3xl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.mumbaiStock?[0]
-                                                              .s3xl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _3xl,
-
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s3xl)
-                                                          .toString())
-                                                          ? int.parse((displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s3xl)
-                                                          .toString()) >=
-                                                          0
-                                                          ? (displayallcolor
-                                                          ?.tripurStock
-                                                          ?.length !=
-                                                          0)
-                                                          ? (displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s3xl ??
-                                                          '')
-                                                          : ""
-                                                          : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.tripurStock?[
-                                                              0]
-                                                                  .s3xl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.tripurStock?[0]
-                                                              .s3xl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _t3xl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      total3xl.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _total_3xl,
-
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.all(2.h),
-                                          child: Container(
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "4XL",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s4xl)
-                                                          .toString())
-                                                          ? int.parse((displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s4xl)
-                                                          .toString()) >=
-                                                          0
-                                                          ? (displayallcolor
-                                                          ?.mumbaiStock
-                                                          ?.length !=
-                                                          0)
-                                                          ? (displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s4xl ??
-                                                          '')
-                                                          : ""
-                                                          : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                              0]
-                                                                  .s4xl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.mumbaiStock?[0]
-                                                              .s4xl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _4xl,
-
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s4xl)
-                                                          .toString())
-                                                          ? int.parse((displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s4xl)
-                                                          .toString()) >=
-                                                          0
-                                                          ? (displayallcolor
-                                                          ?.tripurStock
-                                                          ?.length !=
-                                                          0)
-                                                          ? (displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s4xl ??
-                                                          '')
-                                                          : ""
-                                                          : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.tripurStock?[
-                                                              0]
-                                                                  .s4xl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.tripurStock?[0]
-                                                              .s4xl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _t4xl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      total4xl.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                         
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _total_4xl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          height: 12.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          color: Color(0xfff9f9f9),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(2.h),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "5XL",
-                                                  style: TextStyle(
-                                                      fontSize: 3.h,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s5xl)
-                                                          .toString())
-                                                          ? int.parse((displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s5xl)
-                                                          .toString()) >=
-                                                          0
-                                                          ? (displayallcolor
-                                                          ?.mumbaiStock
-                                                          ?.length !=
-                                                          0)
-                                                          ? (displayallcolor
-                                                          ?.mumbaiStock?[
-                                                      0]
-                                                          .s5xl ??
-                                                          '')
-                                                          : ""
-                                                          : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.mumbaiStock?[
-                                                              0]
-                                                                  .s5xl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.mumbaiStock?[0]
-                                                              .s5xl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _5xl,
-
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 12.w),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      // '432',
-                                                      regex.hasMatch((displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s5xl)
-                                                          .toString())
-                                                          ? int.parse((displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s5xl)
-                                                          .toString()) >=
-                                                          0
-                                                          ? (displayallcolor
-                                                          ?.tripurStock
-                                                          ?.length !=
-                                                          0)
-                                                          ? (displayallcolor
-                                                          ?.tripurStock?[
-                                                      0]
-                                                          .s5xl ??
-                                                          '')
-                                                          : ""
-                                                          : "0"
-                                                          : "0",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                              (displayallcolor
-                                                                  ?.tripurStock?[
-                                                              0]
-                                                                  .s5xl)
-                                                                  .toString())
-                                                              ? (int.parse((displayallcolor
-                                                              ?.tripurStock?[0]
-                                                              .s5xl)
-                                                              .toString()) >
-                                                              0)
-                                                              ? false
-                                                              : true
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _t5xl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                                // SizedBox(width: 5.w),
-                                                //
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      total5xl.toString(),
-                                                      // "432",
-                                                      style: TextStyle(
-                                                          fontSize: 2.h,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(height: 1.h),
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 10.h,
-                                                        height: 4.h,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            border: Border.all(
-                                                                color: Color(
-                                                                    0xfff333389))),
-                                                        child: TextField(
-                                                          onChanged: (value) {
-                                                            updateTotal(value);
-                                                          },
-                                                          controller: _total_5xl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: '',
-                                                            // suffixIcon: Column(
-                                                            //
-                                                            //   children: [
-                                                            //     Icon(Icons.arrow_drop_up),
-                                                            //     Icon(Icons.arrow_drop_down),
-                                                            //   ],
-                                                            // )
-                                                          ),
-                                                          // child: Text(
-                                                          //   "1000",
-                                                          //   style: TextStyle(
-                                                          //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                          // ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-
-                                        // Padding(
-                                        //   padding: EdgeInsets.all(2.h),
-                                        //   child: Container(
-                                        //     child: Row(
-                                        //       crossAxisAlignment: CrossAxisAlignment.center,
-                                        //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        //       children: [
-                                        //         Text(
-                                        //           "Available Qty",
-                                        //           style: TextStyle(
-                                        //               fontSize: 2.5.h,
-                                        //               fontWeight: FontWeight.bold),
-                                        //         ),
-                                        //         // SizedBox(width: 5.w),
-                                        //         Container(
-                                        //           width: 20.w,
-                                        //           child: Divider(
-                                        //               thickness: 2,
-                                        //               color: Color(0xfff333389)),
-                                        //         ),
-                                        //         // SizedBox(width: 5.w),
-                                        //         Container(
-                                        //             alignment: Alignment.center,
-                                        //             width: 11.8.h,
-                                        //             height: 5.8.h,
-                                        //             decoration: BoxDecoration(
-                                        //                 borderRadius:
-                                        //                     BorderRadius.circular(
-                                        //                         15),
-                                        //                 border: Border.all(
-                                        //                     color: Color(
-                                        //                         0xfff333389))),
-                                        //             child: Text("550",
-                                        //                 style: TextStyle(
-                                        //                     fontSize: 2.5.h,
-                                        //                     color:
-                                        //                         Color(0xfff333389),
-                                        //                     fontWeight:
-                                        //                         FontWeight.bold))),
-                                        //       ],
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                        // Padding(
-                                        //   padding: EdgeInsets.all(2.h),
-                                        //   child: Container(
-                                        //     child: Row(
-                                        //         crossAxisAlignment: CrossAxisAlignment.center,
-                                        //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        //       children: [
-                                        //         Text(
-                                        //           "Enter Quantity",
-                                        //           style: TextStyle(
-                                        //               fontSize: 2.5.h,
-                                        //               fontWeight: FontWeight.bold),
-                                        //         ),
-                                        //         // SizedBox(width: 5.w),
-                                        //         // Container(
-                                        //         //   width: 20.w,
-                                        //         //   child: Divider(
-                                        //         //       thickness: 2,
-                                        //         //       color: Color(0xfff333389)),
-                                        //         // ),
-                                        //         // SizedBox(width: 5.w),
-                                        //         Container(
-                                        //             alignment: Alignment.center,
-                                        //             width: 45.w,
-                                        //             height: 5.8.h,
-                                        //             decoration: BoxDecoration(
-                                        //                 color: Color(0xfff333389),
-                                        //                 borderRadius:
-                                        //                     BorderRadius.circular(
-                                        //                         10),
-                                        //                 border: Border.all(
-                                        //                     color: Color(
-                                        //                         0xfff333389))),
-                                        //             child: Text("550",
-                                        //                 style: TextStyle(
-                                        //                     fontSize: 2.h,
-                                        //                     color: Colors.white,
-                                        //                     fontWeight:
-                                        //                         FontWeight.bold))),
-                                        //       ],
-                                        //     ),
-                                        //   ),
-                                        // ),
-
-                                        Padding(
-                                          padding: EdgeInsets.all(2.h),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.grey.shade200),
-                                                borderRadius:
-                                                    BorderRadius.circular(12)
-
-                                                // boxShadow: [
-                                                //   // BoxShadow(
-                                                //   //   // color: Colors.grey.withOpacity(0.5), // color of the shadow
-                                                //   //   spreadRadius: 5, // spread radius
-                                                //   //   // blurRadius: 7, // blur radius
-                                                //   //   offset: Offset(0, 3), // changes position of shadow
-                                                //   // ),
-                                                // ],
-
-                                                ),
-                                            child: ExpansionTile(
-                                              title: Text('Size Chart'),
-                                              children: <Widget>[
-                                                SingleChildScrollView(
-                                                  scrollDirection: Axis.vertical,
-                                                  child: Container(
-                                                    // height: 100.h,
-                                                    child: ListTile(
-                                                        title: Column(
-                                                      children: [
-                                                        Text(
-                                                          "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                                                          style: TextStyle(
-                                                              fontSize: 2.h,
-                                                              color: Colors
-                                                                  .grey.shade600),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 2.h,
-                                                        ),
-                                                        Container(
-                                                            alignment: Alignment
-                                                                .centerLeft,
-                                                            child: Text(
-                                                                "Size Chart",
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        SizedBox(height: 1.h),
-                                                        Divider(
-                                                            color: Colors
-                                                                .grey.shade400),
-                                                        Container(
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.tripurStock?[
+                                                                        0]
+                                                                    .xs)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .xs)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.tripurStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .xs ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        // '432',
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
                                                           alignment:
                                                               Alignment.center,
-                                                          child: Image.asset(
-                                                            'assets/product_2_img2.png',
-                                                            fit: BoxFit.cover,
-                                                            height: 33.5.h,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                             readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .xs)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.tripurStock?[0]
+                                                                .xs)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                    buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                               }
+                                                               else{
+                                                               }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _txs,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        totalxs.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+
+                                                            controller: _totalxs,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(2.h),
+                                            child: Container(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "S ",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                        0]
+                                                                    .s)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .s)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.mumbaiStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .s ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        // '432',
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            readOnly: regex.hasMatch(
+                                                                    (displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .s)
+                                                                        .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                                ?.mumbaiStock?[0]
+                                                                                .s)
+                                                                            .toString()) >
+                                                                        0)
+                                                                    ? false
+                                                                    : true
+                                                                : true,
+                                                            controller: _s,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // contentPadding: EdgeInsets.only(top: 0.1.w),
+
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.tripurStock?[
+                                                                        0]
+                                                                    .s)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .s)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.tripurStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .s ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        // '432',
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                                  readOnly: regex.hasMatch(
+                                                                  (displayallcolor
+                                                                      ?.tripurStock?[
+                                                                  0]
+                                                                      .s)
+                                                                      .toString())
+                                                                  ? (int.parse((displayallcolor
+                                                                  ?.tripurStock?[0]
+                                                                  .s)
+                                                                  .toString()) >
+                                                                  0)
+                                                                  ? false
+                                                                  : true
+                                                                  : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+
+                                                            controller: _ts,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        totals.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+
+                                                            controller: _totalms,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 12.h,
+                                            width:
+                                                MediaQuery.of(context).size.width,
+                                            color: Color(0xfff9f9f9),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(2.h),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "M ",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                        0]
+                                                                    .m)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .m)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.mumbaiStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .m ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        // '432',
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                0]
+                                                                    .m)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.mumbaiStock?[0]
+                                                                .m)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _m,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.tripurStock?[
+                                                                        0]
+                                                                    .m)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .m)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.tripurStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .m ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .m)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.tripurStock?[0]
+                                                                .m)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _tm,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        totalm.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+
+                                                            controller: _totalmm,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(2.h),
+                                            child: Container(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "L ",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                        0]
+                                                                    .l)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .l)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.mumbaiStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .l ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                0]
+                                                                    .l)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.mumbaiStock?[0]
+                                                                .l)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _l,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.tripurStock?[
+                                                                        0]
+                                                                    .l)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .l)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.tripurStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .l ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .l)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.tripurStock?[0]
+                                                                .l)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _tl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        totall.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _total_ll,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 12.h,
+                                            width:
+                                                MediaQuery.of(context).size.width,
+                                            color: Color(0xfff9f9f9),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(2.h),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "XL",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                        0]
+                                                                    .xl)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .xl)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.mumbaiStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .xl ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                0]
+                                                                    .xl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.mumbaiStock?[0]
+                                                                .xl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _xl,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                                    ?.tripurStock?[
+                                                                        0]
+                                                                    .xl)
+                                                                .toString())
+                                                            ? int.parse((displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .xl)
+                                                                        .toString()) >=
+                                                                    0
+                                                                ? (displayallcolor
+                                                                            ?.tripurStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                            ?.tripurStock?[
+                                                                                0]
+                                                                            .xl ??
+                                                                        '')
+                                                                    : ""
+                                                                : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .xl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.tripurStock?[0]
+                                                                .xl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _txl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        totalxl.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _total_xl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(2.h),
+                                            child: Container(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "2XL",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        regex.hasMatch((displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .xxl)
+                                                            .toString())
+                                                            ? int.parse((displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .xxl)
+                                                            .toString()) >=
+                                                            0
+                                                            ? (displayallcolor
+                                                            ?.mumbaiStock
+                                                            ?.length !=
+                                                            0)
+                                                            ? (displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .xxl ??
+                                                            '')
+                                                            : ""
+                                                            : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                0]
+                                                                    .xxl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.mumbaiStock?[0]
+                                                                .xxl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _xxl,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .xxl)
+                                                            .toString())
+                                                            ? int.parse((displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .xs)
+                                                            .toString()) >=
+                                                            0
+                                                            ? (displayallcolor
+                                                            ?.tripurStock
+                                                            ?.length !=
+                                                            0)
+                                                            ? (displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .xxl ??
+                                                            '')
+                                                            : ""
+                                                            : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .xxl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.tripurStock?[0]
+                                                                .xxl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _txxl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        total2xl.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _total_xxl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 12.h,
+                                            width:
+                                                MediaQuery.of(context).size.width,
+                                            color: Color(0xfff9f9f9),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(2.h),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "3XL",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s3xl)
+                                                            .toString())
+                                                            ? int.parse((displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s3xl)
+                                                            .toString()) >=
+                                                            0
+                                                            ? (displayallcolor
+                                                            ?.mumbaiStock
+                                                            ?.length !=
+                                                            0)
+                                                            ? (displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s3xl ??
+                                                            '')
+                                                            : ""
+                                                            : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                0]
+                                                                    .s3xl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.mumbaiStock?[0]
+                                                                .s3xl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _3xl,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s3xl)
+                                                            .toString())
+                                                            ? int.parse((displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s3xl)
+                                                            .toString()) >=
+                                                            0
+                                                            ? (displayallcolor
+                                                            ?.tripurStock
+                                                            ?.length !=
+                                                            0)
+                                                            ? (displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s3xl ??
+                                                            '')
+                                                            : ""
+                                                            : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .s3xl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.tripurStock?[0]
+                                                                .s3xl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _t3xl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        total3xl.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _total_3xl,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(2.h),
+                                            child: Container(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "4XL",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s4xl)
+                                                            .toString())
+                                                            ? int.parse((displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s4xl)
+                                                            .toString()) >=
+                                                            0
+                                                            ? (displayallcolor
+                                                            ?.mumbaiStock
+                                                            ?.length !=
+                                                            0)
+                                                            ? (displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s4xl ??
+                                                            '')
+                                                            : ""
+                                                            : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                0]
+                                                                    .s4xl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.mumbaiStock?[0]
+                                                                .s4xl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _4xl,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s4xl)
+                                                            .toString())
+                                                            ? int.parse((displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s4xl)
+                                                            .toString()) >=
+                                                            0
+                                                            ? (displayallcolor
+                                                            ?.tripurStock
+                                                            ?.length !=
+                                                            0)
+                                                            ? (displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s4xl ??
+                                                            '')
+                                                            : ""
+                                                            : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .s4xl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.tripurStock?[0]
+                                                                .s4xl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _t4xl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        total4xl.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _total_4xl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 12.h,
+                                            width:
+                                                MediaQuery.of(context).size.width,
+                                            color: Color(0xfff9f9f9),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(2.h),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "5XL",
+                                                    style: TextStyle(
+                                                        fontSize: 3.h,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s5xl)
+                                                            .toString())
+                                                            ? int.parse((displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s5xl)
+                                                            .toString()) >=
+                                                            0
+                                                            ? (displayallcolor
+                                                            ?.mumbaiStock
+                                                            ?.length !=
+                                                            0)
+                                                            ? (displayallcolor
+                                                            ?.mumbaiStock?[
+                                                        0]
+                                                            .s5xl ??
+                                                            '')
+                                                            : ""
+                                                            : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                0]
+                                                                    .s5xl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.mumbaiStock?[0]
+                                                                .s5xl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _5xl,
+
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 12.w),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        // '432',
+                                                        regex.hasMatch((displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s5xl)
+                                                            .toString())
+                                                            ? int.parse((displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s5xl)
+                                                            .toString()) >=
+                                                            0
+                                                            ? (displayallcolor
+                                                            ?.tripurStock
+                                                            ?.length !=
+                                                            0)
+                                                            ? (displayallcolor
+                                                            ?.tripurStock?[
+                                                        0]
+                                                            .s5xl ??
+                                                            '')
+                                                            : ""
+                                                            : "0"
+                                                            : "0",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                              readOnly: regex.hasMatch(
+                                                                (displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .s5xl)
+                                                                    .toString())
+                                                                ? (int.parse((displayallcolor
+                                                                ?.tripurStock?[0]
+                                                                .s5xl)
+                                                                .toString()) >
+                                                                0)
+                                                                ? false
+                                                                : true
+                                                                : true,
+                                                            onChanged: (value) {
+
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
+                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              }
+                                                              else{
+                                                              }
+
+
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _t5xl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  // SizedBox(width: 5.w),
+                                                  //
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        total5xl.toString(),
+                                                        // "432",
+                                                        style: TextStyle(
+                                                            fontSize: 2.h,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                      SizedBox(height: 1.h),
+                                                      Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 10.h,
+                                                          height: 4.h,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(8),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xfff333389))),
+                                                          child: TextField(
+                                                            onChanged: (value) {
+                                                              updateTotal(value);
+                                                            },
+                                                            controller: _total_5xl,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder.none,
+                                                              hintText: '',
+                                                              // suffixIcon: Column(
+                                                              //
+                                                              //   children: [
+                                                              //     Icon(Icons.arrow_drop_up),
+                                                              //     Icon(Icons.arrow_drop_down),
+                                                              //   ],
+                                                              // )
+                                                            ),
+                                                            // child: Text(
+                                                            //   "1000",
+                                                            //   style: TextStyle(
+                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
+                                                            // ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+
+                                          // Padding(
+                                          //   padding: EdgeInsets.all(2.h),
+                                          //   child: Container(
+                                          //     child: Row(
+                                          //       crossAxisAlignment: CrossAxisAlignment.center,
+                                          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          //       children: [
+                                          //         Text(
+                                          //           "Available Qty",
+                                          //           style: TextStyle(
+                                          //               fontSize: 2.5.h,
+                                          //               fontWeight: FontWeight.bold),
+                                          //         ),
+                                          //         // SizedBox(width: 5.w),
+                                          //         Container(
+                                          //           width: 20.w,
+                                          //           child: Divider(
+                                          //               thickness: 2,
+                                          //               color: Color(0xfff333389)),
+                                          //         ),
+                                          //         // SizedBox(width: 5.w),
+                                          //         Container(
+                                          //             alignment: Alignment.center,
+                                          //             width: 11.8.h,
+                                          //             height: 5.8.h,
+                                          //             decoration: BoxDecoration(
+                                          //                 borderRadius:
+                                          //                     BorderRadius.circular(
+                                          //                         15),
+                                          //                 border: Border.all(
+                                          //                     color: Color(
+                                          //                         0xfff333389))),
+                                          //             child: Text("550",
+                                          //                 style: TextStyle(
+                                          //                     fontSize: 2.5.h,
+                                          //                     color:
+                                          //                         Color(0xfff333389),
+                                          //                     fontWeight:
+                                          //                         FontWeight.bold))),
+                                          //       ],
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                          // Padding(
+                                          //   padding: EdgeInsets.all(2.h),
+                                          //   child: Container(
+                                          //     child: Row(
+                                          //         crossAxisAlignment: CrossAxisAlignment.center,
+                                          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          //       children: [
+                                          //         Text(
+                                          //           "Enter Quantity",
+                                          //           style: TextStyle(
+                                          //               fontSize: 2.5.h,
+                                          //               fontWeight: FontWeight.bold),
+                                          //         ),
+                                          //         // SizedBox(width: 5.w),
+                                          //         // Container(
+                                          //         //   width: 20.w,
+                                          //         //   child: Divider(
+                                          //         //       thickness: 2,
+                                          //         //       color: Color(0xfff333389)),
+                                          //         // ),
+                                          //         // SizedBox(width: 5.w),
+                                          //         Container(
+                                          //             alignment: Alignment.center,
+                                          //             width: 45.w,
+                                          //             height: 5.8.h,
+                                          //             decoration: BoxDecoration(
+                                          //                 color: Color(0xfff333389),
+                                          //                 borderRadius:
+                                          //                     BorderRadius.circular(
+                                          //                         10),
+                                          //                 border: Border.all(
+                                          //                     color: Color(
+                                          //                         0xfff333389))),
+                                          //             child: Text("550",
+                                          //                 style: TextStyle(
+                                          //                     fontSize: 2.h,
+                                          //                     color: Colors.white,
+                                          //                     fontWeight:
+                                          //                         FontWeight.bold))),
+                                          //       ],
+                                          //     ),
+                                          //   ),
+                                          // ),
+
+                                          Padding(
+                                            padding: EdgeInsets.all(2.h),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey.shade200),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12)
+
+                                                  // boxShadow: [
+                                                  //   // BoxShadow(
+                                                  //   //   // color: Colors.grey.withOpacity(0.5), // color of the shadow
+                                                  //   //   spreadRadius: 5, // spread radius
+                                                  //   //   // blurRadius: 7, // blur radius
+                                                  //   //   offset: Offset(0, 3), // changes position of shadow
+                                                  //   // ),
+                                                  // ],
+
+                                                  ),
+                                              child: ExpansionTile(
+                                                title: Text('Size Chart'),
+                                                children: <Widget>[
+                                                  SingleChildScrollView(
+                                                    scrollDirection: Axis.vertical,
+                                                    child: Container(
+                                                      // height: 100.h,
+                                                      child: ListTile(
+                                                          title: Column(
+                                                        children: [
+                                                          Text(
+                                                            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                                                            style: TextStyle(
+                                                                fontSize: 2.h,
+                                                                color: Colors
+                                                                    .grey.shade600),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 2.h,
+                                                          ),
+                                                          Container(
+                                                              alignment: Alignment
+                                                                  .centerLeft,
+                                                              child: Text(
+                                                                  "Size Chart",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold))),
+                                                          SizedBox(height: 1.h),
+                                                          Divider(
+                                                              color: Colors
+                                                                  .grey.shade400),
+                                                          Container(
+                                                            alignment:
+                                                                Alignment.center,
+                                                            child: Image.asset(
+                                                              'assets/product_2_img2.png',
+                                                              fit: BoxFit.cover,
+                                                              height: 33.5.h,
+                                                              width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width,
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 1.h),
+                                                          Container(
+                                                            alignment:
+                                                                Alignment.center,
+                                                            child: (displayallcolor
+                                                                        ?.mumbaiStock
+                                                                        ?.length !=
+                                                                    0)
+                                                                ? (displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                                0]
+                                                                            .sizeChart ==
+                                                                        "null")
+                                                                    ? Image.asset(
+                                                                        "assets/default_product_image.png",
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        height:
+                                                                            40.h,
+                                                                        width: MediaQuery.of(
+                                                                                context)
+                                                                            .size
+                                                                            .width,
+                                                                      )
+
+                                                                    // 'assets/size_chart.png',
+
+                                                                    : Image.network(
+                                                                        displayallcolor
+                                                                                ?.mumbaiStock?[0]
+                                                                                .sizeChart ??
+                                                                            'N/A',
+
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        height:
+                                                                            40.h,
+                                                                      )
+                                                                : (displayallcolor
+                                                                            ?.tripurStock
+                                                                            ?.length !=
+                                                                        0)
+                                                                    ? (displayallcolor
+                                                                                ?.tripurStock?[
+                                                                                    0]
+                                                                                .sizeChart ==
+                                                                            "null")
+                                                                        ? Image
+                                                                            .asset(
+                                                                            "assets/default_product_image.png",
+                                                                            fit: BoxFit
+                                                                                .cover,
+                                                                            height:
+                                                                                40.h,
+                                                                            width: MediaQuery.of(context)
+                                                                                .size
+                                                                                .width,
+                                                                          )
+
+                                                                        // 'assets/size_chart.png',
+
+                                                                        : Image
+                                                                            .network(
+                                                                            displayallcolor?.mumbaiStock?[0].sizeChart ??
+                                                                                'N/A',
+                                                                            // errorBuilder:
+                                                                            //     (BuildContext context,
+                                                                            //     Object exception,
+                                                                            //     StackTrace?
+                                                                            //     stackTrace) {
+                                                                            //   return Image.asset(
+                                                                            //     'assets/size_chart.png',
+                                                                            //     fit: BoxFit.cover,
+                                                                            //     height: 40.h,
+                                                                            //     width: MediaQuery.of(
+                                                                            //         context)
+                                                                            //         .size
+                                                                            //         .width,
+                                                                            //   );
+                                                                            // },
+                                                                            // 'assets/size_chart.png',
+                                                                            fit: BoxFit
+                                                                                .cover,
+                                                                            height:
+                                                                                40.h,
+                                                                          )
+                                                                    : Text(
+                                                                        "No data found"),
+                                                          ),
+
+                                                          SizedBox(height: 4.h),
+                                                          Container(
+                                                              alignment:
+                                                                  Alignment.center,
+                                                              child: Text(
+                                                                  'Available Downloads')),
+                                                          SizedBox(height: 3.h),
+                                                          Container(
+                                                            alignment:
+                                                                Alignment.center,
+
                                                             width: MediaQuery.of(
                                                                     context)
                                                                 .size
                                                                 .width,
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 1.h),
-                                                        Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: (displayallcolor
-                                                                      ?.mumbaiStock
-                                                                      ?.length !=
-                                                                  0)
-                                                              ? (displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .sizeChart ==
-                                                                      "null")
-                                                                  ? Image.asset(
-                                                                      "assets/default_product_image.png",
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                      height:
-                                                                          40.h,
-                                                                      width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width,
-                                                                    )
-
-                                                                  // 'assets/size_chart.png',
-
-                                                                  : Image.network(
-                                                                      displayallcolor
-                                                                              ?.mumbaiStock?[0]
-                                                                              .sizeChart ??
-                                                                          'N/A',
-
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                      height:
-                                                                          40.h,
-                                                                    )
-                                                              : (displayallcolor
-                                                                          ?.tripurStock
-                                                                          ?.length !=
-                                                                      0)
-                                                                  ? (displayallcolor
-                                                                              ?.tripurStock?[
-                                                                                  0]
-                                                                              .sizeChart ==
-                                                                          "null")
-                                                                      ? Image
-                                                                          .asset(
-                                                                          "assets/default_product_image.png",
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                          height:
-                                                                              40.h,
-                                                                          width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width,
-                                                                        )
-
-                                                                      // 'assets/size_chart.png',
-
-                                                                      : Image
-                                                                          .network(
-                                                                          displayallcolor?.mumbaiStock?[0].sizeChart ??
-                                                                              'N/A',
-                                                                          // errorBuilder:
-                                                                          //     (BuildContext context,
-                                                                          //     Object exception,
-                                                                          //     StackTrace?
-                                                                          //     stackTrace) {
-                                                                          //   return Image.asset(
-                                                                          //     'assets/size_chart.png',
-                                                                          //     fit: BoxFit.cover,
-                                                                          //     height: 40.h,
-                                                                          //     width: MediaQuery.of(
-                                                                          //         context)
-                                                                          //         .size
-                                                                          //         .width,
-                                                                          //   );
-                                                                          // },
-                                                                          // 'assets/size_chart.png',
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                          height:
-                                                                              40.h,
-                                                                        )
-                                                                  : Text(
-                                                                      "No data found"),
-                                                        ),
-
-                                                        SizedBox(height: 4.h),
-                                                        Container(
-                                                            alignment:
-                                                                Alignment.center,
-                                                            child: Text(
-                                                                'Available Downloads')),
-                                                        SizedBox(height: 3.h),
-                                                        Container(
-                                                          alignment:
-                                                              Alignment.center,
-
-                                                          width: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width,
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.09,
-                                                          // color: Color(0xfff333389),
-                                                          // padding:
-                                                          //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              ElevatedButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  var response =
-                                                                      await http.get(
-                                                                          Uri.parse(
-                                                                              "https://images.unsplash.com/photo-1679858511193-f124745ad28b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"));
-                                                                  String
-                                                                      fileName =
-                                                                      DateTime.now()
-                                                                              .millisecondsSinceEpoch
-                                                                              .toString() +
-                                                                          ".jpeg";
-                                                                  Directory?
-                                                                      storageDirectory =
-                                                                      await getExternalStorageDirectory();
-                                                                  String
-                                                                      directoryPath =
-                                                                      storageDirectory!
-                                                                          .path;
-                                                                  File file = File(
-                                                                      '$directoryPath/$fileName');
-                                                                  await file
-                                                                      .writeAsBytes(
-                                                                          response
-                                                                              .bodyBytes);
-                                                                  String
-                                                                      filePath =
-                                                                      '${storageDirectory.path}/$fileName';
-
-                                                                  try {
-                                                                    final savedFile =
-                                                                        await GallerySaver
-                                                                            .saveImage(
-                                                                                filePath);
-                                                                    print(
-                                                                        "Image saved to gallery: $savedFile");
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .showSnackBar(
-                                                                      SnackBar(
-                                                                          content:
-                                                                              Text('Image saved to gallery')),
-                                                                    );
-                                                                    final result =
-                                                                        await OpenFile
-                                                                            .open(
-                                                                                filePath);
-                                                                    // Use the Image.file widget to display the image
-                                                                    // in the UI after it has been downloaded and saved.
-                                                                    // Make sure to import the `dart:io` library.
-                                                                    Image.file(File(
-                                                                        filePath));
-
-                                                                    // Save the image to the gallery
-                                                                  } catch (e) {
-                                                                    print(e
-                                                                        .toString());
-                                                                  }
-                                                                },
-
-
-                                                                style:
-                                                                    ElevatedButton
-                                                                        .styleFrom(
-                                                                  minimumSize:
-                                                                      Size(40.w,
-                                                                          6.h),
-                                                                  backgroundColor:
-                                                                      Color(
-                                                                          0xfff333389),
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
-                                                                                8),
-                                                                  ),
-                                                                ),
-                                                                child: Text(
-                                                                  'Image',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          2.h),
-                                                                ),
-                                                              ),
-
-                                                              ElevatedButton(
-
-
-                                                                onPressed: () {
-                                                                  displayallcolor
-                                                                          ?.mumbaiStock?[
-                                                                              0]
-                                                                          .videoSpecification
-                                                                          .toString() ??
-                                                                      '';
-                                                                  Navigator.push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              VideoPlayerPage(
-                                                                                videoFilePath: 'https://sample-videos.com/video123/mp4/480/big_buck_bunny_480p_2mb.mp4',
-                                                                              )));
-                                                                },
-                                                                style:
-                                                                    ElevatedButton
-                                                                        .styleFrom(
-                                                                  minimumSize:
-                                                                      Size(40.w,
-                                                                          6.h),
-                                                                  backgroundColor:
-                                                                      Color(
-                                                                          0xfff333389),
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
-                                                                                8),
-                                                                  ),
-                                                                ),
-                                                                child: Text(
-                                                                  'Video',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          2.h),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.065,
-                                                          // color: Color(0xfff333389),
-                                                          // padding:
-                                                          //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
-                                                          child: ElevatedButton(
-                                                            onPressed: () async {
-                                                              var response =
-                                                                  await http.get(
-                                                                      Uri.parse(
-                                                                          ("https://www.africau.edu/images/default/sample.pdf")));
-                                                              String fileName =
-                                                                  url
-                                                                      .toString()
-                                                                      .split('/')
-                                                                      .last;
-                                                              Directory?
-                                                                  storageDirectory =
-                                                                  await getExternalStorageDirectory();
-                                                              String
-                                                                  directoryPath =
-                                                                  storageDirectory!
-                                                                      .path;
-                                                              File file = File(
-                                                                  '$directoryPath/$fileName');
-                                                              // Directory directory = await getApplicationDocumentsDirectory();
-                                                              await file.writeAsBytes(
-                                                                  response
-                                                                      .bodyBytes);
-                                                              String filePath =
-                                                                  '${storageDirectory.path}/$fileName';
-
-                                                              try {
-                                                                final result =
-                                                                    await OpenFile
-                                                                        .open(
-                                                                            filePath);
-                                                              } catch (e) {
-                                                                print(
-                                                                    e.toString());
-                                                              }
-                                                              // displayallcolor
-                                                              //         ?.mumbaiStock?[
-                                                              //             0]
-                                                              //         .catalogue
-                                                              //         .toString() ??
-                                                              //     '';
-                                                              // Navigator.push(
-                                                              //     context,
-                                                              //     MaterialPageRoute(
-                                                              //         builder: (context) => products_1()));
-                                                            },
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                              backgroundColor:
-                                                                  Color(
-                                                                      0xfff333389),
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                              ),
-                                                            ),
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.09,
+                                                            // color: Color(0xfff333389),
+                                                            // padding:
+                                                            //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
                                                             child: Row(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
                                                                       .center,
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
-                                                                      .center,
+                                                                      .spaceBetween,
                                                               children: [
-                                                                Text(
-                                                                  'Download Catalogue',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          2.h),
+                                                                ElevatedButton(
+                                                                  onPressed:
+                                                                      () async {
+
+                                                                        displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                        0]
+                                                                            .sizeChart
+                                                                            .toString() != "null" ?
+                                                                        catlog( displayallcolor
+                                                                            ?.mumbaiStock?[
+                                                                        0]
+                                                                            .sizeChart
+                                                                            .toString()):displayallcolor?.tripurStock?[0].sizeChart.toString() !=null ?
+                                                                        catlog( displayallcolor
+                                                                            ?.tripurStock?[
+                                                                        0]
+                                                                            .sizeChart
+                                                                            .toString()):buildErrorDialog(context, "", "No Image available");
+
+                                                                      },
+                                                          style:
+                                                                      ElevatedButton
+                                                                          .styleFrom(
+                                                                    minimumSize:
+                                                                        Size(40.w,
+                                                                            6.h),
+                                                                    backgroundColor:
+                                                                        Color(
+                                                                            0xfff333389),
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .circular(
+                                                                                  8),
+                                                                    ),
+                                                                  ),
+                                                                  child: Text(
+                                                                    'Image',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            2.h),
+                                                                  ),
                                                                 ),
-                                                                // Icon(
-                                                                //   Icons.arrow_forward,
-                                                                //   color: Colors.white,
-                                                                //   size: 24.0,
-                                                                //   semanticLabel:
-                                                                //   'Text to announce in accessibility modes',
-                                                                // ),
+
+                                                                ElevatedButton(
+
+
+                                                                  onPressed: () {
+
+                                                                    displayallcolor
+                                                                        ?.mumbaiStock?[
+                                                                    0]
+                                                                        .videoSpecification
+                                                                        .toString() != "null" ? Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                VideoPlayerPage(
+                                                                                  videoFilePath: (displayallcolor?.mumbaiStock?[0].videoSpecification).toString(),
+                                                                                ))):displayallcolor?.tripurStock?[0].videoSpecification.toString() !=null ?Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                VideoPlayerPage(
+                                                                                  videoFilePath: (displayallcolor?.mumbaiStock?[0].videoSpecification).toString(),
+                                                                                ))):buildErrorDialog(context, "", "No video available");
+                                                                  },
+                                                                  style:
+                                                                      ElevatedButton
+                                                                          .styleFrom(
+                                                                    minimumSize:
+                                                                        Size(40.w,
+                                                                            6.h),
+                                                                    backgroundColor:
+                                                                        Color(
+                                                                            0xfff333389),
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .circular(
+                                                                                  8),
+                                                                    ),
+                                                                  ),
+                                                                  child: Text(
+                                                                    'Video',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            2.h),
+                                                                  ),
+                                                                ),
                                                               ],
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    )),
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.9,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.065,
+                                                            // color: Color(0xfff333389),
+                                                            // padding:
+                                                            //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
+                                                            child: ElevatedButton(
+                                                              onPressed: () async {
+                                                                displayallcolor
+                                                                    ?.mumbaiStock?[
+                                                                0]
+                                                                    .catalogue
+                                                                    .toString() != "null" ?
+                                                                    catlog( displayallcolor
+                                                                        ?.mumbaiStock?[
+                                                                    0]
+                                                                        .catalogue
+                                                                        .toString()):displayallcolor?.tripurStock?[0].catalogue.toString() !=null ?
+                                                                catlog( displayallcolor
+                                                                    ?.tripurStock?[
+                                                                0]
+                                                                    .catalogue
+                                                                    .toString()):buildErrorDialog(context, "", "No Catalogue available");
+
+
+                                                              },
+                                                              style: ElevatedButton
+                                                                  .styleFrom(
+                                                                backgroundColor:
+                                                                    Color(
+                                                                        0xfff333389),
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8),
+                                                                ),
+                                                              ),
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'Download Catalogue',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            2.h),
+                                                                  ),
+                                                                  // Icon(
+                                                                  //   Icons.arrow_forward,
+                                                                  //   color: Colors.white,
+                                                                  //   size: 24.0,
+                                                                  //   semanticLabel:
+                                                                  //   'Text to announce in accessibility modes',
+                                                                  // ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )),
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
+                                        ],
+                                      ),
+                                    )
 
-                                ],
+                                  ],
+                                ),
                               ),
+                                  Positioned(
+                                    // top: 20.h,
+                                    left: 1.h,
+                                    right: 1.h,
+                                    child:check? Container(
+                                      height: 100.h,
+                                      width: MediaQuery.of(context).size.width,
+                                      color:Colors.white,
+                                      child:  (searchproperty == null
+                                          ? SizedBox(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Center(
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 25.h,
+                                                child: Text(
+                                                  'Product not found',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 2.h,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                          : searchproperty?.data?.length ?? 0) ==
+                                          0
+                                          ? SizedBox(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Center(
+                                          child: Column(
+                                            children: [
+
+                                              Text(
+                                                'Product not found.',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 2.h,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                          : Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        alignment: Alignment.topCenter,
+
+                                        margin: EdgeInsets.symmetric(horizontal: 2.h,vertical: 0.5.h),
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: searchproperty == null
+                                              ? 0
+                                              : searchproperty?.data?.length ?? 0,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: () async {
+
+                                                String? search = await
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => product_2(
+
+                                                          pronamenevigatior:   '${searchproperty?.data?[index].prodName}',
+                                                          // coloridnevigator:
+                                                          //     '${productData?.productData![index].apId}',
+                                                        )
+                                                    )
+                                                );
+                                                if (search != null) {
+                                                  if (search.isNotEmpty) {
+                                                    _search.text = search;
+                                                    searchapi(search);
+                                                  }
+                                                }
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.symmetric(vertical: 0.5.h),
+                                                height: 20.w,
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                                  children: [
+                                                    CachedNetworkImage(
+                                                        imageUrl: searchproperty
+                                                            ?.data?[index]
+                                                            .prodImgDefault ??
+                                                            '',
+                                                        imageBuilder:
+                                                            (context, imageProvider) =>
+                                                            CircleAvatar(
+                                                              radius: 8.w,
+                                                              backgroundImage: NetworkImage(searchproperty
+                                                                  ?.data?[index]
+                                                                  .prodImgDefault ??
+                                                                  '',),
+                                                            ),
+                                                        // Container(
+                                                        //   height: 19.h,
+                                                        //   width: 40.w,
+                                                        //   decoration: BoxDecoration(
+                                                        //     borderRadius:
+                                                        //     BorderRadius.all(
+                                                        //       Radius.circular(10.sp),
+                                                        //     ),
+                                                        //     image: DecorationImage(
+                                                        //       image: imageProvider,
+                                                        //       fit: BoxFit.cover,
+                                                        //     ),
+                                                        //   ),
+                                                        // ),
+
+                                                        placeholder: (context, url) =>
+                                                            Center(
+                                                                child:
+                                                                CircularProgressIndicator()),
+                                                        errorWidget:
+                                                            (context, url, error) =>
+                                                            CircleAvatar(
+                                                              radius: 8.w,
+                                                              backgroundImage: AssetImage(
+                                                                "assets/default_product_image.png",
+                                                              ),
+                                                            )
+                                                      // Container(
+                                                      //   height: 19.h,
+                                                      //   width: 40.w,
+                                                      //   decoration: BoxDecoration(
+                                                      //     borderRadius:
+                                                      //     BorderRadius.all(
+                                                      //       Radius.circular(10.h),
+                                                      //     ),
+                                                      //   ),
+                                                      //   child: ClipRRect(
+                                                      //     borderRadius:
+                                                      //     BorderRadius.circular(
+                                                      //         15),
+                                                      //     child: Image.asset(
+                                                      //       "assets/default_product_image.png",
+                                                      //
+                                                      //       fit: BoxFit.cover,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                    ),
+                                                    SizedBox(width: 5.w,),
+                                                    Container(
+                                                      child: Flexible(
+                                                        child: Text(
+                                                          searchproperty
+                                                              ?.data?[index]
+                                                              .prodName ??
+                                                              '',
+                                                          textAlign:
+                                                          TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontSize: 1.8.h,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ):Container()
+                                )
+                            ]
+
                             ),
                           ),
                     displayallcolor?.status == "fail"
@@ -4891,7 +5181,6 @@ class _product_2State extends State<product_2> {
   colorapi() async {
     final Map<String, String> data = {};
     data['action'] = 'all_color_display';
-
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider().product2_color(data).then((Response response) async {
@@ -4901,61 +5190,19 @@ class _product_2State extends State<product_2> {
               product2color?.status == "success") {
             selectimageapi();
             displaycolor();
-
               isloading = false;
-
 
             if (kDebugMode) {
-
             }
           } else {
-
               isloading = false;
-
           }
         });
       } else {
-
           isloading = false;
-
       }
     });
   }
-  //
-  // imageapi() async {
-  //   final Map<String, String> data = {};
-  //   data['action'] = 'single_product_display';
-  //   data['product_name'] = widget.pronamenevigatior.toString();
-  //
-  //   checkInternet().then((internet) async {
-  //     if (internet) {
-  //       Productprovider().product2_image(data).then((Response response) async {
-  //         imageDisplay =
-  //             product2Imageclass.fromJson(json.decode(response.body));
-  //
-  //         isloading = false;
-  //
-  //         if (response.statusCode == 200 && imageDisplay?.status == "success") {
-  //           setState(() {
-  //             isloading = false;
-  //           });
-  //           if (kDebugMode) {
-  //
-  //           }
-  //         } else {
-  //           setState(() {
-  //             isloading = false;
-  //           });
-  //         }
-  //       });
-  //     } else {
-  //       setState(() {
-  //         isloading = false;
-  //       });
-  //     }
-  //   });
-  // }
-// select image according to color
   selectimageapi() async {
     final Map<String, String> data = {};
     data['action'] = 'color_select_display_img';
@@ -5047,7 +5294,6 @@ class _product_2State extends State<product_2> {
 
 
   }
-
    updateTotal(value) {
     // S3
     int s1 = int.tryParse(_s.text) ?? 0;
@@ -5170,6 +5416,7 @@ class _product_2State extends State<product_2> {
               .product2blockprovider(data)
               .then((Response response) async {
             block = blockProductClass.fromJson(json.decode(response.body));
+
             if (response.statusCode == 200 && block?.status == "success") {
               isloading = false;
               Navigator.push(
@@ -5244,7 +5491,7 @@ class _product_2State extends State<product_2> {
         && _3xl.text == "" && _t3xl.text == "" && _4xl.text == "" && _t4xl.text == ""
         && _5xl.text == "" && _t5xl.text == ""){
 
-      buildErrorDialog(this.context,"","No Product Bolcked!");
+      buildErrorDialog(this.context,"","No Product added to cart!");
     }
     else{
       final Map<String, String> data = {};
@@ -5296,7 +5543,7 @@ class _product_2State extends State<product_2> {
       _t4xl.text.trim().toString() == "" ? "0" : _t4xl.text.trim().toString();
       data['t_5xl'] =
       _t5xl.text.trim().toString() == "" ? "0" : _t5xl.text.trim().toString();
-      print(data);
+
       checkInternet().then((internet) async {
         if (internet) {
           Productprovider()
@@ -5350,17 +5597,59 @@ class _product_2State extends State<product_2> {
             } else {
               buildErrorDialog1(this.context, "",  'Already product added to cart',1);
               isloading = false;
-
             }
           });
         } else {
-
-          isloading = false;
+         isloading = false;
 
         }
       });
     }
 
   }
+  // search
+  searchapi(body) async {
+    final Map<String, String> data = {};
+    data['action'] = 'searching_products';
+    data['search'] = body;
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().searchproduct(data).then((Response response) async {
+          searchproperty = search.fromJson(json.decode(response.body));
+          if (response.statusCode == 200 &&
+              searchproperty?.status == "success") {
+            setState(() {
+              isloading = false;
 
+            });
+            if (kDebugMode) { }
+          } else {
+            setState(() {
+              isloading = false;
+            });}
+        });
+      } else {
+        setState(() {
+          isloading = false;
+        });}
+    });
+  }
+  viewcart()async {
+    final Map<String, String> data = {};
+    data['action'] = 'view_add_to_cart_product_single';
+    data['d_id'] = (userData?.logindata?.dId).toString();
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().viewcartapi(data).then((Response response) async {
+          viewaddtocart = ViewCart.fromJson(json.decode(response.body));
+          if (response.statusCode == 200 &&
+              viewaddtocart?.status == "success") {
+          }
+          else {
+          }
+        });
+      } else {
+      }
+    });
+  }
 }

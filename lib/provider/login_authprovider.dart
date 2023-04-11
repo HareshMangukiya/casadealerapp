@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-
 import 'package:casadealerapp/widget/CustomException.dart';
 import 'package:casadealerapp/widget/response.dart';
 import 'package:flutter/material.dart';
@@ -124,83 +122,6 @@ class Authprovider with ChangeNotifier {
     return responseJson;
   }
 
-  Future<http.Response> clrs(Map<String, dynamic> bodyData) async {
-    print(bodyData);
-    var body = jsonEncode(bodyData);
-    const url =
-        'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php/?action=single_product';
-    var responseJson;
-
-    try {
-      final response = await http
-          .post(Uri.parse(url), body: bodyData, headers: headers)
-          .timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw const SocketException('Something went wrong');
-        },
-      );
-      print(response.statusCode);
-      responseJson = responses(response);
-    } on SocketException {
-      throw FetchDataException('No Internet connection');
-    }
-    return responseJson;
-
-    print(responseJson);
-  }
-
-  Future<http.Response> block(Map<String, dynamic> bodyData) async {
-    print(bodyData);
-    var body = jsonEncode(bodyData);
-    const url =
-        'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php/?action=block_product';
-    var responseJson;
-
-    try {
-      final response = await http
-          .post(Uri.parse(url), body: bodyData, headers: headers)
-          .timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw const SocketException('Something went wrong');
-        },
-      );
-      print(response.statusCode);
-      responseJson = responses(response);
-    } on SocketException {
-      throw FetchDataException('No Internet connection');
-    }
-    return responseJson;
-
-    print(responseJson);
-  }
-
-  Future<http.Response> unblock(Map<String, dynamic> bodyData) async {
-    print(bodyData);
-    var body = jsonEncode(bodyData);
-    const url =
-        'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php/?action=unblock_product';
-    var responseJson;
-
-    try {
-      final response = await http
-          .post(Uri.parse(url), body: bodyData, headers: headers)
-          .timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw const SocketException('Something went wrong');
-        },
-      );
-      print(response.statusCode);
-      responseJson = responses(response);
-    } on SocketException {
-      throw FetchDataException('No Internet connection');
-    }
-    return responseJson;
-
-    print(responseJson);
-  }
 
   Future<http.Response> user(Map<String, dynamic> bodyData) async {
     print(bodyData);
@@ -227,12 +148,9 @@ class Authprovider with ChangeNotifier {
 
     print(responseJson);
   }
-
-  Future<http.Response> cart(Map<String, dynamic> bodyData) async {
-    print(bodyData);
-    var body = jsonEncode(bodyData);
+  Future<http.Response> logo(Map<String, dynamic> bodyData) async {
     const url =
-        'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php/?action=add_to_cart';
+        'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php/?action=banner_logo_app_change';
     var responseJson;
 
     try {
@@ -254,29 +172,5 @@ class Authprovider with ChangeNotifier {
     print(responseJson);
   }
 
-  Future<http.Response> fetchcart(Map<String, dynamic> bodyData) async {
-    print(bodyData);
-    var body = jsonEncode(bodyData);
-    const url =
-        'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php/?action=cart_products';
-    var responseJson;
 
-    try {
-      final response = await http
-          .post(Uri.parse(url), body: bodyData, headers: headers)
-          .timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw const SocketException('Something went wrong');
-        },
-      );
-      print(response.statusCode);
-      responseJson = responses(response);
-    } on SocketException {
-      throw FetchDataException('No Internet connection');
-    }
-    return responseJson;
-
-    print(responseJson);
-  }
 }

@@ -1,7 +1,7 @@
 class ViewCart {
   String? status;
   List<DataProduct>? dataProduct;
-
+  int? addToCartNumber;
   ViewCart({this.status, this.dataProduct});
 
   ViewCart.fromJson(Map<String, dynamic> json) {
@@ -12,6 +12,9 @@ class ViewCart {
         dataProduct!.add(new DataProduct.fromJson(v));
       });
     }
+    addToCartNumber = json['add_to_cart_number'];
+
+
   }
 
   Map<String, dynamic> toJson() {
@@ -20,6 +23,7 @@ class ViewCart {
     if (this.dataProduct != null) {
       data['data_product'] = this.dataProduct!.map((v) => v.toJson()).toList();
     }
+    data['add_to_cart_number'] = this.addToCartNumber;
     return data;
   }
 }

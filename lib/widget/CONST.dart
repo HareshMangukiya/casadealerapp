@@ -1,5 +1,12 @@
+import 'dart:io';
+
+import 'package:casadealerapp/modal_class/ViewCart.dart';
 import 'package:casadealerapp/modal_class/login_model.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<bool> checkInternet() async {
   var connectivityResult = await (Connectivity().checkConnectivity());
@@ -12,6 +19,7 @@ Future<bool> checkInternet() async {
 }
 
 usermodal? userData;
+ViewCart? viewaddtocart;
 
 const String baseUrl =
     'https://distributor-app.fableadtechnolabs.com/admin/api/ajax.php';
@@ -19,3 +27,41 @@ const String baseUrl =
 Map<String, String> headers = {
   'Authorization': 'hXuRUGsEGuhGf6KG',
 };
+
+
+catlog(value)async{
+  var response =
+      await http.get(
+      Uri.parse(
+          ("https://www.africau.edu/images/default/sample.pdf")));
+  String fileName =
+      url
+          .toString()
+          .split('/')
+          .last;
+  Directory?
+  storageDirectory =
+      await getExternalStorageDirectory();
+  String
+  directoryPath =
+      storageDirectory!
+          .path;
+  File file = File(
+      '$directoryPath/$fileName');
+  // Directory directory = await getApplicationDocumentsDirectory();
+  await file.writeAsBytes(
+      response
+          .bodyBytes);
+  String filePath =
+      '${storageDirectory.path}/$fileName';
+
+  try {
+    final result =
+        await OpenFile
+        .open(
+        filePath);
+  } catch (e) {
+    print(
+        e.toString());
+  }
+}

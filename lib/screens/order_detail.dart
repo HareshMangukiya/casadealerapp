@@ -1,31 +1,44 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:casadealerapp/modal_class/ViewCart.dart';
 import 'package:casadealerapp/modal_class/convertblockorder.dart';
 import 'package:casadealerapp/modal_class/order_detail_class.dart';
 import 'package:casadealerapp/modal_class/oredrdetail.dart';
+import 'package:casadealerapp/modal_class/search_class.dart';
 import 'package:casadealerapp/provider/productprovider.dart';
 import 'package:casadealerapp/screens/alert_screen.dart';
 
 import 'package:casadealerapp/screens/order_id.dart';
 import 'package:casadealerapp/screens/orderblockdisplay.dart';
+import 'package:casadealerapp/screens/product_2.dart';
 import 'package:casadealerapp/widget/CONST.dart';
+import 'package:casadealerapp/widget/build_dialog.dart';
 import 'package:casadealerapp/widget/drawer.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sizer/sizer.dart';
+import 'package:badges/badges.dart' as badges;
+
 
 class order_detail_c extends StatefulWidget {
   String? oreder;
+  String? total;
   int? id;
-   order_detail_c({Key? key,this.id,this.oreder}) : super(key: key);
+  int? val;
+   order_detail_c({Key? key,this.id,this.oreder,this.total,this.val}) : super(key: key);
 
   @override
   State<order_detail_c> createState() => _order_detail_cState();
 }
 
 class _order_detail_cState extends State<order_detail_c> {
+  TextEditingController _search = TextEditingController();
+  search? searchproperty;
+  bool se_icon = false;
+  bool? check = false;
   TextEditingController _xs =TextEditingController();
   TextEditingController _s =TextEditingController();
   TextEditingController _l =TextEditingController();
@@ -35,14 +48,16 @@ class _order_detail_cState extends State<order_detail_c> {
   TextEditingController _3xl =TextEditingController();
   TextEditingController _4xl =TextEditingController();
   TextEditingController _5xl =TextEditingController();
-
   convertblockorder? edit;
   orderdetail? detail;
+  double? total;
+  double? gtotal;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     orederdetailapiblock();
+    viewcart();
   }
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -59,7 +74,6 @@ class _order_detail_cState extends State<order_detail_c> {
               width: MediaQuery.of(context).size.width * 1,
               height: 11.h,
               child: Column(
-
                 children: [
                   SizedBox(height: 4.h),
                   Padding(
@@ -94,33 +108,33 @@ class _order_detail_cState extends State<order_detail_c> {
                           ],
                         ),
                         SizedBox(
-                          width: 14.h,
+                          width: 28.w,
                         ),
                         Row(
                           children: [
                             IconButton(
                               onPressed: () {
+                                setState(() {
+                                  se_icon = !se_icon;
+                                });
                                 // _scaffoldKey.currentState?.openDrawer();
                               },
                               icon: Icon(
                                 Icons.search,
                                 color: Colors.white,
-                                size: 3.h,
+                                size: 3.5.h,
                               ),
                             ),
-                            // SizedBox(
-                            //   width: 1.h,
-                            // ),
-                            IconButton(
-                              onPressed: () {
-                                // _scaffoldKey.currentState?.openDrawer();
-                              },
-                              icon: Icon(
-                                Icons.shopping_bag_outlined,
-                                color: Colors.white,
-                                size: 3.h,
-                              ),
-                            ),
+                            badges.Badge(
+                                onTap: (){
+
+                                },
+                                badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
+                                style:TextStyle(color:Colors.white)),
+                                child: Icon(Icons.shopping_bag_outlined,
+                                    color: Colors.white,
+                                    size: 3.h)
+                            )
                           ],
                         ),
                       ],
@@ -134,6 +148,197 @@ class _order_detail_cState extends State<order_detail_c> {
                 //   Radius.circular(10),
                 // ),
               ),
+            ),
+            SizedBox(
+              height: 2.h,
+            ),
+            (!se_icon)
+                ? Container()
+                : Container(
+              margin: EdgeInsets.symmetric(horizontal: 2.h),
+              padding: EdgeInsets.symmetric(horizontal: 2.h),
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              height:
+              MediaQuery.of(context).size.height * 0.075,
+              child: TextFormField(
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    setState(() {
+                      check=true;
+                    });
+                    searchapi(value);
+                  } else if (value.isEmpty) {
+                    setState(() {
+                      check=false;
+                    });
+
+                  } else {
+                    // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
+                  }
+                },
+                controller: _search,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(3.h),
+                  hintText: 'Search',
+                  suffixIcon: Icon(
+                    Icons.search,
+                    color: Color(0xfff333389),
+                    size: 3.h,
+                  ),
+                ),
+              ),
+              decoration: BoxDecoration(
+                // shape: BoxShape.circle,
+                color: Color(0xfff3faff),
+                // image: DecorationImage(
+                //     image: AssetImage("assets/product_1_img.png"),
+                //     fit: BoxFit.fitWidth)
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                  // ),
+                ),
+              ),
+            ),
+            Padding(
+              // top: 20.h,
+               padding:EdgeInsets.only (left: 1.h,
+                right: 1.h),
+                child:check ! ? Container(
+                  height: 100.h,
+                  width: MediaQuery.of(context).size.width,
+                  color:Colors.white,
+                  child:  (searchproperty == null
+                      ? SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 25.h,
+                            child: Text(
+                              'Product not found',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 2.h,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                      : searchproperty?.data?.length ?? 0) ==
+                      0
+                      ? SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Product not found.',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 2.h,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                      : Container(
+                    width: MediaQuery.of(context).size.width,
+                    alignment: Alignment.topCenter,
+                    margin: EdgeInsets.symmetric(horizontal: 2.h,vertical: 0.5.h),
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: searchproperty == null
+                          ? 0
+                          : searchproperty?.data?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            String? search = await
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => product_2(
+
+                                      pronamenevigatior:   '${searchproperty?.data?[index].prodName}',
+                                      // coloridnevigator:
+                                      //     '${productData?.productData![index].apId}',
+                                    )
+                                )
+                            );
+                            if (search != null) {
+                              if (search.isNotEmpty) {
+                                _search.text = search;
+                                searchapi(search);
+                              }
+                            }
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 0.5.h),
+                            height: 20.w,
+                            child: Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              children: [
+                                CachedNetworkImage(
+                                    imageUrl: searchproperty
+                                        ?.data?[index]
+                                        .prodImgDefault ??
+                                        '',
+                                    imageBuilder:
+                                        (context, imageProvider) =>
+                                        CircleAvatar(
+                                          radius: 8.w,
+                                          backgroundImage: NetworkImage(searchproperty
+                                              ?.data?[index]
+                                              .prodImgDefault ??
+                                              '',),
+                                        ),
+                                    placeholder: (context, url) =>
+                                        Center(
+                                            child:
+                                            CircularProgressIndicator()),
+                                    errorWidget:
+                                        (context, url, error) =>
+                                        CircleAvatar(
+                                          radius: 8.w,
+                                          backgroundImage: AssetImage(
+                                            "assets/default_product_image.png",
+                                          ),
+                                        )
+                                ),
+                                SizedBox(width: 5.w,),
+                                Container(
+                                  child: Flexible(
+                                    child: Text(
+                                      searchproperty
+                                          ?.data?[index]
+                                          .prodName ??
+                                          '',
+                                      textAlign:
+                                      TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 1.8.h,
+                                          fontWeight:
+                                          FontWeight
+                                              .bold),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ):Container()
             ),
             Padding(
               padding: EdgeInsets.all(2.h),
@@ -457,6 +662,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _xs,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -475,6 +683,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _s,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -493,6 +704,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _m,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -511,6 +725,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _l,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -529,6 +746,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _xl,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -597,7 +817,7 @@ class _order_detail_cState extends State<order_detail_c> {
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.5.h,
+                                  height: 3.6.h,
                                   width: 15.w,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.only(
@@ -669,6 +889,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _xxl,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -687,6 +910,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _3xl,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -705,6 +931,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _4xl,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -723,6 +952,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     controller: _5xl,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value){
+
+                                    },
                                     style: TextStyle(
                                         fontSize: 2.h,
                                         color: Colors.black,
@@ -731,7 +963,7 @@ class _order_detail_cState extends State<order_detail_c> {
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  height: 3.5.h,
+                                  height: 3.6.h,
                                   width: 15.w,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.only(
@@ -740,9 +972,9 @@ class _order_detail_cState extends State<order_detail_c> {
                                     color: Color(0Xffeaeaf3),
                                   ),
                                   child: Text(
-                                    '8888',
+                                      '   ₹'+ total.toString(),
                                     style: TextStyle(
-                                        fontSize: 2.h,
+                                        fontSize: 1.5.h,
                                         color: Color(0Xff50509a),
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -1179,10 +1411,10 @@ class _order_detail_cState extends State<order_detail_c> {
                                     ' Grand Total:',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 2.h),
+                                        fontSize: 1.5.h),
                                   ),
                                   Text(
-                                    '   ₹99,99,999 + GST',
+                      '   ₹' +  gtotal.toString(),
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 2.h,
@@ -1198,182 +1430,7 @@ class _order_detail_cState extends State<order_detail_c> {
                     },
                   ),
                 ),
-                // SizedBox(
-                //   height: 1.3.h,
-                // ),
-                // Container(
-                //   width: MediaQuery.of(context).size.width,
-                //   height: 9.h,
-                //   child: Padding(
-                //     padding: EdgeInsets.all(2.h),
-                //     child: Container(
-                //       child: Row(
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: [
-                //           GestureDetector(
-                //             onTap: () {
-                //               // Navigator.push(
-                //               //     context,
-                //               //     MaterialPageRoute(
-                //               //         builder: (context) =>
-                //               //             summary()));
-                //               setState(() {
-                //                 cart = 1;
-                //               });
-                //             },
-                //             child: Container(
-                //               padding: EdgeInsets.all(0.1.h),
-                //               alignment: Alignment.center,
-                //               width: 40.w,
-                //               height: 8.h,
-                //               decoration: BoxDecoration(
-                //                   color: (cart == 0)
-                //                       ? Colors.white
-                //                       : Color(0xfff333389),
-                //                   borderRadius:
-                //                   BorderRadius.circular(20),
-                //                   border:
-                //                   Border.all(color: Colors.white)),
-                //               child: Text(
-                //                 'Exit',
-                //                 style: TextStyle(
-                //                     color: (cart == 0)
-                //                         ? Color(0xff333389)
-                //                         : Colors.white,
-                //                     fontWeight: FontWeight.bold,
-                //                     fontSize: 2.2.h),
-                //               ),
-                //             ),
-                //           ),
-                //           SizedBox(
-                //             width: 2.w,
-                //           ),
-                //           GestureDetector(
-                //             onTap: () {
-                //               // Navigator.push(
-                //               //     context,
-                //               //     MaterialPageRoute(
-                //               //         builder: (context) =>
-                //               //             summary())
-                //               // );
-                //               setState(() {
-                //                 cart = 0;
-                //               });
-                //             },
-                //             child: Container(
-                //               padding: EdgeInsets.all(0.1.h),
-                //               alignment: Alignment.center,
-                //               width: 40.w,
-                //               height: 8.h,
-                //               decoration: BoxDecoration(
-                //                   color: (cart == 1)
-                //                       ? Colors.white
-                //                       : Color(0xfff333389),
-                //                   // color:_selectedColor,
-                //
-                //                   borderRadius:
-                //                   BorderRadius.circular(20),
-                //                   border:
-                //                   Border.all(color: Colors.white)),
-                //               child: Text(
-                //                 'Confirm',
-                //                 style: TextStyle(
-                //                     color: (cart == 1)
-                //                         ? Color(0xff333389)
-                //                         : Colors.white,
-                //                     fontWeight: FontWeight.bold,
-                //                     fontSize: 2.2.h),
-                //               ),
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                //   decoration: BoxDecoration(
-                //     color: Colors.white,
-                //     // borderRadius: BorderRadius.all(
-                //     //   Radius.circular(10),
-                //     // ),
-                //     boxShadow: [
-                //       BoxShadow(
-                //         blurRadius: 15.0,
-                //       ),
-                //     ],
-                //   ),
-                // ),
 
-                // Padding(
-                //   padding: EdgeInsets.all(2.h),
-                //   child: Container(
-                //     child: Row(
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //       children: [
-                //         GestureDetector(
-                //           onTap: () {
-                //             Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                     builder: (context) => order_id()));
-                //             setState(() {});
-                //           },
-                //           child: Container(
-                //             padding: EdgeInsets.all(0.1.h),
-                //             alignment: Alignment.center,
-                //             width: 40.w,
-                //             height: 6.h,
-                //             decoration: BoxDecoration(
-                //                 color: Color(0xfff333389),
-                //                 borderRadius: BorderRadius.circular(8),
-                //                 border: Border.all(color: Color(0xff333389))),
-                //             child: Text(
-                //               'Convert to Order',
-                //               style: TextStyle(
-                //                   color: Colors.white,
-                //
-                //                   // fontWeight: FontWeight.bold,
-                //                   fontSize: 2.h),
-                //             ),
-                //           ),
-                //         ),
-                //         // SizedBox(
-                //         //   width: 0.6.h,
-                //         // ),
-                //         GestureDetector(
-                //           onTap: () {
-                //             setState(() {});
-                //             Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                     builder: (context) => alert_screen()));
-                //           },
-                //           child: Container(
-                //             padding: EdgeInsets.all(0.1.h),
-                //             alignment: Alignment.center,
-                //             width: 40.w,
-                //             height: 6.h,
-                //             decoration: BoxDecoration(
-                //                 color: Color(0xfff333389),
-                //                 // color:_selectedColor,
-                //
-                //                 borderRadius: BorderRadius.circular(8),
-                //                 border: Border.all(color: Color(0xff333389))),
-                //             child: Text(
-                //               'Unblock Order',
-                //               style: TextStyle(
-                //                   color: Colors.white,
-                //
-                //                   // fontWeight: FontWeight.bold,
-                //                   fontSize: 2.h),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ],
             )
           ],
@@ -1381,6 +1438,7 @@ class _order_detail_cState extends State<order_detail_c> {
       ),
     );
   }
+
   orederdetailapiblock(){
     final Map<String, String> data = {};
     data['action'] = 'order_details';
@@ -1391,8 +1449,6 @@ class _order_detail_cState extends State<order_detail_c> {
             .oredrdetailap(data)
             .then((Response response) async {
           detail = orderdetail.fromJson(json.decode(response.body));
-
-
           if (response.statusCode == 200 && detail?.status == "success") {
             setState(() {
               _s.text =detail?.productData?[int.parse(widget.id.toString())].s.toString() ?? "0";
@@ -1404,13 +1460,23 @@ class _order_detail_cState extends State<order_detail_c> {
               _3xl.text =detail?.productData?[int.parse(widget.id.toString())].s3xl.toString() ?? "0";
               _4xl.text =detail?.productData?[int.parse(widget.id.toString())].s4xl.toString() ?? "0";
               _5xl.text =detail?.productData?[int.parse(widget.id.toString())].s5xl.toString() ?? "0";
-
+              num sum1 = int.parse((detail?.productData?[int.parse(widget.id.toString())].s).toString()) +
+                  int.parse((detail?.productData?[int.parse(widget.id.toString())].xs).toString())+
+                  int.parse((detail?.productData?[int.parse(widget.id.toString())].m).toString())
+              +int.parse((detail?.productData?[int.parse(widget.id.toString())].l).toString()) +
+                  int.parse((detail?.productData?[int.parse(widget.id.toString())].xl).toString()) +
+                  int.parse((detail?.productData?[int.parse(widget.id.toString())].xxl).toString()) +
+                  int.parse((detail?.productData?[int.parse(widget.id.toString())].s3xl).toString());
+              num sum2 =int.parse((detail?.productData?[int.parse(widget.id.toString())].s4xl).toString()) +
+                  int.parse((detail?.productData?[int.parse(widget.id.toString())].s5xl).toString()) ;
+             setState(() {
+               total = sum1 * double.parse((detail?.productData?[int.parse(widget.id.toString())].minPrice).toString())
+                   + sum2 * double.parse((detail?.productData?[int.parse(widget.id.toString())].maxPrice).toString());
+               gtotal= total! * 118/100;
+               print(total);
+               print(gtotal);
+             });
             });
-
-
-            if (kDebugMode) {
-              // isloading = false;
-            }
           } else {
             // isloading = false;
           }
@@ -1435,7 +1501,7 @@ class _order_detail_cState extends State<order_detail_c> {
     data['3xl_order_q'] = _3xl.text== "" ? "0" : _3xl.text.toString() ;
     data['4xl_order_q'] = _4xl.text== "" ? "0" : _4xl.text.toString() ;
     data['5xl_order_q'] = _5xl.text== "" ? "0" : _5xl.text.toString() ;
-print(data);
+    print(data);
    checkInternet().then((internet) async {
       if (internet) {
         Productprovider()
@@ -1443,17 +1509,15 @@ print(data);
             .then((Response response) async {
           edit = convertblockorder.fromJson(json.decode(response.body));
 
-print(edit?.status);
+          print(edit?.status);
           if (response.statusCode == 200 && edit?.status == "success") {
             setState(() {
-
             });
+            widget.val ==0?
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>orderblockdisplay(id: widget.oreder.toString(),))) : Navigator.of(context).push(MaterialPageRoute(builder: (context)=>order_id(id: widget.oreder.toString(),)));
 
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>orderblockdisplay(id: widget?.oreder.toString(),)));
-            if (kDebugMode) {
-              // isloading = false;
-            }
           } else {
+            buildErrorDialog(context, "", "your edited stock is not available.");
             // isloading = false;
           }
         });
@@ -1462,6 +1526,51 @@ print(edit?.status);
       }
     });
 
+  }
+  // search
+  searchapi(body) async {
+    final Map<String, String> data = {};
+    data['action'] = 'searching_products';
+    data['search'] = body;
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().searchproduct(data).then((Response response) async {
+          searchproperty = search.fromJson(json.decode(response.body));
+          if (response.statusCode == 200 &&
+              searchproperty?.status == "success") {
+            setState(() {
+              // isloading = false;
+
+            });
+
+          } else {
+            setState(() {
+              // isloading = false;
+            });}
+        });
+      } else {
+        setState(() {
+          // isloading = false;
+        });}
+    });
+  }
+  viewcart()async {
+    final Map<String, String> data = {};
+    data['action'] = 'view_add_to_cart_product_single';
+    data['d_id'] = (userData?.logindata?.dId).toString();
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().viewcartapi(data).then((Response response) async {
+          viewaddtocart = ViewCart.fromJson(json.decode(response.body));
+          if (response.statusCode == 200 &&
+              viewaddtocart?.status == "success") {
+          }
+          else {
+          }
+        });
+      } else {
+      }
+    });
   }
 
 }

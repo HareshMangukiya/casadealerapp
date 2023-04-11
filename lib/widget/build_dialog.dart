@@ -46,7 +46,7 @@ buildErrorDialog(BuildContext context,String title, String contant,
           backgroundColor: Colors.transparent,
           child: Container(
             width: 73.w,
-            height: (title == "")?18.5.h :22.h,
+            height: (title == "")?20.h :22.h,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),

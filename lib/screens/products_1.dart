@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:casadealerapp/main.dart';
+import 'package:casadealerapp/modal_class/ViewCart.dart';
 import 'package:casadealerapp/modal_class/category_wise_display.dart';
 import 'package:casadealerapp/modal_class/search_class.dart';
 import 'package:casadealerapp/screens/cart_order.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:badges/badges.dart' as badges;
 
 
 class products_1 extends StatefulWidget {
@@ -75,7 +77,7 @@ class _products_1State extends State<products_1> {
   ];
   productapi? productData;
   String? name;
-  String? select;
+  int? select;
   String? image;
   bool se_icon = false;
   bool isloading = true;
@@ -86,6 +88,8 @@ class _products_1State extends State<products_1> {
     super.initState();
     alldisplay();
     categorydisplay();
+    viewcart();
+    print(viewaddtocart?.addToCartNumber);
 
 
   }
@@ -129,7 +133,7 @@ class _products_1State extends State<products_1> {
                           children: [
                             SizedBox(height: 4.h),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Row(
                                   children: [
@@ -158,7 +162,7 @@ class _products_1State extends State<products_1> {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: 14.h,
+                                  width: 28.w,
                                 ),
                                 Row(
                                   children: [
@@ -175,24 +179,35 @@ class _products_1State extends State<products_1> {
                                         size: 3.5.h,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 1.h,
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    cart_order()));
-                                        // _scaffoldKey.currentState?.openDrawer();
+                                    // SizedBox(
+                                    //   width: 1.h,
+                                    // ),
+                                    // IconButton(
+                                    //   onPressed: () {
+                                    //     // Navigator.push(
+                                    //     //     context,
+                                    //     //     MaterialPageRoute(
+                                    //     //         builder: (context) =>
+                                    //     //             cart_order()));
+                                    //     // _scaffoldKey.currentState?.openDrawer();
+                                    //   },
+                                    //   icon: Icon(
+                                    //     Icons.shopping_bag_outlined,
+                                    //     color: Colors.white,
+                                    //     size: 3.h,
+                                    //   ),
+                                    // ),
+                                    badges.Badge(
+                                      onTap: (){
+
                                       },
-                                      icon: Icon(
-                                        Icons.shopping_bag_outlined,
-                                        color: Colors.white,
-                                        size: 3.h,
+                                      badgeContent: Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
+                                      style: TextStyle(color: Colors.white),
                                       ),
-                                    ),
+                                      child: Icon(Icons.shopping_bag_outlined,
+                                            color: Colors.white,
+                                            size: 3.h)
+                                    )
                                   ],
                                 ),
                               ],
@@ -337,7 +352,7 @@ class _products_1State extends State<products_1> {
                               onTap: () {
                                 setState(() {
                                   gen = index;
-                                  select = allproperty?.data?[index].id;
+
                                 });
                                 categorydisplay();
                               },
@@ -387,14 +402,16 @@ class _products_1State extends State<products_1> {
                           }),
                     ),
                   ),
-                       Container(
+                  Container(
                           // height: MediaQuery.of(context).size.height,
                           height: 75.h,
                           width: MediaQuery.of(context).size.width,
-
                           padding: EdgeInsets.all(15),
                           color: Color(0xfffFFFFFF),
-                          child: GridView.builder(
+                          child:allcatogaryproperty?.diffProduct == null ?Center(child: Text("No Product Found.",style:
+                            TextStyle(color:Colors.black,fontSize: 12.sp,
+                            fontWeight: FontWeight.bold)
+                            ,)): GridView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: allcatogaryproperty?.diffProduct?.length,
                             gridDelegate:
@@ -610,7 +627,7 @@ class _products_1State extends State<products_1> {
               left: 1.h,
               right: 1.h,
               child:check? Container(
-                height: 50.h,
+                height: 100.h,
                 width: MediaQuery.of(context).size.width,
                   color:Colors.white,
                 child:  (searchproperty == null
@@ -666,6 +683,8 @@ class _products_1State extends State<products_1> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () async {
+
+                            String? search = await
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -677,11 +696,6 @@ class _products_1State extends State<products_1> {
                                     )
                                 )
                             );
-                            String? search = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        products_1()));
                             if (search != null) {
                               if (search.isNotEmpty) {
                                 _search.text = search;
@@ -799,9 +813,10 @@ class _products_1State extends State<products_1> {
         Productprovider().allcatogeryapi(data).then((Response response) async {
           allproperty = allcategorydisplay.fromJson(json.decode(response.body));
           if (response.statusCode == 200 && allproperty?.status == "success") {
+
             setState(() {
               isloading = false;
-              select = allproperty?.data?[0].id.toString();
+
               categorydisplay();
             });
             if (kDebugMode) {}
@@ -816,10 +831,10 @@ class _products_1State extends State<products_1> {
     });
   }
   categorydisplay() async {
-    print(select);
+
     final Map<String, String> data = {};
     data['action'] = 'category_wise_product';
-    data['category_id'] = select.toString();
+    data['category_id'] =(allproperty?.data?[gen!].id).toString();
 
     checkInternet().then((internet) async {
       if (internet) {
@@ -832,6 +847,7 @@ class _products_1State extends State<products_1> {
 
           if (response.statusCode == 200 &&
               allcatogaryproperty?.status == "success") {
+
             setState(() {
               isloading = false;
             });
@@ -876,6 +892,33 @@ class _products_1State extends State<products_1> {
         setState(() {
         isloading = false;
       });}
+    });
+  }
+  viewcart()async {
+    final Map<String, String> data = {};
+    data['action'] = 'view_add_to_cart_product_single';
+    data['d_id'] = (userData?.logindata?.dId).toString();
+
+
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().viewcartapi(data).then((Response response) async {
+          viewaddtocart = ViewCart.fromJson(json.decode(response.body));
+
+          if (response.statusCode == 200 &&
+              viewaddtocart?.status == "success") {
+
+
+
+
+            }
+           else {
+
+          }
+        });
+      } else {
+
+      }
     });
   }
 }

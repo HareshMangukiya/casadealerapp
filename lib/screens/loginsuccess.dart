@@ -1,7 +1,14 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:casadealerapp/modal_class/logoapi.dart';
+import 'package:casadealerapp/provider/login_authprovider.dart';
 import 'package:casadealerapp/screens/getstarted.dart';
 import 'package:casadealerapp/screens/login.dart';
 import 'package:casadealerapp/screens/products_1.dart';
+import 'package:casadealerapp/widget/CONST.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:sizer/sizer.dart';
 
 class loginsuccess extends StatefulWidget {
@@ -10,8 +17,14 @@ class loginsuccess extends StatefulWidget {
   @override
   State<loginsuccess> createState() => _loginsuccessState();
 }
-
 class _loginsuccessState extends State<loginsuccess> {
+  logoapi? logoapp;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchlogo();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -25,21 +38,37 @@ class _loginsuccessState extends State<loginsuccess> {
             ),
             Container(
               alignment: Alignment.center,
-              child: Image.asset(
-                'assets/login2.png',
-                fit: BoxFit.fill,
+              child:CachedNetworkImage(
                 height: MediaQuery.of(context).size.height * 0.5,
-                // width: MediaQuery.of(context).size.width * 2,
+                imageUrl:logoapp?.data?[0].appLogo ?? "",
+                fit: BoxFit.fill,
+                placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    Image.asset(
+                      'assets/get_started2.png',
+                      fit: BoxFit.fill,
+                      // height: MediaQuery.of(context).size.height * 1,
+                      // width: MediaQuery.of(context).size.width * 2,
+                    ),
               ),
             ),
             SizedBox(height: 2.h),
             Container(
               alignment: Alignment.topCenter,
-              child: Image.asset(
-                'assets/get_started_logo.png',
+              child:CachedNetworkImage(
                 fit: BoxFit.contain,
                 height: MediaQuery.of(context).size.height * 0.07,
-                // width: MediaQuery.of(context).size.width * 2,
+                imageUrl:logoapp?.data?[0].appLogo ?? "",
+                placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    Image.asset(
+                      'assets/get_started_logo.png',
+                      fit: BoxFit.contain,
+                      // height: MediaQuery.of(context).size.height * 1,
+                      // width: MediaQuery.of(context).size.width * 2,
+                    ),
               ),
             ),
             SizedBox(
@@ -101,13 +130,7 @@ class _loginsuccessState extends State<loginsuccess> {
                       'Back to Login',
                       style: TextStyle(fontSize: 2.h),
                     ),
-                    // Icon(
-                    //   Icons.arrow_forward,
-                    //   color: Colors.white,
-                    //   size: 24.0,
-                    //   semanticLabel:
-                    //   'Text to announce in accessibility modes',
-                    // ),
+
                   ],
                 ),
               ),
@@ -116,5 +139,27 @@ class _loginsuccessState extends State<loginsuccess> {
         ),
       ]),
     ));
+  }
+  fetchlogo() async {
+
+    final Map<String, String> data = {};
+    data['action'] = 'banner_logo_app_change';
+
+
+    checkInternet().then((internet) async {
+      if (internet) {
+        Authprovider().logo(data).then((Response response) async {
+          logoapp = logoapi.fromJson(json.decode(response.body));
+
+          if (response.statusCode == 200 &&
+              logoapp?.status == "success") {
+          }
+          else {
+
+          }
+        });
+      } else {
+      }
+    });
   }
 }

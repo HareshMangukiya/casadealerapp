@@ -4,7 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:casadealerapp/modal_class/new_password_class.dart';
 import 'package:casadealerapp/modal_class/profileU.dart';
+import 'package:casadealerapp/modal_class/search_class.dart';
 import 'package:casadealerapp/provider/productprovider.dart';
+import 'package:casadealerapp/screens/product_2.dart';
 
 import 'package:casadealerapp/screens/profile_view.dart';
 import 'package:casadealerapp/widget/CONST.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sizer/sizer.dart';
+import 'package:badges/badges.dart' as badges;
 
 class updateProfile extends StatefulWidget {
   String? prfileFullName;
@@ -28,6 +31,11 @@ class updateProfile extends StatefulWidget {
 }
 
 class _updateProfileState extends State<updateProfile> {
+
+  TextEditingController _search = TextEditingController();
+  bool se_icon = false;
+  bool check = false;
+  search? searchproperty;
 
 
   changePassword? changepass;
@@ -82,499 +90,566 @@ class _updateProfileState extends State<updateProfile> {
           backgroundColor: Color(0xfffFFFFFF),
           drawer: drawer(context),
           key: _scaffoldKey,
-          body: Column(
+          body: Stack(
             children: [
-              Column(
-                children: [
-
-
-
-
-                  //========================================================================
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1,
-                    height: 11.h,
-                    child: Column(
+              Container(
+                height: MediaQuery.of(context).size.height,
+                color: Color(0xfffFFFFFF),
+              ),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Column(
                       children: [
-                        SizedBox(height: 4.h),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Container(
+                          width: MediaQuery.of(context).size.width * 1,
+                          height: 11.h,
+                          child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      _scaffoldKey.currentState?.openDrawer();
-                                    },
-                                    icon: Icon(
-                                      Icons.menu,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 2.3.h,
-                                  ),
-                                  Container(
-                                    // padding: EdgeInsets.only(top: 1.5.h),
-                                    // alignment: Alignment.center,
-                                    child: Text(
-                                      "Profile Update",
-                                      style: TextStyle(
-                                          fontSize: 2.h, color: Colors.white),
-                                    ),
-                                  ),
+                              SizedBox(height: 4.h),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            _scaffoldKey.currentState?.openDrawer();
+                                          },
+                                          icon: Icon(
+                                            Icons.menu,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 2.3.h,
+                                        ),
+                                        Container(
+                                          // padding: EdgeInsets.only(top: 1.5.h),
+                                          // alignment: Alignment.center,
+                                          child: Text(
+                                            "Profile Update",
+                                            style: TextStyle(
+                                                fontSize: 2.h, color: Colors.white),
+                                          ),
+                                        ),
 
-                                ],
+                                      ],
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              se_icon = !se_icon;
+                                            });
+                                            // _scaffoldKey.currentState?.openDrawer();
+                                          },
+                                          icon: Icon(
+                                            Icons.search,
+                                            color: Colors.white,
+                                            size: 3.5.h,
+                                          ),
+                                        ),
+
+                                        badges.Badge(
+                                            onTap: (){
+
+                                            },
+                                            badgeContent: Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
+                                                style:TextStyle(color:Colors.white)),
+                                            child: Icon(Icons.shopping_bag_outlined,
+                                                color: Colors.white,
+                                                size: 3.h)
+                                        )
+                                      ],
+                                    ),
+
+                                  ],
+                                ),
                               ),
-
                             ],
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color(0xfff333389),
+                            // borderRadius: BorderRadius.all(
+                            //   Radius.circular(10),
+                            // ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        (!se_icon)
+                            ? Container()
+                            : Container(
+                          margin: EdgeInsets.symmetric(horizontal: 2.h),
+                          padding: EdgeInsets.symmetric(horizontal: 2.h),
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          height:
+                          MediaQuery.of(context).size.height * 0.075,
+                          child: TextFormField(
+                            onChanged: (value) {
+
+                              if (value.isNotEmpty) {
+                                setState(() {
+                                  check=true;
+                                });
+                                searchapi(value);
+                              } else if (value.isEmpty) {
+                                setState(() {
+                                  check=false;
+                                });
+                              } else {
+                                // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
+                              }
+                            },
+                            controller: _search,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(3.h),
+                              hintText: 'Search',
+                              suffixIcon: Icon(
+                                Icons.search,
+                                color: Color(0xfff333389),
+                                size: 3.h,
+                              ),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+
+                            color: Color(0xfff3faff),
+
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    decoration: BoxDecoration(
-                      color: Color(0xfff333389),
-                      // borderRadius: BorderRadius.all(
-                      //   Radius.circular(10),
-                      // ),
-                    ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(2.h),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                border: Border.all(color: Color(0xfff9e9ec7))),
-                            alignment: Alignment.center,
-                            height: 6.5.h,
-                            width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.symmetric(horizontal: 1.w),
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: tabs.length,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        sumindex = index;
-                                      });
-                                    },
-                                    child: Column(
-                                      // crossAxisAlignment: CrossAxisAlignment.center,
-                                      // mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.center,
 
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
-                                            color: (sumindex == index)
-                                                ? Color(0xfff333389)
-                                                : Color(0xfffFFFFFF),
-                                          ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(2.h),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  border: Border.all(color: Color(0xfff9e9ec7))),
+                              alignment: Alignment.center,
+                              height: 6.5.h,
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.symmetric(horizontal: 1.w),
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: tabs.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          sumindex = index;
+                                        });
+                                      },
+                                      child: Column(
+                                        // crossAxisAlignment: CrossAxisAlignment.center,
+                                        // mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
 
-                                          height: 5.h,
-                                          width: 44.w,
-                                          margin: EdgeInsets.only(right: 0.1.w, top: 0.6.h),
-
-                                          // padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 0.h),
-                                          child: Text(
-                                            tabs[index],
-                                            style: TextStyle(
-                                              fontFamily: "Poppins",
-                                              fontWeight: FontWeight.bold,
-                                              color: (sumindex != index)
-                                                  ? Colors.grey.shade600
-                                                  : Color(0xffffffff),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(20),
+                                              color: (sumindex == index)
+                                                  ? Color(0xfff333389)
+                                                  : Color(0xfffFFFFFF),
                                             ),
-                                          ),
-                                        ),
-                                        // (selectindex != index)
-                                        //     ? Container()
-                                        //     : Center(
-                                        //         child: Container(
-                                        //             height: 7.0,
-                                        //             width: 7.0,
-                                        //             decoration: BoxDecoration(
-                                        //                 shape: BoxShape.circle,
-                                        //                 color: Color(0xffb4776e6)
-                                        //             )
-                                        //         ),
-                                        //       ),
-                                      ],
-                                    ),
-                                  );
-                                }),
+
+                                            height: 5.h,
+                                            width: 44.w,
+                                            margin: EdgeInsets.only(right: 0.1.w, top: 0.6.h),
+
+                                            // padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 0.h),
+                                            child: Text(
+                                              tabs[index],
+                                              style: TextStyle(
+                                                fontFamily: "Poppins",
+                                                fontWeight: FontWeight.bold,
+                                                color: (sumindex != index)
+                                                    ? Colors.grey.shade600
+                                                    : Color(0xffffffff),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            ),
                           ),
-                        ),
-                        (sumindex == 0)
-                            ? Column(
-                          children: [
-                        //     SizedBox(
-                        //   height: 2.h,
-                        // ),
-                            Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: TextFormField(
-                                // upadateP?.updated?.fullName ?? '',
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Please enter your full name";
-                                  }
-                                  return null;
-                                },
-                                controller: _firstname,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(2.h),
-                                  hintText: 'Full Name',
-                                  // suffixIcon: Icon(
-                                  //   Icons.person_outline,
-                                  //   color: Color(0xfff9696c1),
-                                  //   size: 3.5.h,
-                                  // ),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xfffFBFBFB),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Please enter your company name";
-                                  }
-                                  return null;
-                                },
-                                controller: _companyname,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(2.h),
-                                  hintText: 'Company Name',
-                                  // suffixIcon: Icon(
-                                  //   Icons.shopping_bag_outlined,
-                                  //   color: Color(0xfff9696c1),
-                                  //   size: 3.5.h,
-                                  // ),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xfffFBFBFB),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Please enter your company address";
-                                  }
-                                  return null;
-                                },
-                                controller: _companyname1,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(2.h),
-                                  hintText: 'Company Address',
-                                  // suffixIcon: Icon(
-                                  //   Icons.location_on_outlined,
-                                  //   color: Color(0xfff9696c1),
-                                  //   size: 3.5.h,
-                                  // ),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xfffFBFBFB),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: TextFormField(
-                                validator: (value) {
-                                  String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
-                                      "\\@" +
-                                      "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                                      "(" +
-                                      "\\." +
-                                      "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                                      ")+";
-                                  //Convert string p to a RegE  x
-                                  RegExp regExp = RegExp(p);
-
-                                  if (value!.isEmpty) {
-                                    return 'Please enter Your Email';
-                                  } else {
-                                    //If email address matches pattern
-                                    if (regExp.hasMatch(value)) {
-                                      return null;
-                                    } else {
-                                      //If it doesn't match
-                                      return 'Email is not valid';
+                          (sumindex == 0)
+                              ? Column(
+                            children: [
+                              //     SizedBox(
+                              //   height: 2.h,
+                              // ),
+                              Container(
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                child: TextFormField(
+                                  // upadateP?.updated?.fullName ?? '',
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter your full name";
                                     }
-                                  }
-                                },
-                                controller: _email,
-                                decoration: InputDecoration(
-                                  // suffixIcon: Icon(
-                                  //   Icons.person_outline,
-                                  //   color: Color(0xfff9696c1),
-                                  //   size: 3.5.h,
-                                  // ),
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(2.h),
-                                  hintText: 'Email Address',
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xfffFBFBFB),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value?.length != 10)
-                                    return 'Mobile Number must be of 10 digit';
-                                  else
                                     return null;
-                                },
-                                controller: _phone,
-                                keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(2.h),
-                                  hintText: 'Phone No. 1',
-                                  // suffixIcon: Icon(
-                                  //   Icons.phone_outlined,
-                                  //   color: Color(0xfff9696c1),
-                                  //   size: 3.5.h,
-                                  // ),
+                                  },
+                                  controller: _firstname,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.all(2.h),
+                                    hintText: 'Full Name',
+                                    // suffixIcon: Icon(
+                                    //   Icons.person_outline,
+                                    //   color: Color(0xfff9696c1),
+                                    //   size: 3.5.h,
+                                    // ),
+                                  ),
                                 ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xfffFBFBFB),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: TextFormField(
-                                // validator: (value) {
-                                //   if (value?.length != 10)
-                                //     return 'Mobile Number must be of 10 digit';
-                                //   else
-                                //     return null;
-                                // },
-                                controller: _phone1,
-                                keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(2.h),
-                                  hintText: 'Phone 2 (optional)',
-                                  // suffixIcon: Icon(
-                                  //   Icons.phone_outlined,
-                                  //   color: Color(0xfff9696c1),
-                                  //   size: 3.5.h,
-                                  // ),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xfffFBFBFB),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              // color: Color(0xfff333389),
-                              // padding:
-                              //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-
-                                    updateProapi();
-
-
-
-                                    // Navigator.push(
-                                    // context,
-                                    // MaterialPageRoute(
-                                    // builder: (context) => profileView()));
-                                  }
-                                },
-                                child: Text(
-                                  'Update',
-                                  style: TextStyle(fontSize: 2.h),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xfff333389),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffFBFBFB),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 2.h,)
-                          ],
-                        )
-                            : Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xfffFBFBFB),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
+                              SizedBox(
+                                height: 20,
                               ),
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: TextFormField(
-                                obscureText: !_passwordVisible,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Please enter your password";
-                                  }
-                                  return null;
-                                },
-                                controller: _password,
-                                decoration: InputDecoration(
-
-                                  //  prefixIcon: Icon(Icons.login),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _passwordVisible = !_passwordVisible;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        color: Color(0xfff9696c1),
-                                        _passwordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                    ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter your company name";
+                                    }
+                                    return null;
+                                  },
+                                  controller: _companyname,
+                                  decoration: InputDecoration(
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.all(2.h),
-                                    hintText: 'Create new Password'),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xfffFBFBFB),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
+                                    hintText: 'Company Name',
+                                    // suffixIcon: Icon(
+                                    //   Icons.shopping_bag_outlined,
+                                    //   color: Color(0xfff9696c1),
+                                    //   size: 3.5.h,
+                                    // ),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffFBFBFB),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
                                 ),
                               ),
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: TextFormField(
-                                obscureText: !_passwordVisible1,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Please Re-Enter your password";
-                                  }else if (value != _password.text) {
-                                    return "Passwords do not match";
-                                  }
-                                  return null;
-                                },
-
-                                controller: _password1,
-                                decoration: InputDecoration(
-                                  //  prefixIcon: Icon(Icons.login),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _passwordVisible1 = !_passwordVisible1;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        color: Color(0xfff9696c1),
-                                        _passwordVisible1
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                    ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter your company address";
+                                    }
+                                    return null;
+                                  },
+                                  controller: _companyname1,
+                                  decoration: InputDecoration(
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.all(2.h),
-                                    hintText: 'Re-Enter Password'),
+                                    hintText: 'Company Address',
+                                    // suffixIcon: Icon(
+                                    //   Icons.location_on_outlined,
+                                    //   color: Color(0xfff9696c1),
+                                    //   size: 3.5.h,
+                                    // ),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffFBFBFB),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 2.h,),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              // color: Color(0xfff333389),
-                              // padding:
-                              //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // if (_formKey.currentState!.validate()) {
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
+                                        "\\@" +
+                                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                                        "(" +
+                                        "\\." +
+                                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                                        ")+";
+                                    //Convert string p to a RegE  x
+                                    RegExp regExp = RegExp(p);
+
+                                    if (value!.isEmpty) {
+                                      return 'Please enter Your Email';
+                                    } else {
+                                      //If email address matches pattern
+                                      if (regExp.hasMatch(value)) {
+                                        return null;
+                                      } else {
+                                        //If it doesn't match
+                                        return 'Email is not valid';
+                                      }
+                                    }
+                                  },
+                                  controller: _email,
+                                  decoration: InputDecoration(
+                                    // suffixIcon: Icon(
+                                    //   Icons.person_outline,
+                                    //   color: Color(0xfff9696c1),
+                                    //   size: 3.5.h,
+                                    // ),
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.all(2.h),
+                                    hintText: 'Email Address',
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffFBFBFB),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value?.length != 10)
+                                      return 'Mobile Number must be of 10 digit';
+                                    else
+                                      return null;
+                                  },
+                                  controller: _phone,
+                                  keyboardType: TextInputType.phone,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.all(2.h),
+                                    hintText: 'Phone No. 1',
+                                    // suffixIcon: Icon(
+                                    //   Icons.phone_outlined,
+                                    //   color: Color(0xfff9696c1),
+                                    //   size: 3.5.h,
+                                    // ),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffFBFBFB),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                child: TextFormField(
+                                  // validator: (value) {
+                                  //   if (value?.length != 10)
+                                  //     return 'Mobile Number must be of 10 digit';
+                                  //   else
+                                  //     return null;
+                                  // },
+                                  controller: _phone1,
+                                  keyboardType: TextInputType.phone,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.all(2.h),
+                                    hintText: 'Phone 2 (optional)',
+                                    // suffixIcon: Icon(
+                                    //   Icons.phone_outlined,
+                                    //   color: Color(0xfff9696c1),
+                                    //   size: 3.5.h,
+                                    // ),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffFBFBFB),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.06,
+                                // color: Color(0xfff333389),
+                                // padding:
+                                //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+
+                                      updateProapi();
+
+
+
+                                      // Navigator.push(
+                                      // context,
+                                      // MaterialPageRoute(
+                                      // builder: (context) => profileView()));
+                                    }
+                                  },
+                                  child: Text(
+                                    'Update',
+                                    style: TextStyle(fontSize: 2.h),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0xfff333389),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 2.h,)
+                            ],
+                          )
+                              : Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffFBFBFB),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                child: TextFormField(
+                                  obscureText: !_passwordVisible,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter your password";
+                                    }
+                                    return null;
+                                  },
+                                  controller: _password,
+                                  decoration: InputDecoration(
+
+                                    //  prefixIcon: Icon(Icons.login),
+                                      suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _passwordVisible = !_passwordVisible;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          color: Color(0xfff9696c1),
+                                          _passwordVisible
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                        ),
+                                      ),
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.all(2.h),
+                                      hintText: 'Create new Password'),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffFBFBFB),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                child: TextFormField(
+                                  obscureText: !_passwordVisible1,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please Re-Enter your password";
+                                    }else if (value != _password.text) {
+                                      return "Passwords do not match";
+                                    }
+                                    return null;
+                                  },
+
+                                  controller: _password1,
+                                  decoration: InputDecoration(
+                                    //  prefixIcon: Icon(Icons.login),
+                                      suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _passwordVisible1 = !_passwordVisible1;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          color: Color(0xfff9696c1),
+                                          _passwordVisible1
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                        ),
+                                      ),
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.all(2.h),
+                                      hintText: 'Re-Enter Password'),
+                                ),
+                              ),
+                              SizedBox(height: 2.h,),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: MediaQuery.of(context).size.height * 0.06,
+                                // color: Color(0xfff333389),
+                                // padding:
+                                //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    // if (_formKey.currentState!.validate()) {
                                     print("Validate");
                                     changepass1Proapi();
 
@@ -582,31 +657,210 @@ class _updateProfileState extends State<updateProfile> {
                                     // context,
                                     // MaterialPageRoute(
                                     // builder: (context) => profileView()));
-                                  // }
-                                },
-                                child: Text(
-                                  'Change Password',
-                                  style: TextStyle(fontSize: 2.h),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xfff333389),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    // }
+                                  },
+                                  child: Text(
+                                    'Change Password',
+                                    style: TextStyle(fontSize: 2.h),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0xfff333389),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
 
-                          ],
+                            ],
 
-                        ),
+                          ),
 
 
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
+              Positioned(
+                  top: 20.h,
+                  left: 1.h,
+                  right: 1.h,
+                  child:check? Container(
+                    height: 100.h,
+                    width: MediaQuery.of(context).size.width,
+                    color:Colors.white,
+                    child:  (searchproperty == null
+                        ? SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 25.h,
+                              child: Text(
+                                'Product not found',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 2.h,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                        : searchproperty?.data?.length ?? 0) ==
+                        0
+                        ? SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Column(
+                          children: [
+
+                            Text(
+                              'Product not found.',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 2.h,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                        : Container(
+                      width: MediaQuery.of(context).size.width,
+                      alignment: Alignment.topCenter,
+
+                      margin: EdgeInsets.symmetric(horizontal: 2.h,vertical: 0.5.h),
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: searchproperty == null
+                            ? 0
+                            : searchproperty?.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () async {
+
+                              String? search = await
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => product_2(
+
+                                        pronamenevigatior:   '${searchproperty?.data?[index].prodName}',
+                                        // coloridnevigator:
+                                        //     '${productData?.productData![index].apId}',
+                                      )
+                                  )
+                              );
+                              if (search != null) {
+                                if (search.isNotEmpty) {
+                                  _search.text = search;
+                                  searchapi(search);
+                                }
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 0.5.h),
+                              height: 20.w,
+                              child: Row(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.center,
+                                children: [
+                                  CachedNetworkImage(
+                                      imageUrl: searchproperty
+                                          ?.data?[index]
+                                          .prodImgDefault ??
+                                          '',
+                                      imageBuilder:
+                                          (context, imageProvider) =>
+                                          CircleAvatar(
+                                            radius: 8.w,
+                                            backgroundImage: NetworkImage(searchproperty
+                                                ?.data?[index]
+                                                .prodImgDefault ??
+                                                '',),
+                                          ),
+                                      // Container(
+                                      //   height: 19.h,
+                                      //   width: 40.w,
+                                      //   decoration: BoxDecoration(
+                                      //     borderRadius:
+                                      //     BorderRadius.all(
+                                      //       Radius.circular(10.sp),
+                                      //     ),
+                                      //     image: DecorationImage(
+                                      //       image: imageProvider,
+                                      //       fit: BoxFit.cover,
+                                      //     ),
+                                      //   ),
+                                      // ),
+
+                                      placeholder: (context, url) =>
+                                          Center(
+                                              child:
+                                              CircularProgressIndicator()),
+                                      errorWidget:
+                                          (context, url, error) =>
+                                          CircleAvatar(
+                                            radius: 8.w,
+                                            backgroundImage: AssetImage(
+                                              "assets/default_product_image.png",
+                                            ),
+                                          )
+                                    // Container(
+                                    //   height: 19.h,
+                                    //   width: 40.w,
+                                    //   decoration: BoxDecoration(
+                                    //     borderRadius:
+                                    //     BorderRadius.all(
+                                    //       Radius.circular(10.h),
+                                    //     ),
+                                    //   ),
+                                    //   child: ClipRRect(
+                                    //     borderRadius:
+                                    //     BorderRadius.circular(
+                                    //         15),
+                                    //     child: Image.asset(
+                                    //       "assets/default_product_image.png",
+                                    //
+                                    //       fit: BoxFit.cover,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ),
+                                  SizedBox(width: 5.w,),
+                                  Container(
+                                    child: Flexible(
+                                      child: Text(
+                                        searchproperty
+                                            ?.data?[index]
+                                            .prodName ??
+                                            '',
+                                        textAlign:
+                                        TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 1.8.h,
+                                            fontWeight:
+                                            FontWeight
+                                                .bold),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ):Container()
+              )
+
             ],
           ),
 
@@ -1074,6 +1328,34 @@ class _updateProfileState extends State<updateProfile> {
     }
   }
 
+  searchapi(body) async {
+    final Map<String, String> data = {};
+    data['action'] = 'searching_products';
+    data['search'] = body;
 
+
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().searchproduct(data).then((Response response) async {
+          searchproperty = search.fromJson(json.decode(response.body));
+
+          if (response.statusCode == 200 &&
+              searchproperty?.status == "success") {
+            setState(() {
+              // isloading = false;
+
+            });
+            if (kDebugMode) { }
+          } else {
+            setState(() {
+              // isloading = false;
+            });}
+        });
+      } else {
+        setState(() {
+          // isloading = false;
+        });}
+    });
+  }
 
 }
