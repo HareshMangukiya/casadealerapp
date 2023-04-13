@@ -139,7 +139,7 @@ class _product_2State extends State<product_2> {
   colorDisplayClass? displayallcolor;
   blockProductClass? block;
   addtoCartClass? add;
-  bool isloading = true;
+  bool isLoading = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -158,12 +158,12 @@ class _product_2State extends State<product_2> {
   @override
   Widget build(BuildContext context) {
     return commanScreen(
-      isLoading: isloading,
+      isLoading: isLoading,
       scaffold: Scaffold(
         backgroundColor: Color(0xfffFFFFFF),
         drawer: drawer(context),
         key: _scaffoldKey,
-        body: isloading
+        body: isLoading
             ? Container()
             : Form(
                key:_formKey,
@@ -1879,7 +1879,7 @@ class _product_2State extends State<product_2> {
                                                             onChanged: (value) {
 
                                                                if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
-                                                                    buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                                    buildErrorDialog(context, "", "Please enter the stock  less  than " + (displayallcolor?.tripurStock?[0].xs).toString() +" ." );
                                                                }
                                                                else{
                                                                }
@@ -5163,7 +5163,6 @@ class _product_2State extends State<product_2> {
                                 ),
                               ),
                             ),
-
                             decoration: BoxDecoration(
                               color: Color(0xfff333389),
                               // borderRadius: BorderRadius.all(
@@ -5185,21 +5184,24 @@ class _product_2State extends State<product_2> {
       if (internet) {
         Productprovider().product2_color(data).then((Response response) async {
           product2color = colorClass.fromJson(json.decode(response.body));
-          isloading = false;
+
           if (response.statusCode == 200 &&
               product2color?.status == "success") {
             selectimageapi();
             displaycolor();
-              isloading = false;
 
-            if (kDebugMode) {
-            }
+              isLoading = false;
+
           } else {
-              isloading = false;
+
+              isLoading = false;
+
           }
         });
       } else {
-          isloading = false;
+
+          isLoading = false;
+
       }
     });
   }
@@ -5221,34 +5223,33 @@ class _product_2State extends State<product_2> {
 
           if (response.statusCode == 200 && selectimage?.status == "success") {
 
-              isloading = false;
 
-            if (kDebugMode) {
+              isLoading = false;
 
-            }
+
           } else {
-
-              isloading = false;
-
+            setState((){
+              isLoading = false;
+            });
           }
         });
       } else {
 
-          isloading = false;
+        setState((){
+          isLoading = false;
+        });
 
       }
     });
   }
 // color,image,stock data
   displaycolor() async {
-
       final Map<String, String> data = {};
       data['action'] = 'color_select_display_all_data';
       data['product_name'] = widget.pronamenevigatior.toString();
       data['gender_type'] = gen == 0 ? "MEN" : "WOMEN";
       data['color_name'] = product2color?.data?[selectbtn].colorName ?? '';
       data['d_id'] = (userData?.logindata?.dId).toString();
-
       checkInternet().then((internet) async {
         if (internet) {
           Productprovider()
@@ -5256,13 +5257,12 @@ class _product_2State extends State<product_2> {
               .then((Response response) async {
             displayallcolor =
                 colorDisplayClass.fromJson(json.decode(response.body));
-
             if (response.statusCode == 200 &&
                 displayallcolor?.status == "success") {
-              print("tapdid"+(displayallcolor?.tripurStock?[0].tApdId).toString());
+              isLoading = false;
               // colorapi();
               setState((){
-                isloading = false;
+
                 totalxs =  (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()) > 0 ?int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()) : 0)  + (int.parse((displayallcolor?.tripurStock?[0].xs).toString()) > 0 ?int.parse((displayallcolor?.tripurStock?[0].xs).toString()) : 0);
                 totalm =  (int.parse((displayallcolor?.mumbaiStock?[0].m).toString()) > 0 ?int.parse((displayallcolor?.mumbaiStock?[0].m).toString()) : 0 ) + (int.parse((displayallcolor?.tripurStock?[0].m).toString()) > 0 ?int.parse((displayallcolor?.tripurStock?[0].m).toString()) : 0);
                 totals =  (int.parse((displayallcolor?.mumbaiStock?[0].s).toString()) > 0 ?int.parse((displayallcolor?.mumbaiStock?[0].s).toString()) : 0 ) + (int.parse((displayallcolor?.tripurStock?[0].s).toString()) > 0 ?int.parse((displayallcolor?.tripurStock?[0].s).toString()) : 0);
@@ -5272,27 +5272,19 @@ class _product_2State extends State<product_2> {
                 total3xl =  (int.parse((displayallcolor?.mumbaiStock?[0].s3xl).toString()) > 0 ?int.parse((displayallcolor?.mumbaiStock?[0].s3xl).toString()) : 0)  + (int.parse((displayallcolor?.tripurStock?[0].s3xl).toString()) > 0 ?int.parse((displayallcolor?.tripurStock?[0].s3xl).toString()) : 0);
                 total4xl =  (int.parse((displayallcolor?.mumbaiStock?[0].s4xl).toString()) > 0 ?int.parse((displayallcolor?.mumbaiStock?[0].s4xl).toString()) : 0)  + (int.parse((displayallcolor?.tripurStock?[0].s4xl).toString()) > 0 ?int.parse((displayallcolor?.tripurStock?[0].s4xl).toString()) : 0);
                 total5xl =  (int.parse((displayallcolor?.mumbaiStock?[0].s5xl).toString()) > 0 ?int.parse((displayallcolor?.mumbaiStock?[0].s5xl).toString()) : 0)  + (int.parse((displayallcolor?.tripurStock?[0].s5xl).toString()) > 0 ?int.parse((displayallcolor?.tripurStock?[0].s5xl).toString()) : 0);
-
               });
-              if (kDebugMode) {}
             } else {
 
-              setState((){
-                isloading = false;
-              });
+                isLoading = false;
 
             }
           });
         } else {
 
-          setState((){
-            isloading = false;
-          });
+            isLoading = false;
 
         }
       });
-
-
   }
    updateTotal(value) {
     // S3
@@ -5356,7 +5348,7 @@ class _product_2State extends State<product_2> {
     && _3xl.text == "" && _t3xl.text == "" && _4xl.text == "" && _t4xl.text == ""
     && _5xl.text == "" && _t5xl.text == ""){
 
-      buildErrorDialog(this.context,"","No Product Bolcked!");
+      buildErrorDialog(this.context,"No Product Blocked !"," Please add stock for block product");
     }
    else{
 
@@ -5418,7 +5410,7 @@ class _product_2State extends State<product_2> {
             block = blockProductClass.fromJson(json.decode(response.body));
 
             if (response.statusCode == 200 && block?.status == "success") {
-              isloading = false;
+
               Navigator.push(
                   this.context,
                   MaterialPageRoute(
@@ -5470,14 +5462,18 @@ class _product_2State extends State<product_2> {
               if (kDebugMode) {}
             } else {
 
-              isloading = false;
+            setState((){
+              isLoading = false;
+            });
               buildErrorDialog1(this.context, "", 'Already block product.',0);
 
             }
           });
         } else {
 
-          isloading = false;
+          setState((){
+            isLoading = false;
+          });
 
         }
       });
@@ -5491,7 +5487,7 @@ class _product_2State extends State<product_2> {
         && _3xl.text == "" && _t3xl.text == "" && _4xl.text == "" && _t4xl.text == ""
         && _5xl.text == "" && _t5xl.text == ""){
 
-      buildErrorDialog(this.context,"","No Product added to cart!");
+      buildErrorDialog(this.context,"No Product Added To Cart !"," Please add stock for add to cart");
     }
     else{
       final Map<String, String> data = {};
@@ -5543,7 +5539,6 @@ class _product_2State extends State<product_2> {
       _t4xl.text.trim().toString() == "" ? "0" : _t4xl.text.trim().toString();
       data['t_5xl'] =
       _t5xl.text.trim().toString() == "" ? "0" : _t5xl.text.trim().toString();
-
       checkInternet().then((internet) async {
         if (internet) {
           Productprovider()
@@ -5552,7 +5547,7 @@ class _product_2State extends State<product_2> {
             add = addtoCartClass.fromJson(json.decode(response.body));
 
             if (response.statusCode == 200 && add?.status == "success") {
-              isloading = false;
+              isLoading = false;
               Navigator.of(this.context).push(MaterialPageRoute(builder: (context)=>summary(pronamenevigatior: widget.pronamenevigatior,
                   coloridnevigator:  product2color
                       ?.data?[
@@ -5596,11 +5591,15 @@ class _product_2State extends State<product_2> {
               if (kDebugMode) {}
             } else {
               buildErrorDialog1(this.context, "",  'Already product added to cart',1);
-              isloading = false;
+              setState((){
+                isLoading = false;
+              });
             }
           });
         } else {
-         isloading = false;
+          setState((){
+            isLoading = false;
+          });
 
         }
       });
@@ -5619,18 +5618,18 @@ class _product_2State extends State<product_2> {
           if (response.statusCode == 200 &&
               searchproperty?.status == "success") {
             setState(() {
-              isloading = false;
+              isLoading = false;
 
             });
             if (kDebugMode) { }
           } else {
             setState(() {
-              isloading = false;
+              isLoading = false;
             });}
         });
       } else {
         setState(() {
-          isloading = false;
+          isLoading = false;
         });}
     });
   }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:casadealerapp/modal_class/logoapi.dart';
 import 'package:casadealerapp/screens/getstarted.dart';
 import 'package:casadealerapp/screens/login.dart';
 import 'package:casadealerapp/provider/login_authprovider.dart';
@@ -42,7 +44,7 @@ class _registerState extends State<register> {
   bool? check3 = false;
   var select = "i1";
   usermodal? userData;
-
+  logoapi? logoapp;
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -52,6 +54,7 @@ class _registerState extends State<register> {
   }
 
   getdata() async {
+    await fetchlogo();
     userData = await SaveDataLocal.getDataFromLocal();
     setState(() {
       userData;
@@ -66,15 +69,34 @@ class _registerState extends State<register> {
         body: Column(
           children: [
             SizedBox(height: 4.h),
+
             Container(
               alignment: Alignment.topCenter,
-              child: Image.asset(
-                'assets/get_started_logo.png',
+              child: CachedNetworkImage(
                 fit: BoxFit.contain,
                 height: MediaQuery.of(context).size.height * 0.07,
-                // width: MediaQuery.of(context).size.width * 2,
+
+                imageUrl:logoapp?.data?[0].appLogo ?? "",
+                placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    Image.asset(
+                      'assets/get_started_logo.png',
+                      fit: BoxFit.contain,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      // width: MediaQuery.of(context).size.width * 2,
+                    ),
               ),
             ),
+            // Container(
+            //   alignment: Alignment.topCenter,
+            //   child: Image.asset(
+            //     'assets/get_started_logo.png',
+            //     fit: BoxFit.contain,
+            //     height: MediaQuery.of(context).size.height * 0.07,
+            //     // width: MediaQuery.of(context).size.width * 2,
+            //   ),
+            // ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -689,5 +711,24 @@ class _registerState extends State<register> {
         } else {}
       });
     }
+  }
+  fetchlogo() async {
+    final Map<String, String> data = {};
+    data['action'] = 'banner_logo_app_change';
+    checkInternet().then((internet) async {
+      if (internet) {
+        Authprovider().logo(data).then((Response response) async {
+          logoapp = logoapi.fromJson(json.decode(response.body));
+          if (response.statusCode == 200 &&
+              logoapp?.status == "success") {
+          }
+          else {
+
+          }
+        });
+      } else {
+
+      }
+    });
   }
 }

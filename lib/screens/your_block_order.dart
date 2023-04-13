@@ -60,12 +60,14 @@ bool isLoading=true;
         drawer: drawer(context),
         key: _scaffoldKey,
         body:
-        isLoading ? Container():Stack(
+        isLoading ? Container():
+        Stack(
           children: [
             Container(
-            height: MediaQuery.of(context).size.height,
-            color: Color(0xfffFFFFFF),
-          ),
+              height: MediaQuery.of(context).size.height,
+              color: Color(0xfffFFFFFF),
+            ),
+
           SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -202,155 +204,10 @@ bool isLoading=true;
                         ),
                       ),
                     ),
-                    Padding(
-                      // top: 20.h,
-                      padding: EdgeInsets.only(left: 1.h,
-                        right: 1.h,),
-                        child:check ! ? Container(
-                          height: 100.h,
-                          width: MediaQuery.of(context).size.width,
-                          color:Colors.white,
-                          child:  (searchproperty == null
-                              ? SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 25.h,
-                                    child: Text(
-                                      'Product not found',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 2.h,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                              : searchproperty?.data?.length ?? 0) ==
-                              0
-                              ? SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Center(
-                              child: Column(
-                                children: [
-
-                                  Text(
-                                    'Product not found.',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 2.h,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                              : Container(
-                            width: MediaQuery.of(context).size.width,
-                            alignment: Alignment.topCenter,
-
-                            margin: EdgeInsets.symmetric(horizontal: 2.h,vertical: 0.5.h),
-                            child: ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: searchproperty == null
-                                  ? 0
-                                  : searchproperty?.data?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () async {
-                                    String? search = await
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => product_2(
-
-                                              pronamenevigatior:   '${searchproperty?.data?[index].prodName}',
-
-                                            )
-                                        )
-                                    );
-                                    if (search != null) {
-                                      if (search.isNotEmpty) {
-                                        _search.text = search;
-                                        searchapi(search);
-                                      }
-                                    }
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.symmetric(vertical: 0.5.h),
-                                    height: 20.w,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        CachedNetworkImage(
-                                            imageUrl: searchproperty
-                                                ?.data?[index]
-                                                .prodImgDefault ??
-                                                '',
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                CircleAvatar(
-                                                  radius: 8.w,
-                                                  backgroundImage: NetworkImage(searchproperty
-                                                      ?.data?[index]
-                                                      .prodImgDefault ??
-                                                      '',),
-                                                ),
-                                            placeholder: (context, url) =>
-                                                Center(
-                                                    child:
-                                                    CircularProgressIndicator()),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                CircleAvatar(
-                                                  radius: 8.w,
-                                                  backgroundImage: AssetImage(
-                                                    "assets/default_product_image.png",
-                                                  ),
-                                                )
-
-                                        ),
-                                        SizedBox(width: 5.w,),
-                                        Container(
-                                          child: Flexible(
-                                            child: Text(
-                                              searchproperty
-                                                  ?.data?[index]
-                                                  .prodName ??
-                                                  '',
-                                              textAlign:
-                                              TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 1.8.h,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ):Container()
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
                     Container(
                       height: 88.h,
-                      child: blockview2?.data?.length == 0 ?Center(child:Text("No Product in blocked order",style: TextStyle(
-                        color:Colors.black,fontWeight: FontWeight.bold
+                      child: blockview2?.status == "fail" ?Center(child:Text("No Product in blocked order",style: TextStyle(
+                          color:Colors.black,fontWeight: FontWeight.bold
 
                       ),)) :ListView.builder(
                         itemCount: blockview2?.data?.length,
@@ -361,7 +218,7 @@ bool isLoading=true;
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => orderblockdisplay(
-                                        id:blockview2?.data?[index].ordNo
+                                          id:blockview2?.data?[index].ordNo
                                       )));
                             },
                             child: Container(
@@ -390,14 +247,14 @@ bool isLoading=true;
                                                 ?.data?[index]
                                                 .imageOne ??
                                                 "",
-                                             placeholder:
-                                            (context, url) =>
-                                Center(child: CircularProgressIndicator()),
+                                            placeholder:
+                                                (context, url) =>
+                                                Center(child: CircularProgressIndicator()),
                                             errorWidget: (context, url, error) =>
                                                 Image.asset( "assets/default_product_image.png",
-                                                    height: 11.h,
-                                                      width: 20.w,
-                                                      fit: BoxFit.cover,
+                                                  height: 11.h,
+                                                  width: 20.w,
+                                                  fit: BoxFit.cover,
 
                                                 )
                                         ),
@@ -409,9 +266,9 @@ bool isLoading=true;
                                         padding: EdgeInsets.all(1.h),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             Row(
                                               children: [
@@ -428,7 +285,7 @@ bool isLoading=true;
                                             // SizedBox(height: 1.5.h),
                                             Row(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   'No of Products : ',
@@ -439,7 +296,7 @@ bool isLoading=true;
                                                 Text(
                                                   // (view?.data?[index].productNumberOrder).toString() ?? "" ,
 
-                                                   (blockview2?.data?[index]?.numberOfProduct.toString() ?? ""),
+                                                  (blockview2?.data?[index]?.numberOfProduct.toString() ?? ""),
 
                                                   style: TextStyle(
                                                     color: Color(0xff5a5a9f),
@@ -486,21 +343,21 @@ bool isLoading=true;
                                             itemBuilder: (BuildContext bc) {
                                               return [
                                                 PopupMenuItem(
-
                                                   child: InkWell(
                                                     onTap: () {
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  order_detail_c()));
+                                                                  orderblockdisplay(id:blockview2?.data?[index].ordNo.toString())));
+                                                  Navigator.of(context).pop();
                                                     },
                                                     child: Text("Edit",
                                                         style: TextStyle(
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                             color:
-                                                                Color(0xff333389))),
+                                                            Color(0xff333389))),
                                                   ),
                                                   value: '/hello',
                                                 ),
@@ -509,39 +366,41 @@ bool isLoading=true;
                                                     setState((){
                                                       select = index;
                                                     });
-                                                   converttoorder();
+                                                    converttoorder();
+                                                    Navigator.of(context).pop();
                                                   },
                                                   child: Text("Convert to order",
                                                       style: TextStyle(
                                                           fontWeight:
-                                                              FontWeight.bold)
+                                                          FontWeight.bold)
                                                   ),
                                                   value: '/about',
                                                 ),
                                                 PopupMenuItem(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                alert_screen(id:blockview2?.data?[index].ordNo)
-                                                        )
-                                                    );
-                                                  },
-                                                  child: Text("Unblock order",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  value: '/contact',
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  alert_screen(id:blockview2?.data?[index].ordNo.toString())));
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child: Text("Unblock order",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight.bold)),
+                                                  ),
+
                                                 )
                                               ];
                                             },
                                           )
-                                          // Icon(
-                                          //   Icons.more_vert,
-                                          //   color: Color(0xff5a5a9f),
-                                          // ),
-                                          ),
+                                        // Icon(
+                                        //   Icons.more_vert,
+                                        //   color: Color(0xff5a5a9f),
+                                        // ),
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -551,9 +410,9 @@ bool isLoading=true;
                         },
                       ),
                     ),
-
                   ],
-                )
+                ),
+
               ],
             ),
           ),
@@ -563,7 +422,7 @@ bool isLoading=true;
                 left: 2.h,
                 right: 2.h,
                 child:check? Container(
-                  height: 40.h,
+                  height: 100.h,
                   width: MediaQuery.of(context).size.width,
                   color:Colors.white,
                   child:  (searchproperty == null
@@ -711,29 +570,26 @@ bool isLoading=true;
         if (internet) {
           Productprovider().blockViewProvider(data).then((Response response) async {
             blockview2 = viewBlockOrder.fromJson(json.decode(response.body));
-            print(blockview2?.status);
+
 
             if (response.statusCode == 200 && blockview2?.status == "success") {
               setState(() {
-                // isLoading =false;
+                isLoading =false;
               });
 
             } else {
               setState(() {
-                // isLoading =false;
+                isLoading =false;
               });
             }
           });
         } else {
           setState(() {
-            // isLoading =false;
+            isLoading =false;
           });
         }
       });
-
-
   }
-
   searchapi(body) async {
     final Map<String, String> data = {};
     data['action'] = 'searching_products';

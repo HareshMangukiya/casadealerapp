@@ -22,8 +22,6 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:badges/badges.dart' as badges;
-
-
 class products_1 extends StatefulWidget {
   const products_1({Key? key}) : super(key: key);
   static const appTitle = 'Drawer Demo';
@@ -32,20 +30,6 @@ class products_1 extends StatefulWidget {
   State<products_1> createState() => _products_1State();
 }
 
-class products {
-  String? image;
-  String? Brand_Name;
-  String? Street_Wear;
-  String? Artist_Name;
-  String? size_s;
-  String? size_m;
-  String? size_l;
-
-  String? Price;
-
-  products(this.image, this.Brand_Name, this.Street_Wear, this.Artist_Name,
-      this.size_s, this.size_m, this.size_l, this.Price);
-}
 
 class _products_1State extends State<products_1> {
   TextEditingController _search = TextEditingController();
@@ -57,24 +41,7 @@ class _products_1State extends State<products_1> {
   bool check = false;
   String dropdownValue = 'Dog';
 
-  List<products> images = [
-    products("assets/product_1_img.png", "Brand Name", "Street Wear",
-        "Artist Name", "S", "M", "L", "\₹125 - \₹150"),
-    products("assets/product_1_img2.png", "Brand Name", "Street Wear",
-        "Artist Name", "S", "M", "L", "\₹125 - \₹150"),
-    products("assets/product_1_img3.png", "Brand Name", "Street Wear",
-        "Artist Name", "S", "M", "L", "\₹125 - \₹150"),
-    products("assets/product_1_img4.png", "Brand Name", "Street Wear",
-        "Artist Name", "S", "M", "L", "\₹125 - \₹150"),
-    products("assets/product_1_img5.png", "Brand Name", "Street Wear",
-        "Artist Name", "S", "M", "L", "\₹125 - \₹150"),
-    products("assets/product_1img6.png", "Brand Name", "Street Wear",
-        "Artist Name", "S", "M", "L", "\₹125 - \₹150"),
-    products("assets/product_1_img.png", "Brand Name", "Street Wear",
-        "Artist Name", "S", "M", "L", "\₹125 - \₹150"),
-    products("assets/product_1_img2.png", "Brand Name", "Street Wear",
-        "Artist Name", "S", "M", "L", "\₹125 - \₹150"),
-  ];
+
   productapi? productData;
   String? name;
   int? select;
@@ -86,20 +53,16 @@ class _products_1State extends State<products_1> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    alldisplay();
-    categorydisplay();
-    viewcart();
-    print(viewaddtocart?.addToCartNumber);
-
+   getdata();
+  }
+  getdata()async{
+   await alldisplay();
+   await categorydisplay();
+   await viewcart();
 
   }
 
-  // getdata() async {
-  //   userData = await SaveDataLocal.getDataFromLocal();
-  //   setState(() {
-  //     productData;
-  //   });
-  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -107,13 +70,6 @@ class _products_1State extends State<products_1> {
       scaffold: Scaffold(
         drawer: drawer(context),
         key: _scaffoldKey,
-        // appBar: AppBar(
-        //   toolbarHeight: 15.h, // Set this height
-        //
-        //   title: Text("Products"),
-        //   backgroundColor: Color(0xfff333389),
-        //
-        // ),
         body: isloading?Container():
         Stack(
           children: [
@@ -352,7 +308,6 @@ class _products_1State extends State<products_1> {
                               onTap: () {
                                 setState(() {
                                   gen = index;
-
                                 });
                                 categorydisplay();
                               },
@@ -411,7 +366,8 @@ class _products_1State extends State<products_1> {
                           child:allcatogaryproperty?.diffProduct == null ?Center(child: Text("No Product Found.",style:
                             TextStyle(color:Colors.black,fontSize: 12.sp,
                             fontWeight: FontWeight.bold)
-                            ,)): GridView.builder(
+                            ,)):
+                          GridView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: allcatogaryproperty?.diffProduct?.length,
                             gridDelegate:
@@ -576,33 +532,29 @@ class _products_1State extends State<products_1> {
                                           padding: EdgeInsets.only(left: 0.8.h),
                                           alignment: Alignment.centerLeft,
                                           child:
-                                          allcatogaryproperty
-                                              ?.diffProduct?[index]
-                                              .minPrice == 0 || allcatogaryproperty
-                                  ?.diffProduct?[index]
-                                  .minPrice ==  null
-                                              ? Text(
-                                            "N/A",
-                                            style: TextStyle(color: Colors.red,
-                                              fontSize: 2.3.h,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-
-                                          )
-                                              :
-
+                                          // allcatogaryproperty
+                                          //     ?.diffProduct?[index]
+                                          //     .minPrice == 0
+                                          //     ? Text(
+                                          //   "N/A",
+                                          //   style: TextStyle(color: Colors.red,
+                                          //     fontSize: 2.3.h,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // )
+                                          //     :
                                           Text(
                                             (allcatogaryproperty
                                                             ?.diffProduct?[
                                                                 index]
-                                                            .minPrice)
-                                                        .toString()  +
+                                                            .minPrice.toString() ?? "N?A")
+                                                         +
                                                     " - " +
                                                     (allcatogaryproperty
                                                             ?.diffProduct?[
                                                                 index]
-                                                            .minPrice)
-                                                        .toString() ?? 'N/A',
+                                                            .maxPrice
+                                                        .toString() ?? 'N/A'),
                                             maxLines: 2,
                                             style: TextStyle(
                                               fontSize: 2.3.h,
@@ -813,15 +765,15 @@ class _products_1State extends State<products_1> {
         Productprovider().allcatogeryapi(data).then((Response response) async {
           allproperty = allcategorydisplay.fromJson(json.decode(response.body));
           if (response.statusCode == 200 && allproperty?.status == "success") {
-
+            categorydisplay();
             setState(() {
               isloading = false;
-
-              categorydisplay();
             });
             if (kDebugMode) {}
           } else {
-
+            setState(() {
+              isloading = false;
+            });
           }
         });
       } else {
@@ -831,11 +783,10 @@ class _products_1State extends State<products_1> {
     });
   }
   categorydisplay() async {
-
     final Map<String, String> data = {};
     data['action'] = 'category_wise_product';
     data['category_id'] =(allproperty?.data?[gen!].id).toString();
-
+    data['d_id'] = (userData?.logindata?.dId).toString();
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider()
@@ -843,8 +794,6 @@ class _products_1State extends State<products_1> {
             .then((Response response) async {
           allcatogaryproperty =
               categorywisedisplay.fromJson(json.decode(response.body));
-          isloading = false;
-
           if (response.statusCode == 200 &&
               allcatogaryproperty?.status == "success") {
 
@@ -869,8 +818,6 @@ class _products_1State extends State<products_1> {
     final Map<String, String> data = {};
     data['action'] = 'searching_products';
     data['search'] = body;
-
-
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider().searchproduct(data).then((Response response) async {
