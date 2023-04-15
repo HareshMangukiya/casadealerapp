@@ -46,30 +46,23 @@ class _loginState extends State<login> {
       child: Scaffold(
         backgroundColor: Color(0xffffffff),
         body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
           child: Column(children: [
             Container(
               alignment: Alignment.topCenter,
               child:
               CachedNetworkImage(
-                // width: MediaQuery.of(context)
-                //     .size
-                //     .width *
-                //     0.6,
-                // height: MediaQuery.of(context)
-                //     .size
-                //     .height *
-                //     0.3,
-                fit: BoxFit.fill,
+              width:MediaQuery.of(context).size.width,
+                height:44.h,
+                fit: BoxFit.cover,
                 imageUrl:logoapp?.data?[0].loginScreenBannersOne ?? "",
                 placeholder: (context, url) => Center(
                     child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) =>
                     Image.asset(
                       'assets/get_started2.png',
-                      fit: BoxFit.fill,
-                      // height: MediaQuery.of(context).size.height * 1,
-                      // width: MediaQuery.of(context).size.width * 2,
+                      fit: BoxFit.cover,
+                      width:MediaQuery.of(context).size.width,
+                      height:44.h,
                     ),
               ),
             ),
@@ -186,7 +179,7 @@ class _loginState extends State<login> {
                               icon: Icon(
                                 _passwordVisible
                                     ? Icons.visibility
-                                    : Icons.visibility_off,
+                                    : Icons.visibility_off,color:Colors.black
                               ),
                             ),
                             border: InputBorder.none,

@@ -16,6 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sizer/sizer.dart';
+import 'dart:math' as math;
 
 class drawer extends StatefulWidget {
   final BuildContext context;
@@ -54,9 +55,7 @@ class _drawerState extends State<drawer> {
           child: Container(
               height: MediaQuery.of(context).size.height,
               width: widthDrawer,
-              // color: Colors.black,
               child: ListView(
-                //padding: EdgeInsets.all(2.w),
                 children: [
                   Container(
                       height: 13.h,
@@ -76,6 +75,7 @@ class _drawerState extends State<drawer> {
                             children: [
                               CircleAvatar(
                                 radius: 7.w,
+                                backgroundColor: Colors.transparent,
                                 child: ClipOval(
                                   child: Image.asset(
                                     'assets/profile.jpg',
@@ -112,7 +112,7 @@ class _drawerState extends State<drawer> {
                                       (viewP?.data?.phoneOne).toString(),
                                       // userData?.logindata?.phoneOne ?? "",
                                       style: TextStyle(
-                                          color: Color(0xff6161a3),
+                                          color: Color(0xff333389),
                                           fontWeight: FontWeight.w600)),
                                 ],
                               ),
@@ -131,10 +131,8 @@ class _drawerState extends State<drawer> {
                         ],
                       )),
                   Divider(
-                    color: Colors.black,
+                    color: Color(0xffbd6d6e7),
                   ),
-
-                  // Divider(color: Colors.black,),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 9.w),
                     child: Column(
@@ -144,60 +142,72 @@ class _drawerState extends State<drawer> {
                               ? Color(0xffb4776e6).withOpacity(0.2)
                               : Colors.transparent,
                           child: ListTile(
-                            // trailing: Icon(
-                            //   Icons.arrow_forward_ios,
-                            //   // color: Color(0xffb4776e6),
-                            //   color: index[1] ? Color(0xffb4776e6) : Colors.black,
-                            // ),
-                            leading: Icon(Icons.person,
-                                // color: Color(0xffb4776e6),
-                                color: index[0]
-                                    ? Color(0xffb4776e6)
-                                    : Color(0xff6161a3)),
+                            leading: Stack(
+                              children: [
+                                Transform.rotate(
+                                  angle: -math.pi / 4,
+                                  child: Container(
+                                    height: 25.0,
+                                    width:25.0,
+                                        decoration: BoxDecoration(
+                                          color:Color(0xffbefeff6),
+                                          borderRadius: BorderRadius.circular(8.0)
+                                        ),
+                                  ),
+                                ),
+                                  Icon(Icons.shopping_bag_outlined,
+                                      color: index[0]
+                                          ? Color(0xffb4776e6)
+                                          : Color(0xff6161a3)),
+                              ],
+                            ),
                             title: Text(
-                              'Profile',
+                              'Home',
                               style: TextStyle(
-                                // color: Color(0xffb4776e6),
-                                  color: index[0]
-                                      ? Color(0xffb4776e6)
-                                      : Colors.black,
+                                  color: Colors.black,
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w600),
                             ),
                             onTap: () {
                               Navigator.of(context).pop();
-
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => profileView()));
-                              setState(() {
-                                index[0] = !index[0];
-                              });
-
-                              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>mytrips1()));
+                                      builder: (context) => products_1()));
                             },
                           ),
                         ),
+                        Divider(color: Colors.grey.shade100,),
                         Container(
                           color: index[1]
                               ? Color(0xffb4776e6).withOpacity(0.2)
                               : Colors.transparent,
                           child: ListTile(
-                            // trailing: Icon(
-                            //   Icons.arrow_forward_ios,
-                            //   // color: Color(0xffb4776e6),
-                            //   color: index[1] ? Color(0xffb4776e6) : Colors.black,
-                            // ),
-                            leading: Icon(Icons.shopping_bag_outlined,
-                                // color: Color(0xffb4776e6),
-                                color: index[1]
-                                    ? Color(0xffb4776e6)
-                                    : Color(0xff6161a3)),
+
+                            leading: Stack(
+                              children: [
+                                Transform.rotate(
+                                  angle: -math.pi / 4,
+                                  child: Container(
+                                    height: 25.0,
+                                    width:25.0,
+                                    decoration: BoxDecoration(
+                                        color:Color(0xffbefeff6),
+                                        borderRadius: BorderRadius.circular(8.0)
+                                    ),
+                                  ),
+                                ),
+                                Icon(Icons.person,
+
+                                    color: index[1]
+                                        ? Color(0xffb4776e6)
+                                        : Color(0xff6161a3)),
+                              ],
+                            ),
                             title: Text(
-                              'Home',
+                              'Profile',
                               style: TextStyle(
-                                  // color: Color(0xffb4776e6),
+
                                   color: index[1]
                                       ? Color(0xffb4776e6)
                                       : Colors.black,
@@ -206,42 +216,47 @@ class _drawerState extends State<drawer> {
                             ),
                             onTap: () {
                               Navigator.of(context).pop();
-
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => products_1()));
-                              setState(() {
-                                index[1] = !index[1];
-                              });
-                              // Navigator.of(context).pop();
-                              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>mytrips1()));
+                                      builder: (context) => profileView()));
                             },
                           ),
                         ),
-                        // Divider(color: Colors.black,),
+                        Divider(color: Colors.grey.shade100,),
 
                         Container(
                           color: index[2]
                               ? Color(0xffb4776e6).withOpacity(0.2)
                               : Colors.transparent,
                           child: ListTile(
-                            // trailing: Icon(
-                            //   Icons.arrow_forward_ios,
-                            //   // color: Color(0xffb4776e6),
-                            //   color: index[2] ? Color(0xffb4776e6) : Colors.black,
-                            // ),
-                            leading: Icon(
-                              Icons.library_books,
-                              // color: Color(0xffb4776e6),
-                              color: index[2]
-                                  ? Color(0xffb4776e6)
-                                  : Color(0xff6161a3),
+
+                            leading: Stack(
+                              children: [
+                                Transform.rotate(
+                                  angle: -math.pi / 4,
+                                  child: Container(
+                                    height: 25.0,
+                                    width:25.0,
+                                    decoration: BoxDecoration(
+                                        color:Color(0xffbefeff6),
+                                        borderRadius: BorderRadius.circular(8.0)
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.library_books,
+
+                                  color: index[2]
+                                      ? Color(0xffb4776e6)
+                                      : Color(0xff6161a3),
+                                ),
+                              ],
                             ),
                             title: Text(
                               'Order History',
                               style: TextStyle(
-                                  // color: Color(0xffb4776e6),
+
                                   color: index[2]
                                       ? Color(0xffb4776e6)
                                       : Colors.black,
@@ -249,41 +264,47 @@ class _drawerState extends State<drawer> {
                                   fontWeight: FontWeight.w600),
                             ),
                             onTap: () {
-                              setState(() {
+
                                 Navigator.of(context).pop();
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => your_order()));
-
-                                index[2] = !index[2];
-                              });
-                              // Navigator.of(context).pop();
-                              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>favouritelist()));
                             },
                           ),
                         ),
+                        Divider(color: Colors.grey.shade100,),
                         Container(
                           color: index[3]
                               ? Color(0xffb4776e6).withOpacity(0.2)
                               : Colors.transparent,
                           child: ListTile(
-                            // trailing: Icon(
-                            //   Icons.arrow_forward_ios,
-                            //   // color: Color(0xffb4776e6),
-                            //   color: index[3] ? Color(0xffb4776e6) : Colors.black,
-                            // ),
-                            leading: Icon(
-                              Icons.check_box_outline_blank,
-                              // color: Color(0xffb4776e6),
-                              color: index[3]
-                                  ? Color(0xffb4776e6)
-                                  : Color(0xff6161a3),
+
+                            leading: Stack(
+                              children: [
+                                Transform.rotate(
+                                  angle: -math.pi / 4,
+                                  child: Container(
+                                    height: 25.0,
+                                    width:25.0,
+                                    decoration: BoxDecoration(
+                                        color:Color(0xffbefeff6),
+                                        borderRadius: BorderRadius.circular(8.0)
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.check_box_outline_blank,
+                                  color: index[3]
+                                      ? Color(0xffb4776e6)
+                                      : Color(0xff6161a3),
+                                ),
+                              ],
                             ),
                             title: Text(
                               'Blocked Order',
                               style: TextStyle(
-                                  // color: Color(0xffb4776e6),
+
                                   color: index[3]
                                       ? Color(0xffb4776e6)
                                       : Colors.black,
@@ -292,7 +313,7 @@ class _drawerState extends State<drawer> {
                                   fontWeight: FontWeight.w600),
                             ),
                             onTap: () {
-                              setState(() {
+
                                 Navigator.of(context).pop();
 
                                 Navigator.pushReplacement(
@@ -300,35 +321,41 @@ class _drawerState extends State<drawer> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             your_block_order()));
-                                index[3] = !index[3];
-                              });
-                              // Navigator.of(context).pop();
-                              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>requestlist()));
                             },
                           ),
                         ),
-                        // Divider(color: Colors.black,),
+                        Divider(color: Colors.grey.shade100,),
+
                         Container(
                           color: index[4]
                               ? Color(0xffb4776e6).withOpacity(0.2)
                               : Colors.transparent,
                           child: ListTile(
-                            // trailing: Icon(
-                            //   Icons.arrow_forward_ios,
-                            //   // color: Color(0xffb4776e6),
-                            //   color: index[4] ? Color(0xffb4776e6) : Colors.black,
-                            // ),
-                            leading: Icon(
-                              Icons.headphones_outlined,
-                              // color: Color(0xffb4776e6),
-                              color: index[4]
-                                  ? Color(0xffb4776e6)
-                                  : Color(0xff6161a3),
+                            leading: Stack(
+                              children: [
+                                Transform.rotate(
+                                  angle: -math.pi / 4,
+                                  child: Container(
+                                    height: 25.0,
+                                    width:25.0,
+                                    decoration: BoxDecoration(
+                                        color:Color(0xffbefeff6),
+                                        borderRadius: BorderRadius.circular(8.0)
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.headphones_outlined,
+
+                                  color: index[4]
+                                      ? Color(0xffb4776e6)
+                                      : Color(0xff6161a3),
+                                ),
+                              ],
                             ),
                             title: Text(
                               'Help & Support',
                               style: TextStyle(
-                                  // color: Color(0xffb4776e6),
                                   color: index[4]
                                       ? Color(0xffb4776e6)
                                       : Colors.black,
@@ -346,6 +373,7 @@ class _drawerState extends State<drawer> {
                             },
                           ),
                         ),
+                        Divider(color: Colors.grey.shade100,),
                         SizedBox(
                           height: 40.h,
                         ),
@@ -355,12 +383,26 @@ class _drawerState extends State<drawer> {
                               : Colors.transparent,
                           child: ListTile(
 
-                            leading: Icon(
-                              Icons.exit_to_app,
-                              // color: Color(0xffb4776e6),
-                              color: index[5]
-                                  ? Color(0xffb4776e6)
-                                  : Color(0xff6161a3),
+                            leading: Stack(
+                              children: [
+                                Transform.rotate(
+                                  angle: -math.pi / 4,
+                                  child: Container(
+                                    height: 25.0,
+                                    width:25.0,
+                                    decoration: BoxDecoration(
+                                        color:Color(0xffbefeff6),
+                                        borderRadius: BorderRadius.circular(8.0)
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.exit_to_app,
+                                  color: index[5]
+                                      ? Color(0xffb4776e6)
+                                      : Color(0xff6161a3),
+                                ),
+                              ],
                             ),
                             title: Text(
                               'Logout',
@@ -374,18 +416,12 @@ class _drawerState extends State<drawer> {
                                   fontWeight: FontWeight.w600),
                             ),
                             onTap: () {
-                              setState(() {
                                 Navigator.of(context).pop();
                                 SaveDataLocal.clearUserData();
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => login()));
-
-                                index[5] = !index[5];
-                              });
-                              // Navigator.of(context).pop();
-                              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>profile2()));
                             },
                           ),
                         ),
@@ -396,13 +432,9 @@ class _drawerState extends State<drawer> {
                 ],
               )),
         );
-
-
   }
-
   TextStyle textStyle = TextStyle(
       color: Colors.black, fontSize: 12.sp, fontWeight: FontWeight.w600);
-
   viewProapi() async {
     final Map<String, String> data = {};
     data['action'] = "fetch_distributor_data";

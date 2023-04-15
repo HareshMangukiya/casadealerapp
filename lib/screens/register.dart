@@ -8,6 +8,7 @@ import 'package:casadealerapp/provider/login_authprovider.dart';
 import 'package:casadealerapp/modal_class/login_model.dart';
 import 'package:casadealerapp/screens/loginsuccess.dart';
 import 'package:casadealerapp/widget/CONST.dart';
+import 'package:casadealerapp/widget/build_dialog.dart';
 import 'package:casadealerapp/widget/shared_preference.dart';
 
 import 'package:flutter/foundation.dart';
@@ -66,45 +67,36 @@ class _registerState extends State<register> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xfffFFFFFF),
-        body: Column(
-          children: [
-            SizedBox(height: 4.h),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 2.h),
 
-            Container(
-              alignment: Alignment.topCenter,
-              child: CachedNetworkImage(
-                fit: BoxFit.contain,
-                height: MediaQuery.of(context).size.height * 0.07,
+              Container(
+                alignment: Alignment.topCenter,
+                child: CachedNetworkImage(
+                  fit: BoxFit.contain,
+                  height: MediaQuery.of(context).size.height * 0.07,
 
-                imageUrl:logoapp?.data?[0].appLogo ?? "",
-                placeholder: (context, url) => Center(
-                    child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) =>
-                    Image.asset(
-                      'assets/get_started_logo.png',
-                      fit: BoxFit.contain,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      // width: MediaQuery.of(context).size.width * 2,
-                    ),
+                  imageUrl:logoapp?.data?[0].appLogo ?? "",
+                  placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>
+                      Image.asset(
+                        'assets/get_started_logo.png',
+                        fit: BoxFit.contain,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        // width: MediaQuery.of(context).size.width * 2,
+                      ),
+                ),
               ),
-            ),
-            // Container(
-            //   alignment: Alignment.topCenter,
-            //   child: Image.asset(
-            //     'assets/get_started_logo.png',
-            //     fit: BoxFit.contain,
-            //     height: MediaQuery.of(context).size.height * 0.07,
-            //     // width: MediaQuery.of(context).size.width * 2,
-            //   ),
-            // ),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
+              SingleChildScrollView(
+
                 child: Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      SizedBox(height: 2.h),
+                      SizedBox(height: 1.h),
                       Padding(
                         padding: EdgeInsets.only(right: 30.h),
                         child: Container(
@@ -119,9 +111,9 @@ class _registerState extends State<register> {
                         height: 2.h,
                       ),
                       Container(
-                        alignment: Alignment.center,
+                        // alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        // height: 5.5.h,
                         child: TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -134,11 +126,6 @@ class _registerState extends State<register> {
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(2.h),
                             hintText: 'Full Name',
-                            // suffixIcon: Icon(
-                            //   Icons.person_outline,
-                            //   color: Color(0xfff9696c1),
-                            //   size: 3.5.h,
-                            // ),
                           ),
                         ),
                         decoration: BoxDecoration(
@@ -153,7 +140,7 @@ class _registerState extends State<register> {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        // height: 5.5.h,
                         child: TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -166,11 +153,7 @@ class _registerState extends State<register> {
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(2.h),
                             hintText: 'Company Name',
-                            // suffixIcon: Icon(
-                            //   Icons.shopping_bag_outlined,
-                            //   color: Color(0xfff9696c1),
-                            //   size: 3.5.h,
-                            // ),
+
                           ),
                         ),
                         decoration: BoxDecoration(
@@ -185,7 +168,7 @@ class _registerState extends State<register> {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        // height:5.5.h,
                         child: TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -198,11 +181,7 @@ class _registerState extends State<register> {
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(2.h),
                             hintText: 'Company Address',
-                            // suffixIcon: Icon(
-                            //   Icons.location_on_outlined,
-                            //   color: Color(0xfff9696c1),
-                            //   size: 3.5.h,
-                            // ),
+
                           ),
                         ),
                         decoration: BoxDecoration(
@@ -218,7 +197,7 @@ class _registerState extends State<register> {
                       Container(
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        // height: 5.5.h,
                         child: TextFormField(
                           validator: (value) {
                             String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
@@ -245,11 +224,7 @@ class _registerState extends State<register> {
                           },
                           controller: _email,
                           decoration: InputDecoration(
-                            // suffixIcon: Icon(
-                            //   Icons.person_outline,
-                            //   color: Color(0xfff9696c1),
-                            //   size: 3.5.h,
-                            // ),
+
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(2.h),
                             hintText: 'Email Address',
@@ -268,7 +243,7 @@ class _registerState extends State<register> {
                       Container(
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        // height:5.5.h,
                         child: TextFormField(
                           validator: (value) {
                             if (value?.length != 10)
@@ -302,25 +277,16 @@ class _registerState extends State<register> {
                       Container(
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        // height: 5.5.h,
                         child: TextFormField(
-                          // validator: (value) {
-                          //   if (value?.length != 10)
-                          //     return 'Mobile Number must be of 10 digit';
-                          //   else
-                          //     return null;
-                          // },
+
                           controller: _phone1,
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(2.h),
                             hintText: 'Phone 2 (optional)',
-                            // suffixIcon: Icon(
-                            //   Icons.phone_outlined,
-                            //   color: Color(0xfff9696c1),
-                            //   size: 3.5.h,
-                            // ),
+
                           ),
                         ),
                         decoration: BoxDecoration(
@@ -342,7 +308,7 @@ class _registerState extends State<register> {
                         ),
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        // height: 5.5.h,
                         child: TextFormField(
                           obscureText: !_passwordVisible,
                           validator: (value) {
@@ -353,8 +319,6 @@ class _registerState extends State<register> {
                           },
                           controller: _password,
                           decoration: InputDecoration(
-
-                              //  prefixIcon: Icon(Icons.login),
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
@@ -362,7 +326,7 @@ class _registerState extends State<register> {
                                   });
                                 },
                                 icon: Icon(
-                                  color: Color(0xfff9696c1),
+                                  color: Colors.black,
                                   _passwordVisible
                                       ? Icons.visibility
                                       : Icons.visibility_off,
@@ -385,7 +349,7 @@ class _registerState extends State<register> {
                         ),
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        // height: 5.5.h,
                         child: TextFormField(
                           obscureText: !_passwordVisible1,
                           validator: (value) {
@@ -396,7 +360,7 @@ class _registerState extends State<register> {
                           },
                           controller: _password1,
                           decoration: InputDecoration(
-                              //  prefixIcon: Icon(Icons.login),
+
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
@@ -404,7 +368,7 @@ class _registerState extends State<register> {
                                   });
                                 },
                                 icon: Icon(
-                                  color: Color(0xfff9696c1),
+                                  color: Colors.black,
                                   _passwordVisible1
                                       ? Icons.visibility
                                       : Icons.visibility_off,
@@ -421,19 +385,11 @@ class _registerState extends State<register> {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.9,
                         height: MediaQuery.of(context).size.height * 0.06,
-                        // color: Color(0xfff333389),
-                        // padding:
-                        //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
+
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              print("Validate");
                               registerApi();
-                              print("Validate");
-                              // Navigator.push(
-                              // context,
-                              // MaterialPageRoute(
-                              // builder: (context) => loginsuccess()));
                             }
                           },
                           child: Text(
@@ -477,15 +433,13 @@ class _registerState extends State<register> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+
                     ],
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -508,204 +462,18 @@ class _registerState extends State<register> {
       checkInternet().then((internet) async {
         if (internet) {
           Authprovider().loginapi(data).then((Response response) async {
-            print(response.body);
+
 
             userData = usermodal.fromJson(json.decode(response.body));
-
             if (response.statusCode == 200 && userData!.status == "success") {
-              print(userData?.status);
+
               SaveDataLocal.saveLogInData(userData!);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => loginsuccess()));
-              // Fluttertoast.showToast(
-              //   msg: "Logged In Successfully",
-              //   textColor: Colors.white,
-              //   toastLength: Toast.LENGTH_SHORT,
-              //   timeInSecForIosWeb: 1,
-              //   gravity: ToastGravity.BOTTOM,
-              //   backgroundColor: Colors.indigo,
-              // );
-
-              if (kDebugMode) {}
-
               _email.text = "";
               _password.text = "";
             } else {
-
-
-
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    backgroundColor: Colors.transparent,
-                    child: Container(
-                      height: 25.h,
-                      width: 80.w,
-                      // padding: EdgeInsets.all(5.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Stack(
-                        children: [
-
-                          Container(
-                            height: 25.h,
-                            width: 80.w,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            // borderRadius: BorderRadius.circular(16),
-                            padding: EdgeInsets.all(3.w),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-
-                                    Row(
-                                      children: [
-                                        // Icon(Icons.edit,color:Colors.white ,),
-                                        Text(
-                                          "",
-                                          style: TextStyle(
-                                              decoration: TextDecoration.underline,
-                                              fontSize: 16.sp,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: "Poppins"),
-                                        ),
-                                      ],
-                                    ),
-                                    IconButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        icon: Icon(
-                                          Icons.close,
-                                          color: Colors.black,
-                                        ))
-                                  ],
-                                ),
-                                Form(
-
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 2.h,
-                                      ),
-                                      Text(
-                                        "User already exist",
-                                        style: TextStyle(
-
-                                            fontSize: 12.sp,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: "Poppins"),
-                                      ),
-
-
-                                      // TextFormField(
-                                      //   controller: _title,
-                                      //   keyboardType: TextInputType.text,
-                                      //   validator: (value) {
-                                      //     if (value!.isEmpty) {
-                                      //       return 'Please enter your subject';
-                                      //     }
-                                      //     return null;
-                                      //   },
-                                      //   decoration: InputDecoration(
-                                      //     contentPadding: EdgeInsets.all(2.0),
-                                      //     prefixIcon: Icon(Icons.add,color: Colors.grey,),
-                                      //     filled: true,
-                                      //     hintText: "Subject",
-                                      //     hintStyle: textstyle,
-                                      //     fillColor: Colors.white,
-                                      //     enabledBorder: OutlineInputBorder(
-                                      //         borderSide: BorderSide.none,
-                                      //         borderRadius: BorderRadius.circular(30.0)),
-                                      //     focusedBorder: OutlineInputBorder(
-                                      //         borderSide: BorderSide.none,
-                                      //         borderRadius: BorderRadius.circular(30.0)),
-                                      //   ),
-                                      // ),
-
-                                      Padding(
-                                        padding: EdgeInsets.all(3.w),
-                                        child: Container(
-                                          width: 40.w,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xff333389),
-                                            borderRadius: BorderRadius.circular(30.0),
-                                            // boxShadow: [
-                                            //   BoxShadow(
-                                            //     color: Color(0xff333389),
-                                            //     offset: Offset(0, 10),
-                                            //     blurRadius: 10,
-                                            //     spreadRadius: -5,
-                                            //   ),
-                                            // ],
-                                            // border: Border.all(color: Colors.white,width: 1.0)
-                                          ),
-                                          height: 40.0,
-                                          child: TextButton(
-                                            style: ButtonStyle(
-                                              alignment: Alignment.center,
-                                              // backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
-                                              padding: MaterialStateProperty.all(
-                                                EdgeInsets.symmetric(vertical: 1.h),
-                                              ),
-                                              shape:
-                                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20.sp),
-                                                  )),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  "Oky",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 14.sp,
-                                                      fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                                SizedBox(
-                                                  width: 5.0,
-                                                ),
-                                                // Icon(
-                                                //   Icon,
-                                                //   color: Colors.grey.shade700,
-                                                // )
-
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
+              buildErrorDialog(context, "", "User already exist");
             }
           });
         } else {}
@@ -723,7 +491,6 @@ class _registerState extends State<register> {
               logoapp?.status == "success") {
           }
           else {
-
           }
         });
       } else {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:casadealerapp/modal_class/ViewCart.dart';
+import 'package:casadealerapp/modal_class/cartcount.dart';
 import 'package:casadealerapp/modal_class/search_class.dart';
 import 'package:casadealerapp/modal_class/view_order.dart';
 
@@ -9,6 +10,7 @@ import 'package:casadealerapp/provider/productprovider.dart';
 
 import 'package:casadealerapp/screens/order_id.dart';
 import 'package:casadealerapp/screens/product_2.dart';
+import 'package:casadealerapp/screens/summary.dart';
 import 'package:casadealerapp/widget/CONST.dart';
 import 'package:casadealerapp/widget/drawer.dart';
 import 'package:casadealerapp/widget/loader.dart';
@@ -35,7 +37,7 @@ class _your_orderState extends State<your_order> {
   viewOrders? view;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+cartcount? count;
   TextEditingController _search = TextEditingController();
   bool se_icon = false;
   bool isLoading = true;
@@ -46,6 +48,7 @@ class _your_orderState extends State<your_order> {
     // TODO: implement initState
     super.initState();
     viewapi();
+    viewcount();
   }
 
   @override
@@ -77,11 +80,11 @@ class _your_orderState extends State<your_order> {
                               children: [
                                 Row(
                                   children: [
-                                    IconButton(
-                                      onPressed: () {
+                                    GestureDetector(
+                                      onTap: () {
                                         _scaffoldKey.currentState?.openDrawer();
                                       },
-                                      icon: Icon(
+                                      child: Icon(
                                         Icons.menu,
                                         color: Colors.white,
                                         size: 4.h,
@@ -96,7 +99,7 @@ class _your_orderState extends State<your_order> {
                                       child: Text(
                                         "Your Orders",
                                         style:
-                                            TextStyle(fontSize: 2.h, color: Colors.white),
+                                        TextStyle(fontSize: 2.h, color: Colors.white),
                                       ),
                                     ),
                                   ],
@@ -106,48 +109,40 @@ class _your_orderState extends State<your_order> {
                                 ),
                                 Row(
                                   children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          se_icon = !se_icon;
-                                        });
-                                        // _scaffoldKey.currentState?.openDrawer();
-                                      },
-                                      icon: Icon(
-                                        Icons.search,
-                                        color: Colors.white,
-                                        size: 3.5.h,
-                                      ),
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 11,),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              se_icon = !se_icon;
+                                            });
+                                            // _scaffoldKey.currentState?.openDrawer();
+                                          },
+                                          child: Icon(
+                                            Icons.search,
+                                            color: Colors.white,
+                                            size: 3.5.h,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    // SizedBox(
-                                    //   width: 1.h,
-                                    // ),
-                                    // IconButton(
-                                    //   onPressed: () {
-                                    //     // Navigator.push(
-                                    //     //     context,
-                                    //     //     MaterialPageRoute(
-                                    //     //         builder: (context) =>
-                                    //     //             cart_order()));
-                                    //     // _scaffoldKey.currentState?.openDrawer();
-                                    //   },
-                                    //   icon: Icon(
-                                    //     Icons.shopping_bag_outlined,
-                                    //     color: Colors.white,
-                                    //     size: 3.h,
-                                    //   ),
-                                    // ),
+
                                     badges.Badge(
                                         onTap: (){
-
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
                                         },
-                                        badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
+                                        badgeContent:  Text(( count?.cartCount== 0 ||count?.cartCount == null ) ? "0" :(count?.cartCount).toString(),
                                             style:TextStyle(color:Colors.white)),
+                                        child: GestureDetector(
+                                          onTap : (){
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
 
-
-                                        child: Icon(Icons.shopping_bag_outlined,
-                                            color: Colors.white,
-                                            size: 3.h)
+                                          },
+                                          child: Icon(Icons.shopping_bag_outlined,
+                                              color: Colors.white,
+                                              size: 3.5.h),
+                                        )
                                     )
                                   ],
                                 ),
@@ -176,12 +171,7 @@ class _your_orderState extends State<your_order> {
                       height:
                       MediaQuery.of(context).size.height * 0.075,
                       child: TextFormField(
-                        // validator: (value) {
-                        //   if (value!.isEmpty) {
-                        //     return "";
-                        //   }
-                        //   return null;
-                        // },
+
                         onChanged: (value) {
 
                           if (value.isNotEmpty) {
@@ -193,10 +183,7 @@ class _your_orderState extends State<your_order> {
                             setState(() {
                               check=false;
                             });
-                            // Navigator.of(context).pushReplacement(
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             products_1()));
+
                           } else {
                             // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
                           }
@@ -216,9 +203,7 @@ class _your_orderState extends State<your_order> {
                       decoration: BoxDecoration(
                         // shape: BoxShape.circle,
                         color: Color(0xfff3faff),
-                        // image: DecorationImage(
-                        //     image: AssetImage("assets/product_1_img.png"),
-                        //     fit: BoxFit.fitWidth)
+
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
                           // ),
@@ -240,8 +225,7 @@ class _your_orderState extends State<your_order> {
                                   )));
                             },
                             child: Container(
-                              // padding: EdgeInsets.all(0),
-                              // alignment: Alignment.center,
+
                               height: 11.h,
                               margin: EdgeInsets.all(10.0),
                               decoration: BoxDecoration(
@@ -250,7 +234,7 @@ class _your_orderState extends State<your_order> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
@@ -269,18 +253,14 @@ class _your_orderState extends State<your_order> {
                                                 value: downloadProgress
                                                     .progress),
                                         errorWidget: (context, url, error) =>
-                                            Image.asset( "assets/default_product_image.png",
+                                            Image.asset( "assets/product_1_img2.png",
                                               height: 11.h,
                                               width: 20.w,
                                               fit: BoxFit.cover,
-
                                             )
-                                    ),
-
-
+                                    )
                                   ),
                                   // SizedBox(width: 5.w,),
-
                                   Padding(
                                     padding: EdgeInsets.all(1.h),
                                     child: Column(
@@ -314,7 +294,6 @@ class _your_orderState extends State<your_order> {
                                             ),
                                             Text(
                                               view?.data?[index].numberOfProduct.toString() ?? "",
-
                                               style: TextStyle(
                                                 color: Color(0xff5a5a9f),
                                               ),
@@ -334,12 +313,15 @@ class _your_orderState extends State<your_order> {
                                                   ? Color(0xfffaede7)
                                                   : (view?.data?[index].status ==
                                                   "2")
+                                                  ? Color(0xffe1f5e2):(view?.data?[index].status ==
+                                                  "3")
                                                   ? Color(0xffe1f5e2)
                                                   : Color(0xfffae7e7)),
                                           child: Text(
                                             (view?.data?[index].status == "1")
-                                                ? "Placed"
+                                                ? "Blocked"
                                                 : (view?.data?[index].status == "2")
+                                                ? "Placed":(view?.data?[index].status == "3")
                                                 ? "Confirmed"
                                                 : "Cancle",
                                             // 'Placed',
@@ -349,25 +331,26 @@ class _your_orderState extends State<your_order> {
                                                     ? Color(0xfff98b54)
                                                     : (view?.data?[index].status ==
                                                     "2")
-                                                    ? Color(0xff48d34d)
-                                                    : Color(0xfff97070),
+                                                    ? Color(0xff48d34d):(view?.data?[index].status ==
+                                                    "3")
+                                                    ? Color(0xff48d34d):
+                                                    Color(0xfff97070),
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         )
                                       ],
                                     ),
                                   ),
-
-                                  SizedBox(width: 1.3.w),
-
                                   SizedBox(width: 9.w),
-                                  Text(
-                                    '₹' + (view?.data?[index].price).toString() == null ? "N/A" :"₹" + (view?.data?[index].price).toString(),
-                                    // '₹5,925',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 2.2.h,
-                                        color: Color(0xff3b3b8d)),
+                                  Padding(
+                                    padding:  EdgeInsets.all(8.0),
+                                    child: Text(
+                                    (view?.data?[index].price).toString() == null ? "N/A" :"₹" + (view?.data?[index].price).toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 2.2.h,
+                                          color: Color(0xff3b3b8d)),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -379,11 +362,10 @@ class _your_orderState extends State<your_order> {
                   ],
                 ),
               ),
-
               Padding(
                   padding:EdgeInsets.only(left: 1.h,  top: 20.h,
                       right: 1.h),
-                  child:check ! ? Container(
+                  child:check! ? Container(
                     height: 100.h,
                     width: MediaQuery.of(context).size.width,
                     color:Colors.white,
@@ -607,6 +589,27 @@ class _your_orderState extends State<your_order> {
           }
           else {
 
+          }
+        });
+      } else {
+
+      }
+    });
+  }
+  viewcount()async {
+    final Map<String, String> data = {};
+    data['action'] = 'add_to_cart_count';
+    data['d_id'] = (userData?.logindata?.dId).toString();
+
+
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().addtocartcount(data).then((Response response) async {
+          count = cartcount.fromJson(json.decode(response.body));
+          if (response.statusCode == 200 &&
+              count?.status == "success") {
+          }
+          else {
           }
         });
       } else {

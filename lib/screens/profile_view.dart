@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:casadealerapp/modal_class/ViewCart.dart';
+import 'package:casadealerapp/modal_class/cartcount.dart';
 
 import 'package:casadealerapp/modal_class/profileV_class.dart';
 import 'package:casadealerapp/modal_class/search_class.dart';
@@ -32,6 +33,7 @@ class _profileViewState extends State<profileView> {
   bool se_icon = false;
   bool check = false;
   search? searchproperty;
+  cartcount? count;
   bool isLoading = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   viewProfile? viewP;
@@ -40,7 +42,7 @@ class _profileViewState extends State<profileView> {
     // TODO: implement initState
     super.initState();
     viewProapi();
-    viewcart();
+    viewcount();
   }
   Widget build(BuildContext context) {
     return commanScreen(
@@ -66,42 +68,39 @@ class _profileViewState extends State<profileView> {
                                  children: [
                                    SizedBox(height: 4.h),
                                    Padding(
-                                     padding:
-                                         EdgeInsets.only(bottom: 0.h, left: 2.h),
+                                     padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
                                      child: Row(
-                                       mainAxisAlignment:
-                                           MainAxisAlignment.spaceBetween,
+                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                        children: [
                                          Row(
                                            children: [
                                              IconButton(
                                                onPressed: () {
-                                                 _scaffoldKey.currentState
-                                                     ?.openDrawer();
+                                                 _scaffoldKey.currentState?.openDrawer();
                                                },
                                                icon: Icon(
                                                  Icons.menu,
                                                  color: Colors.white,
+                                                 size: 4.h,
                                                ),
                                              ),
-                                             SizedBox(
-                                               width: 2.3.h,
-                                             ),
+                                             // SizedBox(
+                                             //   width: 2.3.h,
+                                             // ),
                                              Container(
                                                // padding: EdgeInsets.only(top: 1.5.h),
                                                // alignment: Alignment.center,
                                                child: Text(
-                                                 "Profile",
-                                                 style: TextStyle(
-                                                     fontSize: 2.h,
-                                                     color: Colors.white),
+                                                 "Order Details",
+                                                 style:
+                                                 TextStyle(fontSize: 2.h, color: Colors.white),
                                                ),
                                              ),
                                            ],
                                          ),
-                                         // SizedBox(
-                                         //   width: 8.w,
-                                         // ),
+                                         SizedBox(
+                                           width: 28.w,
+                                         ),
                                          Row(
                                            children: [
                                              IconButton(
@@ -118,23 +117,15 @@ class _profileViewState extends State<profileView> {
                                                ),
                                              ),
                                              badges.Badge(
-                                                 onTap: () {},
-                                                 badgeContent: Text(
-                                                     (viewaddtocart?.addToCartNumber ==
-                                                                 0 ||
-                                                             viewaddtocart
-                                                                     ?.addToCartNumber ==
-                                                                 null)
-                                                         ? "0"
-                                                         : ((viewaddtocart
-                                                                 ?.addToCartNumber)
-                                                             .toString()),
-                                                     style: TextStyle(
-                                                         color: Colors.white)),
-                                                 child: Icon(
-                                                     Icons.shopping_bag_outlined,
+                                                 onTap: (){
+
+                                                 },
+                                                 badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
+                                                     style:TextStyle(color:Colors.white)),
+                                                 child: Icon(Icons.shopping_bag_outlined,
                                                      color: Colors.white,
-                                                     size: 3.h))
+                                                     size: 3.h)
+                                             )
                                            ],
                                          ),
                                        ],
@@ -702,24 +693,6 @@ class _profileViewState extends State<profileView> {
       }
     });
   }
-  viewcart() async {
-    final Map<String, String> data = {};
-    data['action'] = 'view_add_to_cart_product_single';
-    data['d_id'] = (userData?.logindata?.dId).toString();
-
-    checkInternet().then((internet) async {
-      if (internet) {
-        Productprovider().viewcartapi(data).then((Response response) async {
-          viewaddtocart = ViewCart.fromJson(json.decode(response.body));
-
-          if (response.statusCode == 200 &&
-              viewaddtocart?.status == "success") {
-          } else {}
-        });
-      } else {}
-    });
-  }
-
   searchapi(body) async {
     final Map<String, String> data = {};
     data['action'] = 'searching_products';
@@ -746,6 +719,27 @@ class _profileViewState extends State<profileView> {
         setState(() {
           // isloading = false;
         });
+      }
+    });
+  }
+  viewcount()async {
+    final Map<String, String> data = {};
+    data['action'] = 'add_to_cart_count';
+    data['d_id'] = (userData?.logindata?.dId).toString();
+
+
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().addtocartcount(data).then((Response response) async {
+          count = cartcount.fromJson(json.decode(response.body));
+          if (response.statusCode == 200 &&
+              count?.status == "success") {
+          }
+          else {
+          }
+        });
+      } else {
+
       }
     });
   }

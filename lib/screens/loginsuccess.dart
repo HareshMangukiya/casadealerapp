@@ -40,14 +40,14 @@ class _loginsuccessState extends State<loginsuccess> {
               alignment: Alignment.center,
               child:CachedNetworkImage(
                 height: MediaQuery.of(context).size.height * 0.5,
-                imageUrl:logoapp?.data?[0].appLogo ?? "",
-                fit: BoxFit.fill,
+                imageUrl:logoapp?.data?[0].loginScreenBannersOne ?? "",
+                fit: BoxFit.cover,
                 placeholder: (context, url) => Center(
                     child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) =>
                     Image.asset(
                       'assets/get_started2.png',
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       // height: MediaQuery.of(context).size.height * 1,
                       // width: MediaQuery.of(context).size.width * 2,
                     ),

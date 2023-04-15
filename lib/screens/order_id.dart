@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:casadealerapp/modal_class/ViewCart.dart';
+import 'package:casadealerapp/modal_class/cartcount.dart';
 import 'package:casadealerapp/modal_class/convertblockorder.dart';
 import 'package:casadealerapp/modal_class/order_detail_class.dart';
 import 'package:casadealerapp/modal_class/oredrdetail.dart';
@@ -12,6 +13,7 @@ import 'package:casadealerapp/screens/order_detail.dart';
 import 'package:casadealerapp/screens/product_2.dart';
 
 import 'package:casadealerapp/screens/products_1.dart';
+import 'package:casadealerapp/screens/summary.dart';
 import 'package:casadealerapp/screens/summary_b_edit.dart';
 import 'package:casadealerapp/screens/your_order.dart';
 import 'package:casadealerapp/widget/CONST.dart';
@@ -54,13 +56,14 @@ bool? isLoading =true;
     // TODO: implement initState
     super.initState();
     orederdetailapiblock();
-    viewcart();
+    viewcount();
   }
 int? total1=0;
 int? total2 = 0;
 double? price =0.0;
 double? gtotal =0.0;
 double? gstt = 0.0;
+cartcount? count;
 
   @override
   Widget build(BuildContext context) {
@@ -75,814 +78,831 @@ double? gstt = 0.0;
               height: MediaQuery.of(context).size.height,
               color: Color(0xfffFFFFFF),
             ),
-            SingleChildScrollView(
+            Container(
+              width: MediaQuery.of(context).size.width * 1,
+              height: 11.h,
               child: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 1,
-                height: 11.h,
-                child: Column(
-                  children: [
-                    SizedBox(height: 4.h),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  _scaffoldKey.currentState?.openDrawer();
-                                },
-                                icon: Icon(
-                                  Icons.menu,
-                                  color: Colors.white,
-                                  size: 4.h,
-                                ),
+                children: [
+                  SizedBox(height: 4.h),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _scaffoldKey.currentState?.openDrawer();
+                              },
+                              child: Icon(
+                                Icons.menu,
+                                color: Colors.white,
+                                size: 4.h,
                               ),
-                              //
-                              SizedBox(
-                                width: 2.3.h,
+                            ),
+                            SizedBox(
+                              width: 2.3.h,
+                            ),
+                            Container(
+                              // padding: EdgeInsets.only(top: 1.5.h),
+                              // alignment: Alignment.center,
+                              child: Text(
+                                "Your Orders",
+                                style:
+                                TextStyle(fontSize: 2.h, color: Colors.white),
                               ),
-                              Container(
-                                // padding: EdgeInsets.only(top: 1.5.h),
-                                // alignment: Alignment.center,
-                                child: Text(
-                                  "Your Orders",
-                                  style: TextStyle(fontSize: 2.h, color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 28.w,
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    se_icon = !se_icon;
-                                  });
-                                  // _scaffoldKey.currentState?.openDrawer();
-                                },
-                                icon: Icon(
-                                  Icons.search,
-                                  color: Colors.white,
-                                  size: 3.5.h,
-                                ),
-                              ),
-                              badges.Badge(
-                                  onTap: (){
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 28.w,
+                        ),
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                SizedBox(height: 11,),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      se_icon = !se_icon;
+                                    });
+                                    // _scaffoldKey.currentState?.openDrawer();
                                   },
-                                  badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
-                                      style:TextStyle(color:Colors.white)),
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                    size: 3.5.h,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            badges.Badge(
+                                onTap: (){
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
+                                },
+                                badgeContent:  Text(( count?.cartCount== 0 ||count?.cartCount == null ) ? "0" :(count?.cartCount).toString(),
+                                    style:TextStyle(color:Colors.white)),
+                                child: GestureDetector(
+                                  onTap : (){
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
+
+                                  },
                                   child: Icon(Icons.shopping_bag_outlined,
                                       color: Colors.white,
-                                      size: 3.h)
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  color: Color(0xfff333389),
-                  // borderRadius: BorderRadius.all(
-                  //   Radius.circular(10),
-                  // ),
-                ),
-              ),
-            SizedBox(
-              height: 2.h,
-            ),
-            (!se_icon)
-                ? Container()
-                : Container(
-              margin: EdgeInsets.symmetric(horizontal: 2.h),
-              padding: EdgeInsets.symmetric(horizontal: 2.h),
-              alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width,
-              height:
-              MediaQuery.of(context).size.height * 0.075,
-              child: TextFormField(
-                onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    setState(() {
-                      check=true;
-                    });
-                    searchapi(value);
-                  } else if (value.isEmpty) {
-                    setState(() {
-                      check=false;
-                    });
-                  } else {
-                    // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
-                  }
-                },
-                controller: _search,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(3.h),
-                  hintText: 'Search',
-                  suffixIcon: Icon(
-                    Icons.search,
-                    color: Color(0xfff333389),
-                    size: 3.h,
-                  ),
-                ),
-              ),
-              decoration: BoxDecoration(
-                // shape: BoxShape.circle,
-                color: Color(0xfff3faff),
-                // image: DecorationImage(
-                //     image: AssetImage("assets/product_1_img.png"),
-                //     fit: BoxFit.fitWidth)
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                  // ),
-                ),
-              ),
-            ),
-
-
-// SizedBox(height: 2.h),
-              Padding(
-                padding: EdgeInsets.all(2.h),
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 6.5.h,
-                  width: 95.w,
-                  decoration: BoxDecoration(
-                    color: Color(0xffeaeaf3),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 2.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                              "ORDER ID : "+widget.id.toString(),
-
-                            style: TextStyle(
-                                fontSize: 2.h,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff333389)
-                            )),
+                                      size: 3.5.h),
+                                )
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Color(0xfff333389),
+                // borderRadius: BorderRadius.all(
+                //   Radius.circular(10),
+                // ),
+              ),
+            ),
+            Padding(
+              padding:  EdgeInsets.only(top:10.h),
+              child: SingleChildScrollView(
+                child: Column(
+              children: [
+                SizedBox(
+                height: 2.h,
+              ),
+              (!se_icon)
+                  ? Container()
+                  : Container(
+                margin: EdgeInsets.symmetric(horizontal: 2.h),
+                padding: EdgeInsets.symmetric(horizontal: 2.h),
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width,
+                height:
+                MediaQuery.of(context).size.height * 0.075,
+                child: TextFormField(
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      setState(() {
+                        check=true;
+                      });
+                      searchapi(value);
+                    } else if (value.isEmpty) {
+                      setState(() {
+                        check=false;
+                      });
+                    } else {
+                      // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
+                    }
+                  },
+                  controller: _search,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(3.h),
+                    hintText: 'Search',
+                    suffixIcon: Icon(
+                      Icons.search,
+                      color: Color(0xfff333389),
+                      size: 3.h,
+                    ),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  // shape: BoxShape.circle,
+                  color: Color(0xfff3faff),
+                  // image: DecorationImage(
+                  //     image: AssetImage("assets/product_1_img.png"),
+                  //     fit: BoxFit.fitWidth)
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                    // ),
+                  ),
                 ),
               ),
-
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      height: 69.h,
-                      child: ListView.builder(
-                        itemCount: detail?.productData?.length,
-                        itemBuilder: (context,  index) {
-                          total1 = int.parse(
-                              detail?.productData?[index]
-                                  .xs ?? "0") +
-                              int.parse(detail?.productData?[index]
-                                  .s ?? "0") +
-                              int.parse(detail?.productData?[index]
-                                  .m ?? "0") +
-                              int.parse(detail?.productData?[index]
-                                  .l ?? "0") +
-                              int.parse(detail?.productData?[index]
-                                  .xl ?? "0") +
-                              int.parse(detail?.productData?[index]
-                                  .xxl ?? "0") +
-                              int.parse(detail?.productData?[index]
-                                  .s3xl ?? "0");
-                          total2 = int.parse(
-                              detail?.productData?[index]
-                                  .s4xl ?? "0") +
-                              int.parse(detail?.productData?[index]
-                                  .s5xl ?? "0");
-                          price = double.parse(total1.toString()) *
-                              double.parse(detail?.productData?[index]
-                                  .minPrice ?? "0") + double.parse(total2.toString()) *
-                              double.parse(detail?.productData?[index]
-                                  .maxPrice ?? "0");
-
-                          gst = price!* 18/100;
-                          gtotal = price!+ gst!;
-
-
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Product Name',
-                                        style: TextStyle(
-                                          color: Color(0xff848484),
-                                          fontSize: 1.5.h,
-                                        )),
-                                    Text('Color',
-                                        style: TextStyle(
-                                          color: Color(0xff848484),
-                                          fontSize: 1.5.h,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(detail?.productData?[index].productName.toString() ?? "N/A",
-                                        style: TextStyle(
-                                            color: Color(0xff35358a),
-                                            fontSize: 2.h,
-                                            fontWeight: FontWeight.bold)),
-                                    Text(detail?.productData?[index].colorName.toString() ?? "N/A",
-                                        style: TextStyle(
-                                          color: Color(0xff35358a),
-                                          fontSize: 2.h,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 3.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Price',
-                                    style: TextStyle(color: Color(0xff848484)),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.h,
-                                      child: Row(
-                                        children: [
-                                          Text('XS - 3XL :',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold)),
-                                          Text(detail?.productData?[index].minPrice.toString() ?? "N/A",
-                                              style: TextStyle(
-                                                  color: Color(0xff35358a),
-                                                  fontWeight: FontWeight.bold)),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.h,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '4XL- 5XL :',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            detail?.productData?[index].maxPrice.toString() ?? "N/A",
-                                            style: TextStyle(
-                                              color: Color(0xff35358a),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                order_detail_c(
-                                                val:1,
-                                                  oreder:widget.id.toString(),
-                                                  id: index,
-                                                )
-                                            )
-                                        );
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        height: 3.5.h,
-                                        width: 20.5.w,
-                                        child: Text(
-                                          'Edit',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 1.5.h),
-                                        ),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xff333389),
-                                            borderRadius:
-                                            BorderRadius.circular(15)),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Divider(
-                                  height: 3.h,
-                                  thickness: 0.3.w,
-                                  color: Color(0xff50509a),
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Container(
-                                  child: Row(
-                                    children: [
-                                      Text('Gender',
-                                          style: TextStyle(
-                                            color: Color(0xff848484),
-                                          )),
-                                      SizedBox(
-                                        width: 2.w,
-                                      ),
-                                      Text(
-                                        detail?.productData?[index].gender.toString() ?? "N/A",
-                                        style: TextStyle(
-                                            fontSize: 2.3.h,
-                                            color: Color(0xff35358a),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Container(
-                                  child: Row(
-                                    children: [
-                                      Text('State',
-                                          style: TextStyle(
-                                            color: Color(0xff848484),
-                                          )),
-                                      SizedBox(
-                                        width: 2.w,
-                                      ),
-                                      Text(
-                                        detail?.productData?[index].warehouseName.toString() ?? "N/A",
-                                        style: TextStyle(
-                                            fontSize: 2.3.h,
-                                            color: Color(0xff35358a),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 2.h),
-
-                              Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      // color: Colors.red,
-                                      child: Text(
-                                        'XS',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        'S',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        'M',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        'L',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        'XL',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].xs).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].s).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].m).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].l).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].xl).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        '2XL',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        '3XL',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        '4XL',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        '5XL',
-                                        style: TextStyle(
-                                            fontSize: 2.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10)),
-                                        color: Color(0Xffeaeaf3),
-                                      ),
-                                      child: Text(
-                                        'TOTAL',
-                                        style: TextStyle(
-                                            fontSize: 1.6.h,
-                                            color: Color(0XFF50509a),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                    Container(
-                                      height: 0.1.h,
-                                      width: 15.w,
-                                      color: Colors.black,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 3.h),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].xxl).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].s3xl).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].s4xl).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.5.h,
-                                      width: 15.w,
-                                      child: Text(
-                                        (detail?.productData?[index].s5xl).toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.9.h,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 3.6.h,
-                                      width: 15.w,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10)),
-                                        color: Color(0Xffeaeaf3),
-                                      ),
-                                      child: Text(
-                                        "₹" + price.toString(),
-                                        style: TextStyle(
-                                            fontSize: 1.5.h,
-                                            color: Color(0Xff50509a),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 2.h),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                height: 6.h,
-                                width: MediaQuery.of(context).size.width,
-                                color: Color(0xfffeaeaf3),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        ' Grand Total:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 2.h),
-                                      ),
-                                      Text(
-                                        '   ₹' + price.toString() + " + ₹" +gst.toString() +"(18% GST) = ₹"+ gtotal.toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 1.5.h,
-                                            color: Color(0xff333389)),
-                                        maxLines:2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
-
-                              SizedBox(height: 2.h),
-
-                            ],
-                          );
-                        },
+// SizedBox(height: 2.h),
+                Padding(
+                  padding: EdgeInsets.all(2.h),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 6.5.h,
+                    width: 95.w,
+                    decoration: BoxDecoration(
+                      color: Color(0xffeaeaf3),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
                       ),
                     ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 2.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                                "ORDER ID : "+widget.id.toString(),
+
+                              style: TextStyle(
+                                  fontSize: 2.h,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff333389)
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 69.h,
+                  child: ListView.builder(
+                    itemCount: detail?.productData?.length,
+                    itemBuilder: (context,  index) {
+                      total1 = int.parse(
+                          detail?.productData?[index]
+                              .xs ?? "0") +
+                          int.parse(detail?.productData?[index]
+                              .s ?? "0") +
+                          int.parse(detail?.productData?[index]
+                              .m ?? "0") +
+                          int.parse(detail?.productData?[index]
+                              .l ?? "0") +
+                          int.parse(detail?.productData?[index]
+                              .xl ?? "0") +
+                          int.parse(detail?.productData?[index]
+                              .xxl ?? "0") +
+                          int.parse(detail?.productData?[index]
+                              .s3xl ?? "0");
+                      total2 = int.parse(
+                          detail?.productData?[index]
+                              .s4xl ?? "0") +
+                          int.parse(detail?.productData?[index]
+                              .s5xl ?? "0");
+                      price = double.parse(total1.toString()) *
+                          double.parse(detail?.productData?[index]
+                              .minPrice ?? "0") + double.parse(total2.toString()) *
+                          double.parse(detail?.productData?[index]
+                              .maxPrice ?? "0");
+
+                      gst = price!* 18/100;
+                      gtotal = price!+ gst!;
+
+
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Product Name',
+                                    style: TextStyle(
+                                      color: Color(0xff848484),
+                                      fontSize: 1.5.h,
+                                    )),
+                                Text('Color',
+                                    style: TextStyle(
+                                      color: Color(0xff848484),
+                                      fontSize: 1.5.h,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(detail?.productData?[index].productName.toString() ?? "N/A",
+                                    style: TextStyle(
+                                        color: Color(0xff35358a),
+                                        fontSize: 2.h,
+                                        fontWeight: FontWeight.bold)),
+                                Text(detail?.productData?[index].colorName.toString() ?? "N/A",
+                                    style: TextStyle(
+                                      color: Color(0xff35358a),
+                                      fontSize: 2.h,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 3.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Price',
+                                style: TextStyle(color: Color(0xff848484)),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.h,
+                                  child: Row(
+                                    children: [
+                                      Text('XS - 3XL :',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold)),
+                                      Text( "₹"+(detail?.productData?[index].minPrice).toString() != 0 ?(detail?.productData?[index].minPrice).toString() :"N/A" ,
+                                          style: TextStyle(
+                                              color: Color(0xff35358a),
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.h,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '4XL- 5XL :',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                          "₹"+ (detail?.productData?[index].maxPrice).toString() != 0  ?(detail?.productData?[index].maxPrice).toString() : "N/A",
+                                        style: TextStyle(
+                                          color: Color(0xff35358a),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            order_detail_c(
+                                            val:1,
+                                              oreder:widget.id.toString(),
+                                              id: index,
+                                            )
+                                        )
+                                    );
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 3.5.h,
+                                    width: 20.5.w,
+                                    child: Text(
+                                      'Edit',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 1.5.h),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff333389),
+                                        borderRadius:
+                                        BorderRadius.circular(15)),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Divider(
+                              height: 3.h,
+                              thickness: 0.3.w,
+                              color: Color(0xff50509a),
+                            ),
+                          ),
+                          SizedBox(height: 1.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Text('Gender',
+                                      style: TextStyle(
+                                        color: Color(0xff848484),
+                                      )),
+                                  SizedBox(
+                                    width: 2.w,
+                                  ),
+                                  Text(
+                                    detail?.productData?[index].gender.toString() ?? "N/A",
+                                    style: TextStyle(
+                                        fontSize: 2.3.h,
+                                        color: Color(0xff35358a),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 1.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Text('State',
+                                      style: TextStyle(
+                                        color: Color(0xff848484),
+                                      )),
+                                  SizedBox(
+                                    width: 2.w,
+                                  ),
+                                  Text(
+                                    detail?.productData?[index].warehouseName.toString() ?? "N/A",
+                                    style: TextStyle(
+                                        fontSize: 2.3.h,
+                                        color: Color(0xff35358a),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 2.h),
+
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  // color: Colors.red,
+                                  child: Text(
+                                    'XS',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    'S',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    'M',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    'L',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    'XL',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].xs).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].s).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].m).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].l).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].xl).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    '2XL',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    '3XL',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    '4XL',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    '5XL',
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10)),
+                                    color: Color(0Xffeaeaf3),
+                                  ),
+                                  child: Text(
+                                    'TOTAL',
+                                    style: TextStyle(
+                                        fontSize: 1.6.h,
+                                        color: Color(0XFF50509a),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 15.w,
+                                  color: Colors.black,
+                                ),
+                                Container(
+                                  height: 0.1.h,
+                                  width: 17.w,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 3.h),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].xxl).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].s3xl).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].s4xl).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.5.h,
+                                  width: 15.w,
+                                  child: Text(
+                                    (detail?.productData?[index].s5xl).toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.9.h,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.6.h,
+                                  width: 15.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10)),
+                                    color: Color(0Xffeaeaf3),
+                                  ),
+                                  child: Text(
+                                    "₹" + price.toString(),
+                                    style: TextStyle(
+                                        fontSize: 1.5.h,
+                                        color: Color(0Xff50509a),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 2.h),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            height: 6.h,
+                            width: MediaQuery.of(context).size.width,
+                            color: Color(0xfffeaeaf3),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 3.h),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    ' Grand Total:',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 2.h),
+                                  ),
+                                  Text(
+                                    '   ₹' + price.toString() + " + ₹" +gst.toString() +"(18% GST) = ₹"+ gtotal.toString(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 1.5.h,
+                                        color: Color(0xff333389)),
+                                    maxLines:2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+
+                          SizedBox(height: 2.h),
+
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding:  EdgeInsets.only(top:73.h),
+              child: Column(
+                  children:[
                     Container(
                       height: 20.h,
                       width: MediaQuery.of(context).size.width,
@@ -1001,63 +1021,59 @@ double? gstt = 0.0;
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 3.h),
-                    child: GestureDetector(
-                      onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => summary_b_edit()));
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Color(0xff333389),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 3.h),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => summary_b_edit()));
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Color(0xff333389),
+                              ),
+                              height: 6.h,
+                              width: 40.w,
+                              child: Text(
+                                'Edit',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                         ),
-                        height: 6.h,
-                        width: 40.w,
-                        child: Text(
-                          'Edit',
-                          style: TextStyle(color: Colors.white),
+                        GestureDetector(
+                          onTap: () {
+                            cancelrequest();
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) => products_1()));
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Color(0xff333389),
+                            ),
+                            height: 6.h,
+                            width: 40.w,
+                            child: Text(
+                              'Cancle Request',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      cancelrequest();
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) => products_1()));
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xff333389),
-                      ),
-                      height: 6.h,
-                      width: 40.w,
-                      child: Text(
-                        'Cancle Request',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            //
-      ],
+                    SizedBox(height:1.h),
+                  ]
               ),
             ),
             Padding(
-
                 padding: EdgeInsets.only( left: 1.h,top: 20.h,
                     right: 1.h),
                 child:check ! ? Container(
@@ -1169,26 +1185,7 @@ double? gstt = 0.0;
                                             "assets/default_product_image.png",
                                           ),
                                         )
-                                  // Container(
-                                  //   height: 19.h,
-                                  //   width: 40.w,
-                                  //   decoration: BoxDecoration(
-                                  //     borderRadius:
-                                  //     BorderRadius.all(
-                                  //       Radius.circular(10.h),
-                                  //     ),
-                                  //   ),
-                                  //   child: ClipRRect(
-                                  //     borderRadius:
-                                  //     BorderRadius.circular(
-                                  //         15),
-                                  //     child: Image.asset(
-                                  //       "assets/default_product_image.png",
-                                  //
-                                  //       fit: BoxFit.cover,
-                                  //     ),
-                                  //   ),
-                                  // ),
+
                                 ),
                                 SizedBox(width: 5.w,),
                                 Container(
@@ -1339,19 +1336,20 @@ cancelrequest(){
         });}
     });
   }
-  viewcart()async {
+  viewcount()async {
     final Map<String, String> data = {};
-    data['action'] = 'view_add_to_cart_product_single';
+    data['action'] = 'add_to_cart_count';
     data['d_id'] = (userData?.logindata?.dId).toString();
+
+
     checkInternet().then((internet) async {
       if (internet) {
-        Productprovider().viewcartapi(data).then((Response response) async {
-          viewaddtocart = ViewCart.fromJson(json.decode(response.body));
+        Productprovider().addtocartcount(data).then((Response response) async {
+          count = cartcount.fromJson(json.decode(response.body));
           if (response.statusCode == 200 &&
-              viewaddtocart?.status == "success") {
+              count?.status == "success") {
           }
           else {
-
           }
         });
       } else {

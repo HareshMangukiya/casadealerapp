@@ -8,6 +8,7 @@ import 'package:casadealerapp/main.dart';
 import 'package:casadealerapp/modal_class/ViewCart.dart';
 import 'package:casadealerapp/modal_class/add_to_cart_modal.dart';
 import 'package:casadealerapp/modal_class/block_product_modal.dart';
+import 'package:casadealerapp/modal_class/cartcount.dart';
 import 'package:casadealerapp/modal_class/category_wise_display.dart';
 import 'package:casadealerapp/modal_class/color_display_all_class.dart';
 import 'package:casadealerapp/modal_class/color_modal.dart';
@@ -117,6 +118,7 @@ class _product_2State extends State<product_2> {
   int selectgender = 0;
   int def = 0;
   search? searchproperty;
+  cartcount? count;
   bool check = false;
 
   //Api Total
@@ -148,7 +150,7 @@ class _product_2State extends State<product_2> {
   }
 
   getdata() async {
-    await viewcart();
+    await viewcount();
     await displaycolor();
     // await imageapi();
     await colorapi();
@@ -182,13 +184,14 @@ class _product_2State extends State<product_2> {
                               children: [
                                 Row(
                                   children: [
-                                    IconButton(
-                                      onPressed: () {
+                                    GestureDetector(
+                                      onTap: () {
                                         _scaffoldKey.currentState?.openDrawer();
                                       },
-                                      icon: Icon(
+                                      child: Icon(
                                         Icons.menu,
                                         color: Colors.white,
+                                        size: 4.h,
                                       ),
                                     ),
                                     SizedBox(
@@ -199,8 +202,8 @@ class _product_2State extends State<product_2> {
                                       // alignment: Alignment.center,
                                       child: Text(
                                         "Products",
-                                        style: TextStyle(
-                                            fontSize: 2.h, color: Colors.white),
+                                        style:
+                                        TextStyle(fontSize: 2.h, color: Colors.white),
                                       ),
                                     ),
                                   ],
@@ -210,35 +213,41 @@ class _product_2State extends State<product_2> {
                                 ),
                                 Row(
                                   children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          se_icon = !se_icon;
-                                        });
-                                        // _scaffoldKey.currentState?.openDrawer();
-                                      },
-                                      icon: Icon(
-                                        Icons.search,
-                                        color: Colors.white,
-                                        size: 3.5.h,
-                                      ),
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 11,),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              se_icon = !se_icon;
+                                            });
+                                            // _scaffoldKey.currentState?.openDrawer();
+                                          },
+                                          child: Icon(
+                                            Icons.search,
+                                            color: Colors.white,
+                                            size: 3.5.h,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: 1.h,
-                                    ),
+
                                     badges.Badge(
                                         onTap: (){
-
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
                                         },
-                                        badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
-                                          style: TextStyle(color: Colors.white),
+                                        badgeContent:  Text(( count?.cartCount== 0 ||count?.cartCount == null ) ? "0" :(count?.cartCount).toString(),
+                                            style:TextStyle(color:Colors.white)),
+                                        child: GestureDetector(
+                                            onTap : (){
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
 
-                                            ),
-                                        child: Icon(Icons.shopping_bag_outlined,
-                                            color: Colors.white,
-                                            size: 3.h)
+                                            },
+                                          child: Icon(Icons.shopping_bag_outlined,
+                                              color: Colors.white,
+                                              size: 3.5.h),
+                                        )
                                     )
-
                                   ],
                                 ),
                               ],
@@ -248,6 +257,9 @@ class _product_2State extends State<product_2> {
                       ),
                       decoration: BoxDecoration(
                         color: Color(0xfff333389),
+                        // borderRadius: BorderRadius.all(
+                        //   Radius.circular(10),
+                        // ),
                       ),
                     ),
                     SizedBox(
@@ -263,12 +275,7 @@ class _product_2State extends State<product_2> {
                       height:
                       MediaQuery.of(context).size.height * 0.075,
                       child: TextFormField(
-                        // validator: (value) {
-                        //   if (value!.isEmpty) {
-                        //     return "";
-                        //   }
-                        //   return null;
-                        // },
+
                         onChanged: (value) {
 
                           if (value.isNotEmpty) {
@@ -280,10 +287,7 @@ class _product_2State extends State<product_2> {
                             setState(() {
                               check=false;
                             });
-                            // Navigator.of(context).pushReplacement(
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             products_1()));
+
                           } else {
                             // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
                           }
@@ -382,7 +386,7 @@ class _product_2State extends State<product_2> {
                                                                                 28),
                                                                         child: Image
                                                                             .asset(
-                                                                          "assets/default_product_image.png",
+                                                                          "assets/product_1_img2.png",
                                                                           fit: BoxFit
                                                                               .cover,
                                                                         ),
@@ -461,30 +465,7 @@ class _product_2State extends State<product_2> {
                                                                                   Column(
                                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
-                                                                                      // Container(
-                                                                                      //   alignment: Alignment.center,
-                                                                                      //   width: MediaQuery.of(context).size.width * 0.2,
-                                                                                      //   height: MediaQuery.of(context).size.height * 0.03,
-                                                                                      //   decoration: BoxDecoration(
-                                                                                      //     color: Color(0xfff7c7773),
-                                                                                      //     borderRadius: BorderRadius.all(
-                                                                                      //       Radius.circular(8),
-                                                                                      //     ),
-                                                                                      //   ),
-                                                                                      //   child: Padding(
-                                                                                      //     padding: EdgeInsets.all(0.5.h),
-                                                                                      //     child: Text(
-                                                                                      //       "Brand Name",
-                                                                                      //       style: TextStyle(
-                                                                                      //         fontSize: 1.3.h,
-                                                                                      //         color: Colors.white,
-                                                                                      //       ),
-                                                                                      //     ),
-                                                                                      //   ),
-                                                                                      // ),
-                                                                                      // SizedBox(
-                                                                                      //   height: 1.h,
-                                                                                      // ),
+                                                                                
                                                                                       Container(
                                                                                         child: Text(
                                                                                           widget.pronamenevigatior ?? 'N/A',
@@ -600,7 +581,7 @@ class _product_2State extends State<product_2> {
                                                                                     url,
                                                                                     error) =>
                                                                                 Image.asset(
-                                                                              "assets/default_product_image.png",
+                                                                              "assets/product_1_img2.png",
                                                                               fit: BoxFit
                                                                                   .cover,
                                                                             ),
@@ -679,42 +660,13 @@ class _product_2State extends State<product_2> {
                                                                                   Column(
                                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
-                                                                                      // Container(
-                                                                                      //   alignment: Alignment.center,
-                                                                                      //   width: MediaQuery.of(context).size.width * 0.2,
-                                                                                      //   height: MediaQuery.of(context).size.height * 0.03,
-                                                                                      //   decoration: BoxDecoration(
-                                                                                      //     color: Color(0xfff7c7773),
-                                                                                      //     borderRadius: BorderRadius.all(
-                                                                                      //       Radius.circular(8),
-                                                                                      //     ),
-                                                                                      //   ),
-                                                                                      //   child: Padding(
-                                                                                      //     padding: EdgeInsets.all(0.5.h),
-                                                                                      //     child: Text(
-                                                                                      //       "Brand Name",
-                                                                                      //       style: TextStyle(
-                                                                                      //         fontSize: 1.3.h,
-                                                                                      //         color: Colors.white,
-                                                                                      //       ),
-                                                                                      //     ),
-                                                                                      //   ),
-                                                                                      // ),
-                                                                                      // SizedBox(
-                                                                                      //   height: 1.h,
-                                                                                      // ),
+                                                                                    
                                                                                       Container(
                                                                                         child: Text(
                                                                                           widget.pronamenevigatior ?? 'N/A',
                                                                                           style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
                                                                                         ),
                                                                                       ),
-                                                                                      // Container(
-                                                                                      //   child: Text(
-                                                                                      //     "Artist Name",
-                                                                                      //     style: TextStyle(fontSize: 1.9.h, color: Colors.grey.shade300),
-                                                                                      //   ),
-                                                                                      // ),
                                                                                     ],
                                                                                   ),
                                                                                   Row(
@@ -802,7 +754,7 @@ class _product_2State extends State<product_2> {
                                                                                 BorderRadius.circular(28),
                                                                             child: Image
                                                                                 .asset(
-                                                                              "assets/default_product_image.png",
+                                                                              "assets/product_1_img2.png",
                                                                               fit: BoxFit
                                                                                   .cover,
                                                                             ),
@@ -874,12 +826,8 @@ class _product_2State extends State<product_2> {
                                                                                               style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
                                                                                             ),
                                                                                           ),
-
                                                                                         ],
                                                                                       ),
-
-
-
                                                                                       Row(
                                                                                         children: [
                                                                                           SizedBox(width: 3.w),
@@ -902,7 +850,6 @@ class _product_2State extends State<product_2> {
                                                                                     ],
                                                                                   ),
                                                                                 ),
-
                                                                               ],
                                                                             ),
                                                                           ),
@@ -979,7 +926,7 @@ class _product_2State extends State<product_2> {
                                                                                   CircularProgressIndicator(),
                                                                               errorWidget: (context, url, error) =>
                                                                                   Image.asset(
-                                                                                "assets/default_product_image.png",
+                                                                                "assets/product_1_img2.png",
 
                                                                                 fit:
                                                                                     BoxFit.cover,
@@ -1053,17 +1000,6 @@ class _product_2State extends State<product_2> {
                                                                                               style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
                                                                                             ),
                                                                                           ),
-                                                                                          // Container(
-                                                                                          //   child: Text(
-                                                                                          //     "Artist Name",
-                                                                                          //     style: TextStyle(
-                                                                                          //         fontSize: 1.9.h,
-                                                                                          //         // fontWeight:
-                                                                                          //         //     FontWeight
-                                                                                          //         //         .bold,
-                                                                                          //         color: Colors.grey.shade300),
-                                                                                          //   ),
-                                                                                          // ),
                                                                                         ],
                                                                                       ),
 
@@ -1073,7 +1009,6 @@ class _product_2State extends State<product_2> {
 
                                                                                       Row(
                                                                                         children: [
-
                                                                                           SizedBox(width: 3.w),
                                                                                           Container(
                                                                                             alignment: Alignment.center,
@@ -1160,22 +1095,15 @@ class _product_2State extends State<product_2> {
                                       ],
                                     ),
                                     SizedBox(
-                                      height: 2.h,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 2.h),
-
+                                      height: 1.h,
                                     ),
                                     Container(
                                       child: Column(
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 2.h),
+                                                horizontal: 5.w),
                                             child: Container(
-                                                alignment: Alignment.centerLeft,
-                                                margin: EdgeInsets.only(top: 1.h),
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -1189,12 +1117,12 @@ class _product_2State extends State<product_2> {
                                                       ),
                                                     ),
                                                     Row(
+                                                      crossAxisAlignment:CrossAxisAlignment.center,
                                                       children: [
                                                         Container(
                                                           height: 4.5.h,
                                                           width: 9.w,
                                                           child: CircleAvatar(
-                                                            // radius: 7.w,
                                                             child: ClipOval(
                                                               child: Image.network(
                                                                 product2color
@@ -1202,7 +1130,7 @@ class _product_2State extends State<product_2> {
                                                                             selectbtn]
                                                                         .colorImage ??
                                                                     '',
-                                                                width: 12.w,
+                                                                width: 13.w,
                                                                 height: 13.w,
                                                                 fit: BoxFit.cover,
                                                               ),
@@ -1228,7 +1156,7 @@ class _product_2State extends State<product_2> {
                                                               maxLines: 2,
                                                               // 'Red',
                                                               style: TextStyle(
-                                                                fontSize: 2.5.h,
+                                                                fontSize: 2.4.h,
                                                                 fontWeight:
                                                                     FontWeight.bold,
                                                               )),
@@ -1251,9 +1179,8 @@ class _product_2State extends State<product_2> {
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 2.h),
                                             child: Container(
-                                                height: 18.18.h,
+                                                height: 10.h,
                                                 width: 90.w,
-                                                padding: EdgeInsets.all(9.0),
                                                 child: GridView.builder(
                                                   itemCount:
                                                       product2color?.data?.length,
@@ -1278,8 +1205,8 @@ class _product_2State extends State<product_2> {
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                              height: 10.h,
-                                                              width: 20.w,
+                                                              // height: 10.h,
+                                                              // width: 20.w,
                                                               child: CircleAvatar(
                                                                 // radius: 7.w,
                                                                 child: ClipOval(
@@ -1553,18 +1480,23 @@ class _product_2State extends State<product_2> {
                                                         ),
                                                         Container(
                                                           width: 30.w,
-                                                          child: displayallcolor
-                                                                          ?.priceArray?[
-                                                                              0]
-                                                                          .minPrice ==
-                                                                      0 ||
-                                                                  displayallcolor
-                                                                          ?.priceArray?[
-                                                                              0]
-                                                                          .minPrice ==
-                                                                      null
-                                                              ? Text(
-                                                                  "N/A",
+                                                          child: 
+                                                               Text(
+                                                        displayallcolor
+                                                            ?.priceArray?[
+                                                        0]
+                                                            .minPrice ==
+                                                        0 ||
+                                                        displayallcolor
+                                                            ?.priceArray?[
+                                                        0]
+                                                            .minPrice ==
+                                                        null ?"N/A":'₹' +
+                                                          (displayallcolor
+                                                              ?.priceArray?[
+                                                              0]
+                                                              .minPrice)
+                                                              .toString(),
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           2.6.h,
@@ -1574,42 +1506,28 @@ class _product_2State extends State<product_2> {
                                                                       color: Color(
                                                                           0xfff333389)),
                                                                 )
-                                                              : Text(
-                                                                  '₹' +
-                                                                      (displayallcolor
-                                                                              ?.priceArray?[
-                                                                                  0]
-                                                                              .minPrice)
-                                                                          .toString(),
-                                                                  // "₹125",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          2.6.h,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: Color(
-                                                                          0xfff333389)),
-                                                                ),
+                                                             
                                                         ),
-                                                        // SizedBox(
-                                                        //   width: 6.h,
-                                                        // ),
-
                                                         Container(
                                                           width: 30.w,
-                                                          child: displayallcolor
-                                                                          ?.priceArray?[
-                                                                              0]
-                                                                          .minPrice ==
-                                                                      0 ||
-                                                                  displayallcolor
-                                                                          ?.priceArray?[
-                                                                              0]
-                                                                          .minPrice ==
-                                                                      null
-                                                              ? Text(
-                                                                  "N/A",
+                                                          child: 
+                                                          Text(
+                                                        displayallcolor
+                                                            ?.priceArray?[
+                                                        0]
+                                                            .maxPrice ==
+                                                        0 ||
+                                                        displayallcolor
+                                                            ?.priceArray?[
+                                                        0]
+                                                          .maxPrice ==
+                                                          null ?
+                                                                  "N/A" :'₹' +
+                                                        (displayallcolor
+                                                            ?.priceArray?[
+                                                            0]
+                                                            .maxPrice)
+                                                            .toString(),
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           2.6.h,
@@ -1619,23 +1537,7 @@ class _product_2State extends State<product_2> {
                                                                       color: Color(
                                                                           0xfff333389)),
                                                                 )
-                                                              : Text(
-                                                                  '₹' +
-                                                                      (displayallcolor
-                                                                              ?.priceArray?[
-                                                                                  0]
-                                                                              .maxPrice)
-                                                                          .toString(),
-                                                                  // " ₹150",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          2.6.h,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: Color(
-                                                                          0xfff333389)),
-                                                                ),
+                                                             
                                                         ),
                                                       ],
                                                     ),
@@ -1656,31 +1558,48 @@ class _product_2State extends State<product_2> {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    "Size",
-                                                    style: TextStyle(fontSize: 2.h),
+                                                  Container(
+                                                width:10.w,
+                                                    alignment:Alignment.center,
+                                                 
+                                                    
+                                                    child: Text(
+                                                      "Size",
+                                                      style: TextStyle(fontSize: 2.h),
+                                                    ),
                                                   ),
-                                                  // SizedBox(width: 1.8.h),
-                                                  Text("Mumbai",
-                                                      style:
-                                                          TextStyle(fontSize: 2.h)),
-                                                  // SizedBox(width: 1.8.h),
-                                                  Text("Tripur",
-                                                      style:
-                                                          TextStyle(fontSize: 2.h)),
-                                                  // SizedBox(width: 1.8.h),
-                                                  Text("Total",
-                                                      style:
-                                                          TextStyle(fontSize: 2.h)),
+                                              
+                                                  Container(
+                                                      width:20.w,
+                                                    alignment:Alignment.center,
+                                                   
+                                                    child: Text("Mumbai",
+                                                        style:
+                                                            TextStyle(fontSize: 2.h)),
+                                                  ),
+                                        
+                                                  Container(
+                                                      width:18.w,
+                                                 
+                                                    alignment:Alignment.center,
+                                                    child: Text("Tirupur",
+                                                        style:
+                                                            TextStyle(fontSize: 2.h)),
+                                                  ),
+                                               
+                                                  Container(
+                                                      width:18.w,
+                                                 
+                                                    alignment:Alignment.center,
+                                                    child: Text("Total",
+                                                        style:
+                                                            TextStyle(fontSize: 2.h)),
+                                                  ),
                                                 ],
                                               ),
                                             ),
                                           ),
-                                          // Padding(
-                                          //   padding: EdgeInsets.all(8.0),
-                                          //   child:
-                                          //       Divider(color: Colors.grey.shade400),
-                                          // ),
+                                       
 
                                           Container(
                                             height: 12.h,
@@ -1731,11 +1650,7 @@ class _product_2State extends State<product_2> {
                                                                     : ""
                                                                 : "0"
                                                             : "0",
-                                                        // '432',
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style:textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -1743,15 +1658,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color:
-                                                                   Color(
-                                                                      0xfff333389))),
-                                                          child:TextFormField(
+                                                          child:TextField(
                                                             readOnly: regex.hasMatch(
                                                                 (displayallcolor
                                                                     ?.mumbaiStock?[
@@ -1766,21 +1673,11 @@ class _product_2State extends State<product_2> {
                                                                 ? false
                                                                 : true
                                                                 : true,
-                                                            validator:(value){
-                                                              if(value!.isEmpty){
-
-                                                              }
-                                                            },
-
                                                             onChanged: (value) {
 
                                                               if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _xs,
@@ -1789,29 +1686,9 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // contentPadding: EdgeInsets.only(top: 0.1.w),
-
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
+                                                            decoration:inputDecoration())
                                                             ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
-                                                          )),
-                                                    ],
+                                                    ]
                                                   ),
                                                   // SizedBox(width: 12.w),
                                                   Column(
@@ -1841,12 +1718,8 @@ class _product_2State extends State<product_2> {
                                                                         '')
                                                                     : ""
                                                                 : "0"
-                                                            : "0",
-                                                        // '432',
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                            : "0",                                                        // '432',
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -1854,13 +1727,6 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
                                                           child: TextField(
                                                              readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -1883,8 +1749,6 @@ class _product_2State extends State<product_2> {
                                                                }
                                                                else{
                                                                }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _txs,
@@ -1893,25 +1757,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                            decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -1923,11 +1769,8 @@ class _product_2State extends State<product_2> {
                                                     children: [
                                                       Text(
                                                         totalxs.toString(),
-                                                        // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                      
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -1935,13 +1778,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                        
                                                           child: TextField(
 
                                                             onChanged: (value) {
@@ -1955,26 +1792,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
-                                                          )),
+                                                            decoration:inputDecoration())),
                                                     ],
                                                   ),
                                                 ],
@@ -2027,10 +1845,7 @@ class _product_2State extends State<product_2> {
                                                                 : "0"
                                                             : "0",
                                                         // '432',
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2038,23 +1853,13 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                          
                                                           child: TextField(
                                                             onChanged: (value) {
 
                                                               if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             readOnly: regex.hasMatch(
@@ -2077,27 +1882,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // contentPadding: EdgeInsets.only(top: 0.1.w),
-
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2131,10 +1916,7 @@ class _product_2State extends State<product_2> {
                                                                 : "0"
                                                             : "0",
                                                         // '432',
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2142,13 +1924,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                        
                                                           child: TextField(
                                                                   readOnly: regex.hasMatch(
                                                                   (displayallcolor
@@ -2169,10 +1945,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
 
@@ -2182,25 +1954,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2212,11 +1966,8 @@ class _product_2State extends State<product_2> {
                                                     children: [
                                                       Text(
                                                         totals.toString(),
-                                                        // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                     
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2224,44 +1975,18 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
                                                           child: TextField(
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
-
                                                             controller: _totalms,
-
                                                             textAlign:
                                                                 TextAlign.center,
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
-                                                          )),
+                                                              decoration:inputDecoration(
+                                                          ))),
                                                     ],
                                                   ),
                                                 ],
@@ -2319,10 +2044,7 @@ class _product_2State extends State<product_2> {
                                                                 : "0"
                                                             : "0",
                                                         // '432',
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style:textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2330,13 +2052,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                       
                                                           child: TextField(
                                                             readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -2357,10 +2073,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _m,
@@ -2369,24 +2081,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2396,7 +2091,7 @@ class _product_2State extends State<product_2> {
                                                         CrossAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        // '432',
+                                               
                                                         regex.hasMatch((displayallcolor
                                                                     ?.tripurStock?[
                                                                         0]
@@ -2420,10 +2115,7 @@ class _product_2State extends State<product_2> {
                                                                     : ""
                                                                 : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2431,13 +2123,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                    
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -2454,14 +2140,9 @@ class _product_2State extends State<product_2> {
                                                                 : true
                                                                 : true,
                                                             onChanged: (value) {
-
                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _tm,
@@ -2470,24 +2151,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2500,10 +2164,7 @@ class _product_2State extends State<product_2> {
                                                       Text(
                                                         totalm.toString(),
                                                         // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2511,42 +2172,18 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                    
                                                           child: TextField(
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
-
                                                             controller: _totalmm,
                                                             textAlign:
                                                                 TextAlign.center,
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2600,10 +2237,7 @@ class _product_2State extends State<product_2> {
                                                                     : ""
                                                                 : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2611,13 +2245,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                       
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -2638,10 +2266,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _l,
@@ -2651,24 +2275,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2702,10 +2309,7 @@ class _product_2State extends State<product_2> {
                                                                     : ""
                                                                 : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2713,13 +2317,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                        
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -2740,10 +2338,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _tl,
@@ -2752,24 +2346,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2782,10 +2359,7 @@ class _product_2State extends State<product_2> {
                                                       Text(
                                                         totall.toString(),
                                                         // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2793,13 +2367,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                   
                                                           child: TextField(
                                                             onChanged: (value) {
                                                               updateTotal(value);
@@ -2810,24 +2378,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2862,7 +2413,7 @@ class _product_2State extends State<product_2> {
                                                         CrossAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        // '432',
+                                                       
                                                         regex.hasMatch((displayallcolor
                                                                     ?.mumbaiStock?[
                                                                         0]
@@ -2886,10 +2437,7 @@ class _product_2State extends State<product_2> {
                                                                     : ""
                                                                 : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2897,13 +2445,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                         
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -2924,10 +2466,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _xl,
@@ -2937,24 +2475,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -2988,10 +2509,7 @@ class _product_2State extends State<product_2> {
                                                                     : ""
                                                                 : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -2999,13 +2517,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                       
                                                           child: TextField(
                                                             readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -3026,10 +2538,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _txl,
@@ -3038,29 +2546,11 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
-                                                  // SizedBox(width: 5.w),
-                                                  //
+                                                 
                                                   Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
@@ -3068,10 +2558,7 @@ class _product_2State extends State<product_2> {
                                                       Text(
                                                         totalxl.toString(),
                                                         // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3079,13 +2566,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                       
                                                           child: TextField(
                                                             onChanged: (value) {
                                                               updateTotal(value);
@@ -3096,24 +2577,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3166,10 +2630,7 @@ class _product_2State extends State<product_2> {
                                                             : ""
                                                             : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3177,13 +2638,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -3200,14 +2655,9 @@ class _product_2State extends State<product_2> {
                                                                 : true
                                                                 : true,
                                                             onChanged: (value) {
-
                                                               if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _xxl,
@@ -3217,24 +2667,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3253,7 +2686,7 @@ class _product_2State extends State<product_2> {
                                                             ? int.parse((displayallcolor
                                                             ?.tripurStock?[
                                                         0]
-                                                            .xs)
+                                                            .xxl)
                                                             .toString()) >=
                                                             0
                                                             ? (displayallcolor
@@ -3268,10 +2701,7 @@ class _product_2State extends State<product_2> {
                                                             : ""
                                                             : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3279,13 +2709,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                       
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -3302,14 +2726,10 @@ class _product_2State extends State<product_2> {
                                                                 : true
                                                                 : true,
                                                             onChanged: (value) {
-
                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
+                                                           
                                                               updateTotal(value);
                                                             },
                                                             controller: _txxl,
@@ -3318,24 +2738,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                           decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3348,10 +2751,7 @@ class _product_2State extends State<product_2> {
                                                       Text(
                                                         total2xl.toString(),
                                                         // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3359,13 +2759,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                         
                                                           child: TextField(
                                                             onChanged: (value) {
                                                               updateTotal(value);
@@ -3376,24 +2770,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3452,10 +2829,7 @@ class _product_2State extends State<product_2> {
                                                             : ""
                                                             : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3463,15 +2837,9 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
-                                                          child: TextField(
-                                                              readOnly: regex.hasMatch(
+                                                                                                               
+
+                                                          child: TextField(                                                                           readOnly: regex.hasMatch(
                                                                 (displayallcolor
                                                                     ?.mumbaiStock?[
                                                                 0]
@@ -3487,13 +2855,11 @@ class _product_2State extends State<product_2> {
                                                                 : true,
                                                             onChanged: (value) {
 
-                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
-                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))) {
+                                                                buildErrorDialog(
+                                                                    context, "",
+                                                                    "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _3xl,
@@ -3503,24 +2869,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                          decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3554,10 +2903,7 @@ class _product_2State extends State<product_2> {
                                                             : ""
                                                             : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3565,13 +2911,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                         
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -3592,10 +2932,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _t3xl,
@@ -3604,24 +2940,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3634,10 +2953,7 @@ class _product_2State extends State<product_2> {
                                                       Text(
                                                         total3xl.toString(),
                                                         // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3645,13 +2961,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                       
                                                           child: TextField(
                                                             onChanged: (value) {
                                                               updateTotal(value);
@@ -3663,24 +2973,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3734,10 +3027,7 @@ class _product_2State extends State<product_2> {
                                                             : ""
                                                             : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style:textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3745,13 +3035,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                         
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -3770,12 +3054,8 @@ class _product_2State extends State<product_2> {
                                                             onChanged: (value) {
 
                                                               if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
-                                                                buildErrorDialog(context, "", "please enter the lower value than available stock.");
+                                                              buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _4xl,
@@ -3785,24 +3065,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3836,10 +3099,7 @@ class _product_2State extends State<product_2> {
                                                             : ""
                                                             : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3847,13 +3107,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                        
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -3874,10 +3128,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _t4xl,
@@ -3886,24 +3136,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -3916,10 +3149,7 @@ class _product_2State extends State<product_2> {
                                                       Text(
                                                         total4xl.toString(),
                                                         // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -3927,13 +3157,6 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
                                                           child: TextField(
 
                                                             onChanged: (value) {
@@ -3945,24 +3168,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -4021,10 +3227,7 @@ class _product_2State extends State<product_2> {
                                                             : ""
                                                             : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -4032,13 +3235,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                       
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -4059,10 +3256,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _5xl,
@@ -4072,24 +3265,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -4123,10 +3299,7 @@ class _product_2State extends State<product_2> {
                                                             : ""
                                                             : "0"
                                                             : "0",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -4134,13 +3307,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                         
                                                           child: TextField(
                                                               readOnly: regex.hasMatch(
                                                                 (displayallcolor
@@ -4161,10 +3328,6 @@ class _product_2State extends State<product_2> {
                                                               if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                                 buildErrorDialog(context, "", "please enter the lower value than available stock.");
                                                               }
-                                                              else{
-                                                              }
-
-
                                                               updateTotal(value);
                                                             },
                                                             controller: _t5xl,
@@ -4173,24 +3336,7 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
+                                                              decoration:inputDecoration()
                                                           )),
                                                     ],
                                                   ),
@@ -4203,10 +3349,7 @@ class _product_2State extends State<product_2> {
                                                       Text(
                                                         total5xl.toString(),
                                                         // "432",
-                                                        style: TextStyle(
-                                                            fontSize: 2.h,
-                                                            fontWeight:
-                                                                FontWeight.bold),
+                                                        style:textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
                                                       Container(
@@ -4214,13 +3357,7 @@ class _product_2State extends State<product_2> {
                                                               Alignment.center,
                                                           width: 10.h,
                                                           height: 4.h,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(8),
-                                                              border: Border.all(
-                                                                  color: Color(
-                                                                      0xfff333389))),
+                                                      
                                                           child: TextField(
                                                             onChanged: (value) {
                                                               updateTotal(value);
@@ -4231,119 +3368,13 @@ class _product_2State extends State<product_2> {
                                                             keyboardType:
                                                                 TextInputType
                                                                     .number,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder.none,
-                                                              hintText: '',
-                                                              // suffixIcon: Column(
-                                                              //
-                                                              //   children: [
-                                                              //     Icon(Icons.arrow_drop_up),
-                                                              //     Icon(Icons.arrow_drop_down),
-                                                              //   ],
-                                                              // )
-                                                            ),
-                                                            // child: Text(
-                                                            //   "1000",
-                                                            //   style: TextStyle(
-                                                            //       color: Color(0xff5a5a9f), fontWeight: FontWeight.bold),
-                                                            // ),
-                                                          )),
+                                                              decoration:inputDecoration())),
                                                     ],
                                                   ),
                                                 ],
                                               ),
                                             ),
                                           ),
-
-                                          // Padding(
-                                          //   padding: EdgeInsets.all(2.h),
-                                          //   child: Container(
-                                          //     child: Row(
-                                          //       crossAxisAlignment: CrossAxisAlignment.center,
-                                          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          //       children: [
-                                          //         Text(
-                                          //           "Available Qty",
-                                          //           style: TextStyle(
-                                          //               fontSize: 2.5.h,
-                                          //               fontWeight: FontWeight.bold),
-                                          //         ),
-                                          //         // SizedBox(width: 5.w),
-                                          //         Container(
-                                          //           width: 20.w,
-                                          //           child: Divider(
-                                          //               thickness: 2,
-                                          //               color: Color(0xfff333389)),
-                                          //         ),
-                                          //         // SizedBox(width: 5.w),
-                                          //         Container(
-                                          //             alignment: Alignment.center,
-                                          //             width: 11.8.h,
-                                          //             height: 5.8.h,
-                                          //             decoration: BoxDecoration(
-                                          //                 borderRadius:
-                                          //                     BorderRadius.circular(
-                                          //                         15),
-                                          //                 border: Border.all(
-                                          //                     color: Color(
-                                          //                         0xfff333389))),
-                                          //             child: Text("550",
-                                          //                 style: TextStyle(
-                                          //                     fontSize: 2.5.h,
-                                          //                     color:
-                                          //                         Color(0xfff333389),
-                                          //                     fontWeight:
-                                          //                         FontWeight.bold))),
-                                          //       ],
-                                          //     ),
-                                          //   ),
-                                          // ),
-                                          // Padding(
-                                          //   padding: EdgeInsets.all(2.h),
-                                          //   child: Container(
-                                          //     child: Row(
-                                          //         crossAxisAlignment: CrossAxisAlignment.center,
-                                          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          //       children: [
-                                          //         Text(
-                                          //           "Enter Quantity",
-                                          //           style: TextStyle(
-                                          //               fontSize: 2.5.h,
-                                          //               fontWeight: FontWeight.bold),
-                                          //         ),
-                                          //         // SizedBox(width: 5.w),
-                                          //         // Container(
-                                          //         //   width: 20.w,
-                                          //         //   child: Divider(
-                                          //         //       thickness: 2,
-                                          //         //       color: Color(0xfff333389)),
-                                          //         // ),
-                                          //         // SizedBox(width: 5.w),
-                                          //         Container(
-                                          //             alignment: Alignment.center,
-                                          //             width: 45.w,
-                                          //             height: 5.8.h,
-                                          //             decoration: BoxDecoration(
-                                          //                 color: Color(0xfff333389),
-                                          //                 borderRadius:
-                                          //                     BorderRadius.circular(
-                                          //                         10),
-                                          //                 border: Border.all(
-                                          //                     color: Color(
-                                          //                         0xfff333389))),
-                                          //             child: Text("550",
-                                          //                 style: TextStyle(
-                                          //                     fontSize: 2.h,
-                                          //                     color: Colors.white,
-                                          //                     fontWeight:
-                                          //                         FontWeight.bold))),
-                                          //       ],
-                                          //     ),
-                                          //   ),
-                                          // ),
-
                                           Padding(
                                             padding: EdgeInsets.all(2.h),
                                             child: Container(
@@ -4352,16 +3383,6 @@ class _product_2State extends State<product_2> {
                                                       color: Colors.grey.shade200),
                                                   borderRadius:
                                                       BorderRadius.circular(12)
-
-                                                  // boxShadow: [
-                                                  //   // BoxShadow(
-                                                  //   //   // color: Colors.grey.withOpacity(0.5), // color of the shadow
-                                                  //   //   spreadRadius: 5, // spread radius
-                                                  //   //   // blurRadius: 7, // blur radius
-                                                  //   //   offset: Offset(0, 3), // changes position of shadow
-                                                  //   // ),
-                                                  // ],
-
                                                   ),
                                               child: ExpansionTile(
                                                 title: Text('Size Chart'),
@@ -4433,9 +3454,6 @@ class _product_2State extends State<product_2> {
                                                                             .size
                                                                             .width,
                                                                       )
-
-                                                                    // 'assets/size_chart.png',
-
                                                                     : Image.network(
                                                                         displayallcolor
                                                                                 ?.mumbaiStock?[0]
@@ -4472,24 +3490,9 @@ class _product_2State extends State<product_2> {
 
                                                                         : Image
                                                                             .network(
-                                                                            displayallcolor?.mumbaiStock?[0].sizeChart ??
+                                                                            displayallcolor?.tripurStock?[0].sizeChart ??
                                                                                 'N/A',
-                                                                            // errorBuilder:
-                                                                            //     (BuildContext context,
-                                                                            //     Object exception,
-                                                                            //     StackTrace?
-                                                                            //     stackTrace) {
-                                                                            //   return Image.asset(
-                                                                            //     'assets/size_chart.png',
-                                                                            //     fit: BoxFit.cover,
-                                                                            //     height: 40.h,
-                                                                            //     width: MediaQuery.of(
-                                                                            //         context)
-                                                                            //         .size
-                                                                            //         .width,
-                                                                            //   );
-                                                                            // },
-                                                                            // 'assets/size_chart.png',
+
                                                                             fit: BoxFit
                                                                                 .cover,
                                                                             height:
@@ -4519,9 +3522,7 @@ class _product_2State extends State<product_2> {
                                                                     .size
                                                                     .height *
                                                                 0.09,
-                                                            // color: Color(0xfff333389),
-                                                            // padding:
-                                                            //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
+                                                           
                                                             child: Row(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
@@ -4575,12 +3576,8 @@ class _product_2State extends State<product_2> {
                                                                             2.h),
                                                                   ),
                                                                 ),
-
                                                                 ElevatedButton(
-
-
                                                                   onPressed: () {
-
                                                                     displayallcolor
                                                                         ?.mumbaiStock?[
                                                                     0]
@@ -4657,8 +3654,6 @@ class _product_2State extends State<product_2> {
                                                                 0]
                                                                     .catalogue
                                                                     .toString()):buildErrorDialog(context, "", "No Catalogue available");
-
-
                                                               },
                                                               style: ElevatedButton
                                                                   .styleFrom(
@@ -4687,13 +3682,7 @@ class _product_2State extends State<product_2> {
                                                                         fontSize:
                                                                             2.h),
                                                                   ),
-                                                                  // Icon(
-                                                                  //   Icons.arrow_forward,
-                                                                  //   color: Colors.white,
-                                                                  //   size: 24.0,
-                                                                  //   semanticLabel:
-                                                                  //   'Text to announce in accessibility modes',
-                                                                  // ),
+
                                                                 ],
                                                               ),
                                                             ),
@@ -4707,8 +3696,7 @@ class _product_2State extends State<product_2> {
                                             ),
                                           ),
                                         ],
-                                      ),
-                                    )
+                                      ),)
 
                                   ],
                                 ),
@@ -4815,21 +3803,6 @@ class _product_2State extends State<product_2> {
                                                                   .prodImgDefault ??
                                                                   '',),
                                                             ),
-                                                        // Container(
-                                                        //   height: 19.h,
-                                                        //   width: 40.w,
-                                                        //   decoration: BoxDecoration(
-                                                        //     borderRadius:
-                                                        //     BorderRadius.all(
-                                                        //       Radius.circular(10.sp),
-                                                        //     ),
-                                                        //     image: DecorationImage(
-                                                        //       image: imageProvider,
-                                                        //       fit: BoxFit.cover,
-                                                        //     ),
-                                                        //   ),
-                                                        // ),
-
                                                         placeholder: (context, url) =>
                                                             Center(
                                                                 child:
@@ -4842,26 +3815,7 @@ class _product_2State extends State<product_2> {
                                                                 "assets/default_product_image.png",
                                                               ),
                                                             )
-                                                      // Container(
-                                                      //   height: 19.h,
-                                                      //   width: 40.w,
-                                                      //   decoration: BoxDecoration(
-                                                      //     borderRadius:
-                                                      //     BorderRadius.all(
-                                                      //       Radius.circular(10.h),
-                                                      //     ),
-                                                      //   ),
-                                                      //   child: ClipRRect(
-                                                      //     borderRadius:
-                                                      //     BorderRadius.circular(
-                                                      //         15),
-                                                      //     child: Image.asset(
-                                                      //       "assets/default_product_image.png",
-                                                      //
-                                                      //       fit: BoxFit.cover,
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
+
                                                     ),
                                                     SizedBox(width: 5.w,),
                                                     Container(
@@ -4891,7 +3845,6 @@ class _product_2State extends State<product_2> {
                                     ):Container()
                                 )
                             ]
-
                             ),
                           ),
                     displayallcolor?.status == "fail"
@@ -4899,7 +3852,6 @@ class _product_2State extends State<product_2> {
                         : Container(
                             width: MediaQuery.of(context).size.width * 1,
                             height: 9.h,
-
                             child: Padding(
                               padding: EdgeInsets.all(2.h),
                               child: Container(
@@ -4909,191 +3861,9 @@ class _product_2State extends State<product_2> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        (displayallcolor?.mumbaiStock?.length ==
-                                                    0) ||
-                                                (displayallcolor
-                                                        ?.tripurStock?.length ==
-                                                    0)
-                                            ? showDialog(
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return Dialog(
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16),
-                                                    ),
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    child: Container(
-                                                      height: 30.h,
-                                                      width: 80.w,
-                                                      // padding: EdgeInsets.all(5.w),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                16),
-                                                      ),
-                                                      child: Stack(
-                                                        children: [
-                                                          Container(
-                                                            height: 30.h,
-                                                            width: 80.w,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          16),
-                                                            ),
-                                                            // borderRadius: BorderRadius.circular(16),
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    3.w),
-                                                            child: Column(
-                                                              children: [
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Row(
-                                                                      children: [
-                                                                        // Icon(Icons.edit,color:Colors.white ,),
-                                                                        Text(
-                                                                          "",
-                                                                          style: TextStyle(
-                                                                              decoration:
-                                                                                  TextDecoration.underline,
-                                                                              fontSize: 16.sp,
-                                                                              color: Colors.white,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: "Poppins"),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    IconButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        },
-                                                                        icon:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .close,
-                                                                          color: Colors
-                                                                              .black,
-                                                                        ))
-                                                                  ],
-                                                                ),
-                                                                Form(
-                                                                  child: Column(
-                                                                    children: [
-                                                                      SizedBox(
-                                                                        height:
-                                                                            2.h,
-                                                                      ),
-                                                                      Text(
-                                                                        "No Data Found !",
-                                                                        style: TextStyle(
-                                                                            fontSize: 12
-                                                                                .sp,
-                                                                            color: Colors
-                                                                                .black,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            fontFamily:
-                                                                                "Poppins"),
-                                                                      ),
-                                                                      Text(
-                                                                        "There is no stock avaliable !",
-                                                                        style: TextStyle(
-                                                                            fontSize: 12
-                                                                                .sp,
-                                                                            color: Colors
-                                                                                .black,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            fontFamily:
-                                                                                "Poppins"),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding: EdgeInsets
-                                                                            .all(3
-                                                                                .w),
-                                                                        child:
-                                                                            Container(
-                                                                          width:
-                                                                              40.w,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                Color(0xff333389),
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(30.0),
-                                                                          ),
-                                                                          height:
-                                                                              40.0,
-                                                                          child:
-                                                                              TextButton(
-                                                                            style:
-                                                                                ButtonStyle(
-                                                                              alignment:
-                                                                                  Alignment.center,
-                                                                              // backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
-                                                                              padding:
-                                                                                  MaterialStateProperty.all(
-                                                                                EdgeInsets.symmetric(vertical: 1.h),
-                                                                              ),
-                                                                              shape:
-                                                                                  MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                                                borderRadius: BorderRadius.circular(20.sp),
-                                                                              )),
-                                                                            ),
-                                                                            onPressed:
-                                                                                () {
-                                                                              Navigator.of(context).pop();
-                                                                            },
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisAlignment:
-                                                                                  MainAxisAlignment.center,
-                                                                              children: [
-                                                                                Text(
-                                                                                  "Oky",
-                                                                                  style: TextStyle(color: Colors.white, fontSize: 14.sp, fontFamily: "Poppins", fontWeight: FontWeight.bold),
-                                                                                ),
-                                                                                SizedBox(
-                                                                                  width: 5.0,
-                                                                                ),
-                                                                                // Icon(
-                                                                                //   Icon,
-                                                                                //   color: Colors.grey.shade700,
-                                                                                // )
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                            :
+
                                         setState(() {
                                           cart = 0;
-
                                         });
                                         blockapi();
                                       },
@@ -5176,6 +3946,27 @@ class _product_2State extends State<product_2> {
       ),
     );
   }
+  TextStyle textstyle3 = TextStyle(
+      fontSize: 2.h,
+      fontWeight:
+      FontWeight.bold);
+  InputDecoration inputDecoration() {
+    return  InputDecoration(
+        contentPadding:EdgeInsets.all(2.w),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color:Color( 0xfff333389)
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        enabledBorder:OutlineInputBorder(
+          borderSide: BorderSide(
+              color:Color( 0xfff333389)
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        )
+    );
+  }
 //color display
   colorapi() async {
     final Map<String, String> data = {};
@@ -5218,9 +4009,6 @@ class _product_2State extends State<product_2> {
             .then((Response response) async {
           selectimage =
               selectColorImageClass.fromJson(json.decode(response.body));
-
-
-
           if (response.statusCode == 200 && selectimage?.status == "success") {
 
 
@@ -5410,20 +4198,21 @@ class _product_2State extends State<product_2> {
             block = blockProductClass.fromJson(json.decode(response.body));
 
             if (response.statusCode == 200 && block?.status == "success") {
-
-              Navigator.push(
-                  this.context,
-                  MaterialPageRoute(
-                      builder: (context) => summary(
-                          pronamenevigatior:
-                          widget
-                              .pronamenevigatior
-                              .toString(),
-                          coloridnevigator:product2color?.data?[btn].colorName,
-                          gender: gen == 0
-                              ? "MEN"
-                              : "WOMEN",
-                      cart:cart)));
+              viewcount();
+              buildErrorDialog(this.context, "",  'Product blocked.');
+              // Navigator.push(
+              //     this.context,
+              //     MaterialPageRoute(
+              //         builder: (context) => summary(
+              //             pronamenevigatior:
+              //             widget
+              //                 .pronamenevigatior
+              //                 .toString(),
+              //             coloridnevigator:product2color?.data?[btn].colorName,
+              //             gender: gen == 0
+              //                 ? "MEN"
+              //                 : "WOMEN",
+              //         cart:cart)));
               // _s.text = "";
               // _ts.text = "";
               // _totalms.text = "";
@@ -5465,7 +4254,7 @@ class _product_2State extends State<product_2> {
             setState((){
               isLoading = false;
             });
-              buildErrorDialog1(this.context, "", 'Already block product.',0);
+              buildErrorDialog(this.context, "", 'Already block product.');
 
             }
           });
@@ -5548,11 +4337,13 @@ class _product_2State extends State<product_2> {
 
             if (response.statusCode == 200 && add?.status == "success") {
               isLoading = false;
-              Navigator.of(this.context).push(MaterialPageRoute(builder: (context)=>summary(pronamenevigatior: widget.pronamenevigatior,
-                  coloridnevigator:  product2color
-                      ?.data?[
-                  selectbtn]
-                      .colorName ,gender: gen == 0 ? "MEN" : "WOMEN")));
+              buildErrorDialog(this.context, "",  'Product Added to cart.');
+              viewcount();
+              // Navigator.of(this.context).push(MaterialPageRoute(builder: (context)=>summary(pronamenevigatior: widget.pronamenevigatior,
+              //     coloridnevigator:  product2color
+              //         ?.data?[
+              //     selectbtn]
+              //         .colorName ,gender: gen == 0 ? "MEN" : "WOMEN")));
               // _s.text = "";
               // _ts.text = "";
               // _totalms.text = "";
@@ -5590,7 +4381,7 @@ class _product_2State extends State<product_2> {
               // _total_5xl.text = "";
               if (kDebugMode) {}
             } else {
-              buildErrorDialog1(this.context, "",  'Already product added to cart',1);
+              buildErrorDialog(this.context, "",  'Already product added to cart');
               setState((){
                 isLoading = false;
               });
@@ -5633,21 +4424,24 @@ class _product_2State extends State<product_2> {
         });}
     });
   }
-  viewcart()async {
+  viewcount()async {
     final Map<String, String> data = {};
-    data['action'] = 'view_add_to_cart_product_single';
+    data['action'] = 'add_to_cart_count';
     data['d_id'] = (userData?.logindata?.dId).toString();
+
+
     checkInternet().then((internet) async {
       if (internet) {
-        Productprovider().viewcartapi(data).then((Response response) async {
-          viewaddtocart = ViewCart.fromJson(json.decode(response.body));
+        Productprovider().addtocartcount(data).then((Response response) async {
+          count = cartcount.fromJson(json.decode(response.body));
           if (response.statusCode == 200 &&
-              viewaddtocart?.status == "success") {
+              count?.status == "success") {
           }
           else {
           }
         });
       } else {
+
       }
     });
   }

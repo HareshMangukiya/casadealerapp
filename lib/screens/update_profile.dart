@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:casadealerapp/modal_class/cartcount.dart';
 
 import 'package:casadealerapp/modal_class/new_password_class.dart';
 import 'package:casadealerapp/modal_class/profileU.dart';
@@ -43,10 +44,6 @@ class _updateProfileState extends State<updateProfile> {
 
   List<String> tabs = ["Profile", "Change Password"];
   int sumindex = 0;
-
-
-
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _firstname = TextEditingController();
   TextEditingController _companyname = TextEditingController();
@@ -63,7 +60,7 @@ class _updateProfileState extends State<updateProfile> {
   final _formKey = GlobalKey<FormState>();
   bool _passwordVisible1 = false;
   bool _passwordVisible = false;
-
+  cartcount? count;
   String? gender = "male";
   bool? check3 = false;
   var select = "i1";
@@ -72,6 +69,7 @@ class _updateProfileState extends State<updateProfile> {
     // TODO: implement initState
     super.initState();
     updateProapi();
+    viewcount();
 
     _firstname.text = widget.prfileFullName.toString();
     _companyname.text = widget.prfileCompanyname.toString();
@@ -121,24 +119,26 @@ class _updateProfileState extends State<updateProfile> {
                                           icon: Icon(
                                             Icons.menu,
                                             color: Colors.white,
+                                            size: 4.h,
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 2.3.h,
-                                        ),
+                                        // SizedBox(
+                                        //   width: 2.3.h,
+                                        // ),
                                         Container(
                                           // padding: EdgeInsets.only(top: 1.5.h),
                                           // alignment: Alignment.center,
                                           child: Text(
-                                            "Profile Update",
-                                            style: TextStyle(
-                                                fontSize: 2.h, color: Colors.white),
+                                            "Order Details",
+                                            style:
+                                            TextStyle(fontSize: 2.h, color: Colors.white),
                                           ),
                                         ),
-
                                       ],
                                     ),
-
+                                    SizedBox(
+                                      width: 28.w,
+                                    ),
                                     Row(
                                       children: [
                                         IconButton(
@@ -154,12 +154,11 @@ class _updateProfileState extends State<updateProfile> {
                                             size: 3.5.h,
                                           ),
                                         ),
-
                                         badges.Badge(
                                             onTap: (){
 
                                             },
-                                            badgeContent: Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
+                                            badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
                                                 style:TextStyle(color:Colors.white)),
                                             child: Icon(Icons.shopping_bag_outlined,
                                                 color: Colors.white,
@@ -167,7 +166,6 @@ class _updateProfileState extends State<updateProfile> {
                                         )
                                       ],
                                     ),
-
                                   ],
                                 ),
                               ),
@@ -1357,5 +1355,25 @@ class _updateProfileState extends State<updateProfile> {
         });}
     });
   }
+  viewcount()async {
+    final Map<String, String> data = {};
+    data['action'] = 'add_to_cart_count';
+    data['d_id'] = (userData?.logindata?.dId).toString();
 
+
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().addtocartcount(data).then((Response response) async {
+          count = cartcount.fromJson(json.decode(response.body));
+          if (response.statusCode == 200 &&
+              count?.status == "success") {
+          }
+          else {
+          }
+        });
+      } else {
+
+      }
+    });
+  }
 }

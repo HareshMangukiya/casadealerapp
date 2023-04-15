@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:casadealerapp/main.dart';
 import 'package:casadealerapp/modal_class/ViewCart.dart';
+import 'package:casadealerapp/modal_class/cartcount.dart';
 import 'package:casadealerapp/modal_class/convertblockorder.dart';
 import 'package:casadealerapp/modal_class/order_detail_class.dart';
 import 'package:casadealerapp/modal_class/oredrdetail.dart';
@@ -13,6 +15,7 @@ import 'package:casadealerapp/screens/order_detail.dart';
 
 import 'package:casadealerapp/screens/order_id.dart';
 import 'package:casadealerapp/screens/product_2.dart';
+import 'package:casadealerapp/screens/summary.dart';
 import 'package:casadealerapp/screens/summary_b_edit.dart';
 import 'package:casadealerapp/screens/your_order.dart';
 import 'package:casadealerapp/widget/CONST.dart';
@@ -49,12 +52,13 @@ convertblockorder? convertorder;
 
 
   orderdetail? detail;
+  cartcount? count;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     orederdetailapiblock();
-    viewcart();
+    viewcount();
   }
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -72,197 +76,207 @@ convertblockorder? convertorder;
                 height: MediaQuery.of(context).size.height,
                 color: Color(0xfffFFFFFF),
               ),
-              Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1,
-                    height: 11.h,
-                    child: Column(
-
-                      children: [
-                        SizedBox(height: 4.h),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Container(
+                width: MediaQuery.of(context).size.width * 1,
+                height: 11.h,
+                child: Column(
+                  children: [
+                    SizedBox(height: 4.h),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      _scaffoldKey.currentState?.openDrawer();
-                                    },
-                                    icon: Icon(
-                                      Icons.menu,
-                                      color: Colors.white,
-                                      size: 4.h,
-                                    ),
-                                  ),
-                                  // SizedBox(
-                                  //   width: 2.3.h,
-                                  // ),
-                                  Container(
-                                    // padding: EdgeInsets.only(top: 1.5.h),
-                                    // alignment: Alignment.center,
-                                    child: Text(
-                                      "Order Details",
-                                      style:
-                                      TextStyle(fontSize: 2.h, color: Colors.white),
-                                    ),
-                                  ),
-                                ],
+                              GestureDetector(
+                                onTap: () {
+                                  _scaffoldKey.currentState?.openDrawer();
+                                },
+                                child: Icon(
+                                  Icons.menu,
+                                  color: Colors.white,
+                                  size: 4.h,
+                                ),
                               ),
                               SizedBox(
-                                width: 28.w,
+                                width: 2.3.h,
                               ),
-                              Row(
+                              Container(
+                                // padding: EdgeInsets.only(top: 1.5.h),
+                                // alignment: Alignment.center,
+                                child: Text(
+                                  "Blocked Orders",
+                                  style:
+                                  TextStyle(fontSize: 2.h, color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 28.w,
+                          ),
+                          Row(
+                            children: [
+                              Column(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
+                                  SizedBox(height: 11,),
+                                  GestureDetector(
+                                    onTap: () {
                                       setState(() {
                                         se_icon = !se_icon;
                                       });
                                       // _scaffoldKey.currentState?.openDrawer();
                                     },
-                                    icon: Icon(
+                                    child: Icon(
                                       Icons.search,
                                       color: Colors.white,
                                       size: 3.5.h,
                                     ),
                                   ),
-
-                                  badges.Badge(
-                                      onTap: (){
-
-                                      },
-                                      badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      child: Icon(Icons.shopping_bag_outlined,
-                                          color: Colors.white,
-                                          size: 3.h)
-                                  )
                                 ],
                               ),
+
+                              badges.Badge(
+                                  onTap: (){
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
+                                  },
+                                  badgeContent:  Text(( count?.cartCount== 0 ||count?.cartCount == null ) ? "0" :(count?.cartCount).toString(),
+                                      style:TextStyle(color:Colors.white)),
+                                  child: GestureDetector(
+                                    onTap : (){
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
+
+                                    },
+                                    child: Icon(Icons.shopping_bag_outlined,
+                                        color: Colors.white,
+                                        size: 3.5.h),
+                                  )
+                              )
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      color: Color(0xfff333389),
-                      // borderRadius: BorderRadius.all(
-                      //   Radius.circular(10),
-                      // ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  (!se_icon)
-                      ? Container()
-                      : Container(
-                    margin: EdgeInsets.symmetric(horizontal: 2.h),
-                    padding: EdgeInsets.symmetric(horizontal: 2.h),
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    height:
-                    MediaQuery.of(context).size.height * 0.075,
-                    child: TextFormField(
-                      // validator: (value) {
-                      //   if (value!.isEmpty) {
-                      //     return "";
-                      //   }
-                      //   return null;
-                      // },
-                      onChanged: (value) {
-
-                        if (value.isNotEmpty) {
-                          setState(() {
-                            check=true;
-                          });
-                          searchapi(value);
-                        } else if (value.isEmpty) {
-                          setState(() {
-                            check=false;
-                          });
-
-                        } else {
-                          // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
-                        }
-                      },
-                      controller: _search,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(3.h),
-                        hintText: 'Search',
-                        suffixIcon: Icon(
-                          Icons.search,
-                          color: Color(0xfff333389),
-                          size: 3.h,
-                        ),
+                        ],
                       ),
                     ),
-                    decoration: BoxDecoration(
-                      // shape: BoxShape.circle,
-                      color: Color(0xfff3faff),
-                      // image: DecorationImage(
-                      //     image: AssetImage("assets/product_1_img.png"),
-                      //     fit: BoxFit.fitWidth)
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                        // ),
-                      ),
-                    ),
-                  ),
-
-
-                  Padding(
-                    padding: EdgeInsets.all(2.h),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 6.5.h,
-                      width: 95.w,
-                      decoration: BoxDecoration(
-                        color: Color(0xffeaeaf3),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 2.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("ORDER ID : "+widget.id.toString(),
-                                style: TextStyle(
-                                    fontSize: 2.h,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff333389))),
-                            Container(
-                              alignment: Alignment.center,
-                              height: 3.4.h,
-                              width: 18.w,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Color(0xfffaede7)),
-                              child: Text(
-                                'Placed',
-                                style: TextStyle(
-                                    color: Color(0xfff98346),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Column(
+                  ],
+                ),
+                decoration: BoxDecoration(
+                  color: Color(0xfff333389),
+                  // borderRadius: BorderRadius.all(
+                  //   Radius.circular(10),
+                  // ),
+                ),
+              ),
+              Padding(
+                padding:  EdgeInsets.only(top:10.h),
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
+
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      (!se_icon)
+                          ? Container()
+                          : Container(
+                        margin: EdgeInsets.symmetric(horizontal: 2.h),
+                        padding: EdgeInsets.symmetric(horizontal: 2.h),
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width,
+                        height:
+                        MediaQuery.of(context).size.height * 0.075,
+                        child: TextFormField(
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return "";
+                          //   }
+                          //   return null;
+                          // },
+                          onChanged: (value) {
+
+                            if (value.isNotEmpty) {
+                              setState(() {
+                                check=true;
+                              });
+                              searchapi(value);
+                            } else if (value.isEmpty) {
+                              setState(() {
+                                check=false;
+                              });
+
+                            } else {
+                              // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>RestaurantsScreen()));
+                            }
+                          },
+                          controller: _search,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.all(3.h),
+                            hintText: 'Search',
+                            suffixIcon: Icon(
+                              Icons.search,
+                              color: Color(0xfff333389),
+                              size: 3.h,
+                            ),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          // shape: BoxShape.circle,
+                          color: Color(0xfff3faff),
+                          // image: DecorationImage(
+                          //     image: AssetImage("assets/product_1_img.png"),
+                          //     fit: BoxFit.fitWidth)
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                            // ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.h),
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 6.5.h,
+                          width: 95.w,
+                          decoration: BoxDecoration(
+                            color: Color(0xffeaeaf3),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 2.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("BLOCKED ORDER ID : "+widget.id.toString(),
+                                    style: TextStyle(
+                                        fontSize: 2.h,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff333389))),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 3.4.h,
+                                  width: 18.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Color(0xfffaede7)),
+                                  child: Text(
+                                    'Placed',
+                                    style: TextStyle(
+                                        color: Color(0xfff98346),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       Container(
                         height: 69.h,
                         child: ListView.builder(
+                          padding: EdgeInsets.all(0.0),
                           itemCount: detail?.productData?.length,
                           itemBuilder: ( context,  index) {
                             total1 = int.parse(
@@ -369,7 +383,7 @@ convertblockorder? convertorder;
                                                 style: TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold)),
-                                            Text(detail?.productData?[index].minPrice.toString() ?? "N/A",
+                                            Text( "₹"+ (detail?.productData?[index].minPrice).toString() != 0 ?(detail?.productData?[index].minPrice).toString() : "N/A",
                                                 style: TextStyle(
                                                     color: Color(0xff35358a),
                                                     fontWeight: FontWeight.bold)),
@@ -389,7 +403,7 @@ convertblockorder? convertorder;
                                               ),
                                             ),
                                             Text(
-                                              detail?.productData?[index].maxPrice.toString() ?? "N/A",
+                                                "₹"+ (detail?.productData?[index].maxPrice).toString() != 0  ? (detail?.productData?[index].maxPrice).toString() :"N/A",
                                               style: TextStyle(
                                                 color: Color(0xff35358a),
                                                 fontWeight: FontWeight.bold,
@@ -406,7 +420,6 @@ convertblockorder? convertorder;
                                                   builder: (context) =>
                                                       order_detail_c(
                                                           val:0,
-
                                                         oreder :widget.id.toString(),
                                                         id:index
                                                       )));
@@ -486,7 +499,7 @@ convertblockorder? convertorder;
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 2.h),
+
                                 SizedBox(height: 2.h),
                                 Padding(
                                   padding:
@@ -859,421 +872,7 @@ convertblockorder? convertorder;
                                   ),
                                 ),
                                 SizedBox(height: 2.h),
-                                // Padding(
-                                //     padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                //     child: DottedLine(
-                                //       direction: Axis.horizontal,
-                                //       lineLength: double.infinity,
-                                //       lineThickness: 1.0,
-                                //       dashLength: 5.0,
-                                //       dashColor: Color(0xff8d8d8d),
-                                //       // dashGradient: [Colors.red, Colors.blue],
-                                //       dashRadius: 0.0,
-                                //       dashGapLength: 4.0,
-                                //       dashGapColor: Colors.transparent,
-                                //       // dashGapGradient: [Colors.red, Colors.blue],
-                                //       dashGapRadius: 0.0,
-                                //     )),
-                                // SizedBox(height: 2.h),
-                                // Padding(
-                                //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                //   child: Container(
-                                //     child: Row(
-                                //       children: [
-                                //         Text('Gender',
-                                //             style: TextStyle(
-                                //               color: Color(0xff848484),
-                                //             )),
-                                //         SizedBox(
-                                //           width: 2.w,
-                                //         ),
-                                //         Text(
-                                //           'Women',
-                                //           style: TextStyle(
-                                //               fontSize: 2.3.h,
-                                //               color: Color(0xff35358a),
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ],
-                                //     ),
-                                //   ),
-                                // ),
-                                // SizedBox(height: 2.h),
-                                // Padding(
-                                //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                //   child: Row(
-                                //     mainAxisAlignment:
-                                //         MainAxisAlignment.spaceBetween,
-                                //     children: [
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           'XS',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           'S',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           'M',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           'L',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           'XL',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                                //
-                                // Padding(
-                                //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                //   child: Row(
-                                //     mainAxisAlignment:
-                                //         MainAxisAlignment.spaceBetween,
-                                //     children: [
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                                // SizedBox(
-                                //   height: 2.h,
-                                // ),
-                                // Padding(
-                                //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                //   child: Row(
-                                //     mainAxisAlignment:
-                                //         MainAxisAlignment.spaceBetween,
-                                //     children: [
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           '2XL',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           '3XL',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           '4XL',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         child: Text(
-                                //           '5XL',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         decoration: BoxDecoration(
-                                //           borderRadius: BorderRadius.only(
-                                //               topLeft: Radius.circular(10),
-                                //               topRight: Radius.circular(10)),
-                                //           color: Color(0Xffeaeaf3),
-                                //         ),
-                                //         child: Text(
-                                //           'TOTAL',
-                                //           style: TextStyle(
-                                //               fontSize: 1.5.h,
-                                //               color: Color(0XFF50509a),
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                                // Padding(
-                                //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                //   child: Row(
-                                //     crossAxisAlignment: CrossAxisAlignment.center,
-                                //     mainAxisAlignment:
-                                //         MainAxisAlignment.spaceBetween,
-                                //     children: [
-                                //       Container(
-                                //         height: 0.1.h,
-                                //         width: 15.w,
-                                //         // color: Colors.black,
-                                //       ),
-                                //       Container(
-                                //         height: 0.1.h,
-                                //         width: 15.w,
-                                //         // color: Colors.black,
-                                //       ),
-                                //       Container(
-                                //         height: 0.1.h,
-                                //         width: 15.w,
-                                //         // color: Colors.black,
-                                //       ),
-                                //       Container(
-                                //         height: 0.1.h,
-                                //         width: 15.w,
-                                //         // color: Colors.black,
-                                //       ),
-                                //       Container(
-                                //         height: 0.1.h,
-                                //         width: 15.w,
-                                //         color: Colors.black,
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                                // Padding(
-                                //   padding: EdgeInsets.symmetric(horizontal: 3.h),
-                                //   child: Row(
-                                //     mainAxisAlignment:
-                                //         MainAxisAlignment.spaceBetween,
-                                //     children: [
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.4.h,
-                                //         width: 16.w,
-                                //         decoration: BoxDecoration(
-                                //             borderRadius: BorderRadius.circular(5),
-                                //             // border: Border.all(color: Colors.black),
-                                //             border: Border.all()),
-                                //         child: TextField(
-                                //           textAlign: TextAlign.center,
-                                //           keyboardType: TextInputType.number,
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         alignment: Alignment.center,
-                                //         height: 3.5.h,
-                                //         width: 15.w,
-                                //         decoration: BoxDecoration(
-                                //           borderRadius: BorderRadius.only(
-                                //               bottomRight: Radius.circular(10),
-                                //               bottomLeft: Radius.circular(10)),
-                                //           color: Color(0Xffeaeaf3),
-                                //         ),
-                                //         child: Text(
-                                //           '8888',
-                                //           style: TextStyle(
-                                //               fontSize: 2.h,
-                                //               color: Color(0Xff50509a),
-                                //               fontWeight: FontWeight.bold),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                                // SizedBox(
-                                //   height: 2.h,
-                                // ),
+
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   height: 6.h,
@@ -1309,78 +908,78 @@ convertblockorder? convertorder;
                             );
                           },
                         ),
-                      ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top:93.h),
+                child: Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          buildErrorDialog2(context,"Alert!","Aer you sure? want to block.");
+                          // converttoorder();
 
-                      Padding(
-                        padding: EdgeInsets.all(2.h),
+                        },
                         child: Container(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                converttoorder();
+                          padding: EdgeInsets.all(0.1.h),
+                          alignment: Alignment.center,
+                          width: 40.w,
+                          height: 6.h,
+                          decoration: BoxDecoration(
+                              color: Color(0xfff333389),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Color(0xff333389))),
+                          child: Text(
+                            'Convert to Order',
+                            style: TextStyle(
+                                color: Colors.white,
 
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(0.1.h),
-                                  alignment: Alignment.center,
-                                  width: 40.w,
-                                  height: 6.h,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xfff333389),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: Color(0xff333389))),
-                                  child: Text(
-                                    'Convert to Order',
-                                    style: TextStyle(
-                                        color: Colors.white,
+                                // fontWeight: FontWeight.bold,
+                                fontSize: 2.h),
+                          ),
+                        ),
+                      ),
+                      // SizedBox(
+                      //   width: 0.6.h,
+                      // ),
+                      GestureDetector(
+                        onTap: () {
 
-                                        // fontWeight: FontWeight.bold,
-                                        fontSize: 2.h),
-                                  ),
-                                ),
-                              ),
-                              // SizedBox(
-                              //   width: 0.6.h,
-                              // ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {});
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => alert_screen(id: widget.id)));
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(0.1.h),
-                                  alignment: Alignment.center,
-                                  width: 40.w,
-                                  height: 6.h,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xfff333389),
-                                      // color:_selectedColor,
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => alert_screen(id: widget.id)));
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(0.1.h),
+                          alignment: Alignment.center,
+                          width: 40.w,
+                          height: 6.h,
+                          decoration: BoxDecoration(
+                              color: Color(0xfff333389),
+                              // color:_selectedColor,
 
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: Color(0xff333389))),
-                                  child: Text(
-                                    'Unblock Order',
-                                    style: TextStyle(
-                                        color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Color(0xff333389))),
+                          child: Text(
+                            'Unblock Order',
+                            style: TextStyle(
+                                color: Colors.white,
 
-                                        // fontWeight: FontWeight.bold,
-                                        fontSize: 2.h),
-                                  ),
-                                ),
-                              ),
-                            ],
+                                // fontWeight: FontWeight.bold,
+                                fontSize: 2.h),
                           ),
                         ),
                       ),
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
               Padding(
                   padding:EdgeInsets.only (left: 1.h, top: 20.h,
@@ -1627,23 +1226,309 @@ converttoorder(){
         });}
     });
   }
-  viewcart()async {
+  viewcount()async {
     final Map<String, String> data = {};
-    data['action'] = 'view_add_to_cart_product_single';
+    data['action'] = 'add_to_cart_count';
     data['d_id'] = (userData?.logindata?.dId).toString();
+
+
     checkInternet().then((internet) async {
       if (internet) {
-        Productprovider().viewcartapi(data).then((Response response) async {
-          viewaddtocart = ViewCart.fromJson(json.decode(response.body));
+        Productprovider().addtocartcount(data).then((Response response) async {
+          count = cartcount.fromJson(json.decode(response.body));
           if (response.statusCode == 200 &&
-              viewaddtocart?.status == "success") {
+              count?.status == "success") {
           }
           else {
           }
         });
       } else {
+
       }
     });
   }
+  buildErrorDialog2(BuildContext context,String title, String contant) {
 
+
+    if (Platform.isAndroid) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            backgroundColor: Colors.transparent,
+            child: Container(
+              width: 73.w,
+              height: (title == "")?21.h :22.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Row(
+                        children: [
+                          // Icon(Icons.edit,color:Colors.white ,),
+                          Text(
+                            "",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: 16.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Poppins"),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ))
+                    ],
+                  ),
+                  (title != "")?Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal:3.w),
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          style:  TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              decorationColor: Colors.black,
+                              fontFamily: 'poppins'),
+                        ),
+                      ),
+                      SizedBox(height: 1.h),
+                    ],
+                  ):Container(),
+
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal:3.w),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 1.h),
+                        Text(
+                          contant,
+                          textAlign: TextAlign.center,
+                          style:  TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              decorationColor: Colors.black,
+                              fontFamily: 'poppins'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Row(
+                      crossAxisAlignment:CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        GestureDetector(
+                          child: Container(
+                            height: 40.0,
+                            width: 20.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Color(0xff333389),
+                            ),
+                            child: Center(
+                              child: Text("Yes",
+                                  textAlign: TextAlign.center,
+                                  style:  TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      decorationColor: Colors.black,
+                                      fontFamily: 'poppins')),
+                            ),
+                          ),
+                          onTap: () {
+                            converttoorder();
+                            Navigator.pop(context);
+
+                          },
+                        ),
+                        SizedBox(width:3.w),
+                        GestureDetector(
+                          child: Container(
+                            height: 40.0,
+                            width: 20.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Color(0xff333389),
+                            ),
+                            child: Center(
+                              child: Text("No",
+                                  textAlign: TextAlign.center,
+                                  style:  TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      decorationColor: Colors.black,
+                                      fontFamily: 'poppins')),
+                            ),
+                          ),
+                          onTap: () {
+
+                            Navigator.pop(context);
+
+                          },
+                        ),
+                      ]),
+                  SizedBox(height: 2.h,),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
+    if (Platform.isIOS) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            backgroundColor: Colors.transparent,
+            child: Container(
+              width: 70.w,
+              height: (title == "")?20.5.h :19.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 3.h,),
+                  (title != "")?Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal:3.w),
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          style:  TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              decorationColor: Colors.black,
+                              fontFamily: 'poppins'),
+                        ),
+                      ),
+                      SizedBox(height: 1.h),
+                    ],
+                  ):Container(),
+
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal:3.w),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 1.h),
+                        Text(
+                          contant,
+                          textAlign: TextAlign.center,
+                          style:  TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              decorationColor: Colors.black,
+                              fontFamily: 'poppins'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Divider(
+                    height: 1.0,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 2.h),
+                  Row(children:[
+                    GestureDetector(
+                      child: Container(
+                        height: 40.0,
+                        width: 30.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: Color(0xff333389),
+                        ),
+                        child: Center(
+                          child: Text("Yes",
+                              textAlign: TextAlign.center,
+                              style:  TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  decorationColor: Colors.black,
+                                  fontFamily: 'poppins')),
+                        ),
+                      ),
+                      onTap: () {
+
+                        Navigator.pop(context);
+
+                      },
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        height: 40.0,
+                        width: 30.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: Color(0xff333389),
+                        ),
+                        child: Center(
+                          child: Text("No",
+                              textAlign: TextAlign.center,
+                              style:  TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  decorationColor: Colors.black,
+                                  fontFamily: 'poppins')),
+                        ),
+                      ),
+                      onTap: () {
+
+                        Navigator.pop(context);
+
+                      },
+                    ),
+                  ]
+                  ),
+                  SizedBox(height: 2.h,),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
+    // show the dialog
+  }
 }

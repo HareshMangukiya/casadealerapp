@@ -83,24 +83,8 @@ class _alert_screenState extends State<alert_screen> {
                                   fontSize: 2.5.h,
                                   fontWeight: FontWeight.w500),
                             ),
-                            SizedBox(
-                              height: 2.5.h,
-                            ),
-                            Text(
-                              "Your registration is pending approval",
-                              style: TextStyle(
-                                  color: Color(0xff6e6e6e),
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Text(
-                              "you will be notified soon.",
-                              style: TextStyle(
-                                  color: Color(0xff6e6e6e),
-                                  fontWeight: FontWeight.w600),
-                            ),
+
+
                           ],
                         ),
                       ),
