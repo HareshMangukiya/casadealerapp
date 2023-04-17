@@ -1137,7 +1137,7 @@ class _product_2State extends State<product_2> {
                                                 child: CarouselSlider(
 
                                                   options: CarouselOptions(
-                                                    height: 45.h,
+                                                    height: 30.h,
                                                     enlargeCenterPage:
                                                     false,
                                                     autoPlay: true,
