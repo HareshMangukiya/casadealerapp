@@ -3357,326 +3357,297 @@ class _product_2State extends State<product_2> {
                                               ),
                                             ),
                                           ),
-                                          // Padding(
-                                          //   padding: EdgeInsets.all(2.h),
-                                          //   child: Container(
-                                          //     decoration: BoxDecoration(
-                                          //         border: Border.all(
-                                          //             color: Colors.grey.shade200),
-                                          //         borderRadius:
-                                          //             BorderRadius.circular(12)
-                                          //         ),
-                                          //     child: ExpansionTile(
-                                          //       title: Text('Size Chart'),
-                                          //       children: <Widget>[
-                                          //         SingleChildScrollView(
-                                          //           scrollDirection: Axis.vertical,
-                                          //           child: Container(
-                                          //             // height: 100.h,
-                                          //             child: ListTile(
-                                          //                 title: Column(
-                                          //               children: [
-                                          //                 Text(
-                                          //                   "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                                          //                   style: TextStyle(
-                                          //                       fontSize: 2.h,
-                                          //                       color: Colors
-                                          //                           .grey.shade600),
-                                          //                 ),
-                                          //                 SizedBox(
-                                          //                   height: 2.h,
-                                          //                 ),
-                                          //                 Container(
-                                          //                     alignment: Alignment
-                                          //                         .centerLeft,
-                                          //                     child: Text(
-                                          //                         "Size Chart",
-                                          //                         style: TextStyle(
-                                          //                             fontWeight:
-                                          //                                 FontWeight
-                                          //                                     .bold))),
-                                          //                 SizedBox(height: 1.h),
-                                          //                 Divider(
-                                          //                     color: Colors
-                                          //                         .grey.shade400),
-                                          //                 Container(
-                                          //                   alignment:
-                                          //                       Alignment.center,
-                                          //                   child: Image.asset(
-                                          //                     'assets/product_2_img2.png',
-                                          //                     fit: BoxFit.cover,
-                                          //                     height: 33.5.h,
-                                          //                     width: MediaQuery.of(
-                                          //                             context)
-                                          //                         .size
-                                          //                         .width,
-                                          //                   ),
-                                          //                 ),
-                                          //                 SizedBox(height: 1.h),
-                                          //                 Container(
-                                          //                   alignment:
-                                          //                       Alignment.center,
-                                          //                   child: (displayallcolor
-                                          //                               ?.mumbaiStock
-                                          //                               ?.length !=
-                                          //                           0)
-                                          //                       ? (displayallcolor
-                                          //                                   ?.mumbaiStock?[
-                                          //                                       0]
-                                          //                                   .sizeChart ==
-                                          //                               "null")
-                                          //                           ? Image.asset(
-                                          //                               "assets/default_product_image.png",
-                                          //                               fit: BoxFit
-                                          //                                   .cover,
-                                          //                               height:
-                                          //                                   40.h,
-                                          //                               width: MediaQuery.of(
-                                          //                                       context)
-                                          //                                   .size
-                                          //                                   .width,
-                                          //                             )
-                                          //                           : Image.network(
-                                          //                               displayallcolor
-                                          //                                       ?.?[0]
-                                          //                                       .sizeChart ??
-                                          //                                   'N/A',
-                                          //
-                                          //                               fit: BoxFit
-                                          //                                   .cover,
-                                          //                               height:
-                                          //                                   40.h,
-                                          //                             )
-                                          //                       : (displayallcolor
-                                          //                                   ?.tripurStock
-                                          //                                   ?.length !=
-                                          //                               0)
-                                          //                           ? (displayallcolor
-                                          //                                       ?.tripurStock?[
-                                          //                                           0]
-                                          //                                       .sizeChart ==
-                                          //                                   "null")
-                                          //                               ? Image
-                                          //                                   .asset(
-                                          //                                   "assets/default_product_image.png",
-                                          //                                   fit: BoxFit
-                                          //                                       .cover,
-                                          //                                   height:
-                                          //                                       40.h,
-                                          //                                   width: MediaQuery.of(context)
-                                          //                                       .size
-                                          //                                       .width,
-                                          //                                 )
-                                          //
-                                          //                               // 'assets/size_chart.png',
-                                          //
-                                          //                               : Image
-                                          //                                   .network(
-                                          //                                   displayallcolor?.tripurStock?[0].sizeChart ??
-                                          //                                       'N/A',
-                                          //
-                                          //                                   fit: BoxFit
-                                          //                                       .cover,
-                                          //                                   height:
-                                          //                                       40.h,
-                                          //                                 )
-                                          //                           : Text(
-                                          //                               "No data found"),
-                                          //                 ),
-                                          //
-                                          //                 SizedBox(height: 4.h),
-                                          //                 Container(
-                                          //                     alignment:
-                                          //                         Alignment.center,
-                                          //                     child: Text(
-                                          //                         'Available Downloads')),
-                                          //                 SizedBox(height: 3.h),
-                                          //                 Container(
-                                          //                   alignment:
-                                          //                       Alignment.center,
-                                          //
-                                          //                   width: MediaQuery.of(
-                                          //                           context)
-                                          //                       .size
-                                          //                       .width,
-                                          //                   height: MediaQuery.of(
-                                          //                               context)
-                                          //                           .size
-                                          //                           .height *
-                                          //                       0.09,
-                                          //
-                                          //                   child: Row(
-                                          //                     crossAxisAlignment:
-                                          //                         CrossAxisAlignment
-                                          //                             .center,
-                                          //                     mainAxisAlignment:
-                                          //                         MainAxisAlignment
-                                          //                             .spaceBetween,
-                                          //                     children: [
-                                          //                       ElevatedButton(
-                                          //                         onPressed:
-                                          //                             () async {
-                                          //
-                                          //                               displayallcolor
-                                          //                                   ?.mumbaiStock?[
-                                          //                               0]
-                                          //                                   .sizeChart
-                                          //                                   .toString() != "null" ?
-                                          //                               catlog( displayallcolor
-                                          //                                   ?.mumbaiStock?[
-                                          //                               0]
-                                          //                                   .sizeChart
-                                          //                                   .toString()):displayallcolor?.tripurStock?[0].sizeChart.toString() !=null ?
-                                          //                               catlog( displayallcolor
-                                          //                                   ?.tripurStock?[
-                                          //                               0]
-                                          //                                   .sizeChart
-                                          //                                   .toString()):buildErrorDialog(context, "", "No Image available");
-                                          //
-                                          //                             },
-                                          //                 style:
-                                          //                             ElevatedButton
-                                          //                                 .styleFrom(
-                                          //                           minimumSize:
-                                          //                               Size(40.w,
-                                          //                                   6.h),
-                                          //                           backgroundColor:
-                                          //                               Color(
-                                          //                                   0xfff333389),
-                                          //                           shape:
-                                          //                               RoundedRectangleBorder(
-                                          //                             borderRadius:
-                                          //                                 BorderRadius
-                                          //                                     .circular(
-                                          //                                         8),
-                                          //                           ),
-                                          //                         ),
-                                          //                         child: Text(
-                                          //                           'Image',
-                                          //                           style: TextStyle(
-                                          //                               fontSize:
-                                          //                                   2.h),
-                                          //                         ),
-                                          //                       ),
-                                          //                       ElevatedButton(
-                                          //                         onPressed: () {
-                                          //                           displayallcolor
-                                          //                               ?.mumbaiStock?[
-                                          //                           0]
-                                          //                               .videoSpecification
-                                          //                               .toString() != "null" ? Navigator.push(
-                                          //                               context,
-                                          //                               MaterialPageRoute(
-                                          //                                   builder: (context) =>
-                                          //                                       VideoPlayerPage(
-                                          //                                         videoFilePath: (displayallcolor?.mumbaiStock?[0].videoSpecification).toString(),
-                                          //                                       ))):displayallcolor?.tripurStock?[0].videoSpecification.toString() !=null ?Navigator.push(
-                                          //                               context,
-                                          //                               MaterialPageRoute(
-                                          //                                   builder: (context) =>
-                                          //                                       VideoPlayerPage(
-                                          //                                         videoFilePath: (displayallcolor?.mumbaiStock?[0].videoSpecification).toString(),
-                                          //                                       ))):buildErrorDialog(context, "", "No video available");
-                                          //                         },
-                                          //                         style:
-                                          //                             ElevatedButton
-                                          //                                 .styleFrom(
-                                          //                           minimumSize:
-                                          //                               Size(40.w,
-                                          //                                   6.h),
-                                          //                           backgroundColor:
-                                          //                               Color(
-                                          //                                   0xfff333389),
-                                          //                           shape:
-                                          //                               RoundedRectangleBorder(
-                                          //                             borderRadius:
-                                          //                                 BorderRadius
-                                          //                                     .circular(
-                                          //                                         8),
-                                          //                           ),
-                                          //                         ),
-                                          //                         child: Text(
-                                          //                           'Video',
-                                          //                           style: TextStyle(
-                                          //                               fontSize:
-                                          //                                   2.h),
-                                          //                         ),
-                                          //                       ),
-                                          //                     ],
-                                          //                   ),
-                                          //                 ),
-                                          //                 Container(
-                                          //                   width: MediaQuery.of(
-                                          //                               context)
-                                          //                           .size
-                                          //                           .width *
-                                          //                       0.9,
-                                          //                   height: MediaQuery.of(
-                                          //                               context)
-                                          //                           .size
-                                          //                           .height *
-                                          //                       0.065,
-                                          //                   // color: Color(0xfff333389),
-                                          //                   // padding:
-                                          //                   //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
-                                          //                   child: ElevatedButton(
-                                          //                     onPressed: () async {
-                                          //                       displayallcolor
-                                          //                           ?.mumbaiStock?[
-                                          //                       0]
-                                          //                           .catalogue
-                                          //                           .toString() != "null" ?
-                                          //                           catlog( displayallcolor
-                                          //                               ?.mumbaiStock?[
-                                          //                           0]
-                                          //                               .catalogue
-                                          //                               .toString()):displayallcolor?.tripurStock?[0].catalogue.toString() !=null ?
-                                          //                       catlog( displayallcolor
-                                          //                           ?.tripurStock?[
-                                          //                       0]
-                                          //                           .catalogue
-                                          //                           .toString()):buildErrorDialog(context, "", "No Catalogue available");
-                                          //                     },
-                                          //                     style: ElevatedButton
-                                          //                         .styleFrom(
-                                          //                       backgroundColor:
-                                          //                           Color(
-                                          //                               0xfff333389),
-                                          //                       shape:
-                                          //                           RoundedRectangleBorder(
-                                          //                         borderRadius:
-                                          //                             BorderRadius
-                                          //                                 .circular(
-                                          //                                     8),
-                                          //                       ),
-                                          //                     ),
-                                          //                     child: Row(
-                                          //                       crossAxisAlignment:
-                                          //                           CrossAxisAlignment
-                                          //                               .center,
-                                          //                       mainAxisAlignment:
-                                          //                           MainAxisAlignment
-                                          //                               .center,
-                                          //                       children: [
-                                          //                         Text(
-                                          //                           'Download Catalogue',
-                                          //                           style: TextStyle(
-                                          //                               fontSize:
-                                          //                                   2.h),
-                                          //                         ),
-                                          //
-                                          //                       ],
-                                          //                     ),
-                                          //                   ),
-                                          //                 ),
-                                          //               ],
-                                          //             )),
-                                          //           ),
-                                          //         ),
-                                          //       ],
-                                          //     ),
-                                          //   ),
-                                          // ),
+                                          Padding(
+                                            padding: EdgeInsets.all(2.h),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey.shade200),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12)
+                                                  ),
+                                              child: ExpansionTile(
+                                                title: Text('Size Chart'),
+                                                children: <Widget>[
+                                                  SingleChildScrollView(
+                                                    scrollDirection: Axis.vertical,
+                                                    child: Container(
+                                                      // height: 100.h,
+                                                      child: ListTile(
+                                                          title: Column(
+                                                        children: [
+                                                          Text(
+                                                            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                                                            style: TextStyle(
+                                                                fontSize: 2.h,
+                                                                color: Colors
+                                                                    .grey.shade600),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 2.h,
+                                                          ),
+                                                          Container(
+                                                              alignment: Alignment
+                                                                  .centerLeft,
+                                                              child: Text(
+                                                                  "Size Chart",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold))),
+                                                          SizedBox(height: 1.h),
+                                                          Divider(
+                                                              color: Colors
+                                                                  .grey.shade400),
+                                                          // Container(
+                                                          //   alignment:
+                                                          //       Alignment.center,
+                                                          //   child: Image.asset(
+                                                          //     'assets/product_2_img2.png',
+                                                          //     fit: BoxFit.cover,
+                                                          //     height: 33.5.h,
+                                                          //     width: MediaQuery.of(
+                                                          //             context)
+                                                          //         .size
+                                                          //         .width,
+                                                          //   ),
+                                                          // ),
+                                                          // SizedBox(height: 1.h),
+                                                            SizedBox(height: 1.h),
+                                                          Container(
+                                                            height: 61.h,
+                                                            alignment:
+                                                                Alignment.center,
+                                                            child: (displayallcolor
+                                                                        ?.mumbaiStock
+                                                                        ?.length !=
+                                                                    0)
+                                                                ? (displayallcolor?.sizeChart?[0].sizeChart==
+                                                                        "null")
+                                                                    ? Image.asset(
+                                                                        "assets/default_product_image.png",
+                                                              fit: BoxFit.contain,
+                                                              height:
+                                                              60.h,
+                                                              width: MediaQuery.of(
+                                                                  context)
+                                                                  .size
+                                                                  .width,
+                                                                      )
+                                                                    : Image.network(
+                                                                        displayallcolor?.sizeChart?[0].sizeChart ??
+                                                                            'N/A',
+
+                                                                        fit: BoxFit.contain,
+                                                                        height:
+                                                                            60.h,
+                                                              width: MediaQuery.of(
+                                                                  context)
+                                                                  .size
+                                                                  .width,
+                                                                      )
+                                                                // : (displayallcolor
+                                                                //             ?.tripurStock
+                                                                //             ?.length !=
+                                                                //         0)
+                                                                //     ? (displayallcolor
+                                                                //                 ?.tripurStock?[
+                                                                //                     0]
+                                                                //                 .sizeChart ==
+                                                                //             "null")
+                                                                //         ? Image
+                                                                //             .asset(
+                                                                //             "assets/default_product_image.png",
+                                                                //             fit: BoxFit
+                                                                //                 .cover,
+                                                                //             height:
+                                                                //                 40.h,
+                                                                //             width: MediaQuery.of(context)
+                                                                //                 .size
+                                                                //                 .width,
+                                                                //           )
+                                                                //
+                                                                //         // 'assets/size_chart.png',
+                                                                //
+                                                                //         : Image
+                                                                //             .network(
+                                                                //             displayallcolor?.tripurStock?[0].sizeChart ??
+                                                                //                 'N/A',
+                                                                //
+                                                                //             fit: BoxFit
+                                                                //                 .cover,
+                                                                //             height:
+                                                                //                 40.h,
+                                                                //           )
+                                                                    : Text(
+                                                                        "No data found"),
+                                                          ),
+
+                                                          SizedBox(height: 4.h),
+                                                          Container(
+                                                              alignment:
+                                                                  Alignment.center,
+                                                              child: Text(
+                                                                  'Available Downloads')),
+                                                          SizedBox(height: 3.h),
+                                                          Container(
+                                                            alignment:
+                                                                Alignment.center,
+
+                                                            width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.09,
+
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                ElevatedButton(
+                                                                  onPressed:
+                                                                      () async {
+
+                                                                        displayallcolor
+                                                                            ?.sizeChart?[0].sizeChart
+                                                                            .toString() != "null" ?
+                                                                        catlog( displayallcolor?.sizeChart?[0].sizeChart.toString())
+                                                                            :buildErrorDialog(context, "", "No Image available");
+
+                                                                      },
+                                                          style:
+                                                                      ElevatedButton
+                                                                          .styleFrom(
+                                                                    minimumSize:
+                                                                        Size(40.w,
+                                                                            6.h),
+                                                                    backgroundColor:
+                                                                        Color(
+                                                                            0xfff333389),
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .circular(
+                                                                                  8),
+                                                                    ),
+                                                                  ),
+                                                                  child: Text(
+                                                                    'Image',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            2.h),
+                                                                  ),
+                                                                ),
+                                                                ElevatedButton(
+                                                                  onPressed: () {
+                                                                    displayallcolor
+                                                                        ?.sizeChart?[0].videoSpecification.toString() != "null" ?
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                VideoPlayerPage(
+                                                                                  videoFilePath: (displayallcolor?.sizeChart?[0].videoSpecification).toString(),
+                                                                                ))):buildErrorDialog(context, "", "No video available");
+                                                                  },
+                                                                  style:
+                                                                      ElevatedButton
+                                                                          .styleFrom(
+                                                                    minimumSize:
+                                                                        Size(40.w,
+                                                                            6.h),
+                                                                    backgroundColor:
+                                                                        Color(
+                                                                            0xfff333389),
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .circular(
+                                                                                  8),
+                                                                    ),
+                                                                  ),
+                                                                  child: Text(
+                                                                    'Video',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            2.h),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.9,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.065,
+                                                            // color: Color(0xfff333389),
+                                                            // padding:
+                                                            //     EdgeInsets.only(left: 35, right: 40, bottom: 10, top: 20),
+                                                            child: ElevatedButton(
+                                                              onPressed: () async {
+                                                                displayallcolor
+                                                                    ?.sizeChart?[0].catalogue.toString()!= "null" ?
+                                                                    catlog( displayallcolor
+                                                                        ?.sizeChart?[0].catalogue.toString()):
+                                                               buildErrorDialog(context, "", "No Catalogue available");
+                                                              },
+                                                              style: ElevatedButton
+                                                                  .styleFrom(
+                                                                backgroundColor:
+                                                                    Color(
+                                                                        0xfff333389),
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8),
+                                                                ),
+                                                              ),
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    'Download Catalogue',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            2.h),
+                                                                  ),
+
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ],
                                       ),)
 
