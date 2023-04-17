@@ -323,7 +323,7 @@ cartcount? count;
                                                 : (view?.data?[index].status == "2")
                                                 ? "Placed":(view?.data?[index].status == "3")
                                                 ? "Confirmed"
-                                                : "Cancle",
+                                                : "Cancel",
                                             // 'Placed',
                                             style: TextStyle(
                                                 color: (view?.data?[index].status ==

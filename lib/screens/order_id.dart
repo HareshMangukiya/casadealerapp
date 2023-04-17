@@ -257,7 +257,7 @@ cartcount? count;
                   ),
                 ),
                 Container(
-                  height: 69.h,
+                  height: 50.h,
                   child: ListView.builder(
                     itemCount: detail?.productData?.length,
                     itemBuilder: (context,  index) {
@@ -1062,7 +1062,7 @@ cartcount? count;
                             height: 6.h,
                             width: 40.w,
                             child: Text(
-                              'Cancle Request',
+                              'Cancel Request',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),

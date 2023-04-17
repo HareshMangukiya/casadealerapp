@@ -524,19 +524,28 @@ double? paymentv=0.0 ;
                                          mainAxisAlignment:
                                          MainAxisAlignment.spaceBetween,
                                          children: [
-                                           Text(
-                                               blockView?.dataProduct?[index].productName ?? "N/A",
+                                           SizedBox(
+                                             width: 40.w,
+                                             child: Text(
+                                                 blockView?.dataProduct?[index].productName ?? "N/A",
 
-                                               style: TextStyle(
+                                                 style: TextStyle(
+                                                     color: Color(0xff35358a),
+                                                     fontSize: 2.h,
+                                                     fontWeight: FontWeight.bold)),
+                                           ),
+                                           SizedBox(
+                                             width: 40.w,
+
+
+                                             child: Text( blockView?.dataProduct?[index].colorName ?? "N/A",
+                                                 maxLines: 2,
+                                                 style: TextStyle(
                                                    color: Color(0xff35358a),
                                                    fontSize: 2.h,
-                                                   fontWeight: FontWeight.bold)),
-                                           Text( blockView?.dataProduct?[index].colorName ?? "N/A",
-                                               style: TextStyle(
-                                                 color: Color(0xff35358a),
-                                                 fontSize: 2.h,
-                                                 fontWeight: FontWeight.bold,
-                                               )),
+                                                   fontWeight: FontWeight.bold,
+                                                 )),
+                                           ),
                                          ],
                                        ),
                                      ),
@@ -1772,7 +1781,9 @@ double? paymentv=0.0 ;
                                                                pricemax: double.parse(max.toString()),
                                                                pricemin:double.parse(min.toString())
 
-                                                           )));
+                                                           )
+                                                   )
+                                               );
 
                                              },
                                              child: Container(
@@ -1831,12 +1842,15 @@ double? paymentv=0.0 ;
                                      viewaddtocart?.dataProduct?[index].mumbaiStock?.length ==0  ?Container()
                                          :Column(
                                        children: [
+                                         SizedBox(height: 2.h),
                                          Padding(
                                            padding:
                                            EdgeInsets.symmetric(horizontal: 3.h),
                                            child: Container(
                                              child: Row(
                                                children: [
+
+
                                                  Text('State',
                                                      style: TextStyle(
                                                        color: Color(0xff848484),

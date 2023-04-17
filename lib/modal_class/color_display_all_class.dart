@@ -3,9 +3,14 @@ class colorDisplayClass {
   List<MumbaiStock>? mumbaiStock;
   List<TripurStock>? tripurStock;
   List<PriceArray>? priceArray;
+  List<SizeChart>? sizeChart;
 
   colorDisplayClass(
-      {this.status, this.mumbaiStock, this.tripurStock, this.priceArray});
+      {this.status,
+        this.mumbaiStock,
+        this.tripurStock,
+        this.priceArray,
+        this.sizeChart});
 
   colorDisplayClass.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -27,6 +32,12 @@ class colorDisplayClass {
         priceArray!.add(new PriceArray.fromJson(v));
       });
     }
+    if (json['size_chart'] != null) {
+      sizeChart = <SizeChart>[];
+      json['size_chart'].forEach((v) {
+        sizeChart!.add(new SizeChart.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +51,9 @@ class colorDisplayClass {
     }
     if (this.priceArray != null) {
       data['price_array'] = this.priceArray!.map((v) => v.toJson()).toList();
+    }
+    if (this.sizeChart != null) {
+      data['size_chart'] = this.sizeChart!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -57,9 +71,6 @@ class MumbaiStock {
   String? s5xl;
   String? mApId;
   String? mApdId;
-  String? sizeChart;
-  String? videoSpecification;
-  String? catalogue;
   List<String>? menImageArray;
 
   MumbaiStock(
@@ -74,9 +85,6 @@ class MumbaiStock {
         this.s5xl,
         this.mApId,
         this.mApdId,
-        this.sizeChart,
-        this.videoSpecification,
-        this.catalogue,
         this.menImageArray});
 
   MumbaiStock.fromJson(Map<String, dynamic> json) {
@@ -91,10 +99,7 @@ class MumbaiStock {
     s5xl = json['5xl'];
     mApId = json['m_ap_id'];
     mApdId = json['m_apd_id'];
-    sizeChart = json['size_chart'];
-    videoSpecification = json['video_specification'];
-    catalogue = json['catalogue'];
-    menImageArray = json['Men_image_array']!=null ?  json['Men_image_array'].cast<String>() : [];
+    menImageArray = json['Men_image_array'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -110,9 +115,6 @@ class MumbaiStock {
     data['5xl'] = this.s5xl;
     data['m_ap_id'] = this.mApId;
     data['m_apd_id'] = this.mApdId;
-    data['size_chart'] = this.sizeChart;
-    data['video_specification'] = this.videoSpecification;
-    data['catalogue'] = this.catalogue;
     data['Men_image_array'] = this.menImageArray;
     return data;
   }
@@ -130,9 +132,6 @@ class TripurStock {
   String? s5xl;
   String? tApId;
   String? tApdId;
-  String? sizeChart;
-  String? videoSpecification;
-  String? catalogue;
   List<String>? menImageArray;
 
   TripurStock(
@@ -147,9 +146,6 @@ class TripurStock {
         this.s5xl,
         this.tApId,
         this.tApdId,
-        this.sizeChart,
-        this.videoSpecification,
-        this.catalogue,
         this.menImageArray});
 
   TripurStock.fromJson(Map<String, dynamic> json) {
@@ -164,11 +160,9 @@ class TripurStock {
     s5xl = json['5xl'];
     tApId = json['t_ap_id'];
     tApdId = json['t_apd_id'];
-    sizeChart = json['size_chart'];
-    videoSpecification = json['video_specification'];
-    catalogue = json['catalogue'];
-    menImageArray =json['Men_image_array']!=null ?  json['Men_image_array'].cast<String>() : [];
+    menImageArray = json['Men_image_array'].cast<String>();
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['xs'] = this.xs;
@@ -182,9 +176,6 @@ class TripurStock {
     data['5xl'] = this.s5xl;
     data['t_ap_id'] = this.tApId;
     data['t_apd_id'] = this.tApdId;
-    data['size_chart'] = this.sizeChart;
-    data['video_specification'] = this.videoSpecification;
-    data['catalogue'] = this.catalogue;
     data['Men_image_array'] = this.menImageArray;
     return data;
   }
@@ -205,6 +196,28 @@ class PriceArray {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['min_price'] = this.minPrice;
     data['max_price'] = this.maxPrice;
+    return data;
+  }
+}
+
+class SizeChart {
+  String? sizeChart;
+  String? videoSpecification;
+  String? catalogue;
+
+  SizeChart({this.sizeChart, this.videoSpecification, this.catalogue});
+
+  SizeChart.fromJson(Map<String, dynamic> json) {
+    sizeChart = json['size_chart'];
+    videoSpecification = json['video_specification'];
+    catalogue = json['catalogue'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['size_chart'] = this.sizeChart;
+    data['video_specification'] = this.videoSpecification;
+    data['catalogue'] = this.catalogue;
     return data;
   }
 }

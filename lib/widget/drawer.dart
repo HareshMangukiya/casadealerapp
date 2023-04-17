@@ -375,7 +375,7 @@ class _drawerState extends State<drawer> {
                         ),
                         Divider(color: Colors.grey.shade100,),
                         SizedBox(
-                          height: 40.h,
+                          height: 30.h,
                         ),
                         Container(
                           color: index[5]

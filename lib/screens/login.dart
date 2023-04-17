@@ -305,10 +305,10 @@ class _loginState extends State<login> {
                 _password.text = "";
               }
               else{
-                buildErrorDialog(context, "", "Your registration is pending approval.you will be notify soon");
+                buildErrorDialog(context, "", ( userData?.msgApproval).toString());
               }
             } else {
-              buildErrorDialog(context, "", "Your login is not correct !");
+              buildErrorDialog(context, "", "Your login is not correct !" );
             }
           });
         } else {}

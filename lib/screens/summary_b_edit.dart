@@ -3234,70 +3234,72 @@ class _summary_b_editState extends State<summary_b_edit> {
               _t4xl.text = "0";
               _t5xl.text = "0";
             }
-         int    total1vm = int.parse(
-                viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .xsBlock ?? "0") +
-                int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .sBlock ?? "0") +
-                int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .mBlock ?? "0") +
-                int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .lBlock ?? "0") +
-                int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .xlBlock ?? "0") +
-                int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .xxlBlock ?? "0") +
-                int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .s3xlBlock ?? "0");
-           int total2vm = int.parse(
-                viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .s4xlBlock ?? "0") +
-                int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
-                    .s5xlBlock ?? "0");
-            totalmm = double.parse(total1vm.toString()) * ((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?.length == 0) ? (double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].minPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].minPrice).toString())) :  (double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].minPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].minPrice).toString()))) +
-                double.parse(total2vm.toString()) * ((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?.length == 0) ? (double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].maxPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].maxPrice).toString())) :  (double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].maxPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].maxPrice).toString())));
-
-          int  total1vt = int.parse(
-                viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                    .xsBlock ?? "0") +
-                int.parse(
-                    viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                        .sBlock ?? "0") +
-                int.parse(
-                    viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                        .mBlock ?? "0") +
-                int.parse(
-                    viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                        .lBlock ?? "0") +
-                int.parse(
-                    viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                        .xlBlock ?? "0") +
-                int.parse(
-                    viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                        .xxlBlock ?? "0") +
-                int.parse(
-                    viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                        .s3xlBlock ?? "0");
-         int  total2vt = int.parse(
-                viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                    .s4xlBlock ?? "0") +
-                int.parse(
-                    viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
-                        .s5xlBlock ?? "0");
-            totaltt = double.parse(total1vt.toString()) * ((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?.length == 0) ? (double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].minPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].minPrice).toString())) :  (double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].minPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].minPrice).toString()))) +
-                double.parse(total2vt.toString()) * ((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?.length == 0) ? (double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].maxPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].maxPrice).toString())) :  (double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].maxPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].maxPrice).toString())));
-           _totalmm.text =totalmm.toString();
-           _totaltt.text= totaltt.toString();
+         // int    total1vm = int.parse(
+         //        viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .xsBlock ?? "0") +
+         //        int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .sBlock ?? "0") +
+         //        int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .mBlock ?? "0") +
+         //        int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .lBlock ?? "0") +
+         //        int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .xlBlock ?? "0") +
+         //        int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .xxlBlock ?? "0") +
+         //        int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .s3xlBlock ?? "0");
+         //   int total2vm = int.parse(
+         //        viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .s4xlBlock ?? "0") +
+         //        int.parse(viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0]
+         //            .s5xlBlock ?? "0");
+         //    totalmm = double.parse(total1vm.toString()) * ((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?.length == 0) ? (double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].minPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].minPrice).toString())) :  (double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].minPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].minPrice).toString()))) +
+         //        double.parse(total2vm.toString()) * ((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?.length == 0) ? (double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].maxPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].maxPrice).toString())) :  (double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].maxPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].maxPrice).toString())));
+         //
+         //  int  total1vt = int.parse(
+         //        viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //            .xsBlock ?? "0") +
+         //        int.parse(
+         //            viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //                .sBlock ?? "0") +
+         //        int.parse(
+         //            viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //                .mBlock ?? "0") +
+         //        int.parse(
+         //            viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //                .lBlock ?? "0") +
+         //        int.parse(
+         //            viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //                .xlBlock ?? "0") +
+         //        int.parse(
+         //            viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //                .xxlBlock ?? "0") +
+         //        int.parse(
+         //            viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //                .s3xlBlock ?? "0");
+         // int  total2vt = int.parse(
+         //        viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //            .s4xlBlock ?? "0") +
+         //        int.parse(
+         //            viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0]
+         //                .s5xlBlock ?? "0");
+         //    totaltt = double.parse(total1vt.toString()) * ((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?.length == 0) ? (double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].minPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].minPrice).toString())) :  (double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].minPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].minPrice).toString()))) +
+         //        double.parse(total2vt.toString()) * ((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?.length == 0) ? (double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].maxPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].tirupurStock?[0].price?[0].maxPrice).toString())) :  (double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].maxPrice).toString()) <=0 ?0 :double.parse((viewaddtocart?.dataProduct?[widget.index!].mumbaiStock?[0].price?[0].maxPrice).toString())));
+         //   _totalmm.text =totalmm.toString();
+         //   _totaltt.text= totaltt.toString();
+         //    setState(() {
+         //      totalmm;
+         //      totaltt;
+         //      grandt = totalmm!+totaltt!;
+         //      gstt = totaltt!*(18/100)+totalmm! *(18/100);
+         //      grandtotalt = grandt! + gstt!;
+         //      isLoading=false;
+         //    });
             setState(() {
-              totalmm;
-              totaltt;
-              grandt = totalmm!+totaltt!;
-              gstt = totaltt!*(18/100)+totalmm! *(18/100);
-              grandtotalt = grandt! + gstt!;
               isLoading=false;
             });
-            if (kDebugMode) {
-            }
+
           } else {
             setState(() {
               isLoading=false;
