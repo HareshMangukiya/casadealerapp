@@ -322,12 +322,13 @@ cartcount? count;
                                                   "3")
                                                   ? Color(0xffe1f5e2)
                                                   : Color(0xfffae7e7)),
+
                                           child: Text(
                                             (view?.data?[index].status == "1")
                                                 ? "Blocked"
                                                 : (view?.data?[index].status == "2")
                                                 ? "Placed":(view?.data?[index].status == "3")
-                                                ? "Confirmed"
+                                                ? "Confirmed":(view?.data?[index].status == "5")?"unblock order"
                                                 : "Cancel",
                                             // 'Placed',
                                             style: TextStyle(

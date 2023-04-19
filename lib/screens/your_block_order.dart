@@ -133,7 +133,7 @@ bool isLoading=true;
                                     size: 3.5.h,
                                   ),
                                 ),
-                              ],
+                               ],
                             ),
 
                             badges.Badge(
