@@ -8,6 +8,8 @@ import 'package:open_file/open_file.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../modal_class/convertblockorder.dart';
+convertblockorder? edit;
 Future<bool> checkInternet() async {
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.mobile) {
