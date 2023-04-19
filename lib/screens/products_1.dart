@@ -6,6 +6,7 @@ import 'package:casadealerapp/modal_class/ViewCart.dart';
 import 'package:casadealerapp/modal_class/cartcount.dart';
 import 'package:casadealerapp/modal_class/category_wise_display.dart';
 import 'package:casadealerapp/modal_class/search_class.dart';
+import 'package:casadealerapp/modal_class/summarEditBlock.dart';
 import 'package:casadealerapp/screens/cart_order.dart';
 
 import 'package:casadealerapp/provider/login_authprovider.dart';
@@ -21,6 +22,7 @@ import 'package:casadealerapp/widget/loader.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:badges/badges.dart' as badges;
@@ -45,6 +47,7 @@ class _products_1State extends State<products_1> {
   bool se_icon = false;
   bool isloading = true;
   cartcount? count;
+  int? id;
 
   @override
   void initState() {
@@ -81,31 +84,37 @@ class _products_1State extends State<products_1> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Row(
+                          Column(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _scaffoldKey.currentState?.openDrawer();
-                                },
-                                child: Icon(
-                                  Icons.menu,
-                                  color: Colors.white,
-                                  size: 4.h,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 2.3.h,
-                              ),
-                              Container(
-                                // padding: EdgeInsets.only(top: 1.5.h),
-                                // alignment: Alignment.center,
-                                child: Text(
-                                  "Products",
-                                  style:
-                                  TextStyle(fontSize: 2.h, color: Colors.white),
-                                ),
+                              SizedBox(height: 11.0,),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      _scaffoldKey.currentState?.openDrawer();
+                                    },
+                                    child: Icon(
+                                      Icons.menu,
+                                      color: Colors.white,
+                                      size: 4.h,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 2.3.h,
+                                  ),
+                                  Container(
+                                    // padding: EdgeInsets.only(top: 1.5.h),
+                                    // alignment: Alignment.center,
+                                    child: Text(
+                                      "Products",
+                                      style:
+                                      TextStyle(fontSize: 2.h, color: Colors.white),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -319,6 +328,10 @@ class _products_1State extends State<products_1> {
                               itemBuilder: (BuildContext context, int index) {
                                 return GestureDetector(
                                   onTap: () {
+                                    setState(() {
+                                      id= index;
+                                    });
+                                    addtocartcount();
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -428,7 +441,18 @@ class _products_1State extends State<products_1> {
                                                       color: Color(0xff7d7d7d),
                                                       size: 1.8.h,
                                                     ),
-                                                    onPressed: () {},
+                                                    onPressed: ()async{
+                                                       String file = (allcatogaryproperty?.diffProduct?[index].prodImgDefault).toString();
+
+                                                       if(file == "null"){
+                                                         await Share.share(
+                                                            " https://distributor-app.fableadtechnolabs.com/admin/src/img/Category/Screenshot_16.png");
+                                                       }
+                                                       else {
+                                                         await Share.share(
+                                                             file);
+                                                       }
+                                                    },
                                                   ),
                                                 ),
                                               ),
@@ -789,4 +813,33 @@ class _products_1State extends State<products_1> {
       }
     });
   }
+  addtocartcount() async {
+    final Map<String, String> data = {};
+    data['action'] = 'product_view_count';
+    data['d_id'] = (userData?.logindata?.dId).toString();
+    data['ap_id']= (allcatogaryproperty?.diffProduct?[id!].id).toString();
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().productviewcount(data).then((Response response) async {
+    summryEditBlockProduct summary = summryEditBlockProduct.fromJson(json.decode(response.body));
+
+          if (response.statusCode == 200 &&
+    summary?.status == "success") {
+            setState(() {
+              isloading = false;
+
+            });
+            if (kDebugMode) { }
+          } else {
+            setState(() {
+              isloading = false;
+            });}
+        });
+      } else {
+        setState(() {
+          isloading = false;
+        });}
+    });
+  }
+
 }

@@ -8,6 +8,7 @@ import 'package:casadealerapp/modal_class/profileV_class.dart';
 import 'package:casadealerapp/modal_class/search_class.dart';
 import 'package:casadealerapp/provider/productprovider.dart';
 import 'package:casadealerapp/screens/product_2.dart';
+import 'package:casadealerapp/screens/summary.dart';
 
 import 'package:casadealerapp/screens/update_profile.dart';
 import 'package:casadealerapp/widget/CONST.dart';
@@ -70,31 +71,36 @@ class _profileViewState extends State<profileView> {
                                    Padding(
                                      padding: EdgeInsets.only(bottom: 0.h, left: 2.h),
                                      child: Row(
-                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                        children: [
-                                         Row(
+                                         Column(
                                            children: [
-                                             IconButton(
-                                               onPressed: () {
-                                                 _scaffoldKey.currentState?.openDrawer();
-                                               },
-                                               icon: Icon(
-                                                 Icons.menu,
-                                                 color: Colors.white,
-                                                 size: 4.h,
-                                               ),
-                                             ),
-                                             // SizedBox(
-                                             //   width: 2.3.h,
-                                             // ),
-                                             Container(
-                                               // padding: EdgeInsets.only(top: 1.5.h),
-                                               // alignment: Alignment.center,
-                                               child: Text(
-                                                 "Order Details",
-                                                 style:
-                                                 TextStyle(fontSize: 2.h, color: Colors.white),
-                                               ),
+                                             SizedBox(height:11),
+                                             Row(
+                                               children: [
+                                                 GestureDetector(
+                                                   onTap: () {
+                                                     _scaffoldKey.currentState?.openDrawer();
+                                                   },
+                                                   child: Icon(
+                                                     Icons.menu,
+                                                     color: Colors.white,
+                                                     size: 4.h,
+                                                   ),
+                                                 ),
+                                                 SizedBox(
+                                                   width: 2.3.h,
+                                                 ),
+                                                 Container(
+                                                   // padding: EdgeInsets.only(top: 1.5.h),
+                                                   // alignment: Alignment.center,
+                                                   child: Text(
+                                                     " Profile",
+                                                     style:
+                                                     TextStyle(fontSize: 2.h, color: Colors.white),
+                                                   ),
+                                                 ),
+                                               ],
                                              ),
                                            ],
                                          ),
@@ -103,28 +109,40 @@ class _profileViewState extends State<profileView> {
                                          ),
                                          Row(
                                            children: [
-                                             IconButton(
-                                               onPressed: () {
-                                                 setState(() {
-                                                   se_icon = !se_icon;
-                                                 });
-                                                 // _scaffoldKey.currentState?.openDrawer();
-                                               },
-                                               icon: Icon(
-                                                 Icons.search,
-                                                 color: Colors.white,
-                                                 size: 3.5.h,
-                                               ),
+                                             Column(
+                                               children: [
+                                                 SizedBox(height: 11,),
+                                                 GestureDetector(
+                                                   onTap: () {
+                                                     setState(() {
+                                                       se_icon = !se_icon;
+                                                     });
+                                                     // _scaffoldKey.currentState?.openDrawer();
+                                                   },
+                                                   child: Icon(
+                                                     Icons.search,
+                                                     color: Colors.white,
+                                                     size: 3.5.h,
+                                                   ),
+                                                 ),
+                                               ],
                                              ),
+
                                              badges.Badge(
                                                  onTap: (){
-
+                                                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
                                                  },
-                                                 badgeContent:  Text((viewaddtocart?.addToCartNumber == 0 ||viewaddtocart?.addToCartNumber == null ) ? "0" :((viewaddtocart?.addToCartNumber).toString()),
+                                                 badgeContent:  Text(( count?.cartCount== 0 ||count?.cartCount == null ) ? "0" :(count?.cartCount).toString(),
                                                      style:TextStyle(color:Colors.white)),
-                                                 child: Icon(Icons.shopping_bag_outlined,
-                                                     color: Colors.white,
-                                                     size: 3.h)
+                                                 child: GestureDetector(
+                                                   onTap : (){
+                                                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary()));
+
+                                                   },
+                                                   child: Icon(Icons.shopping_bag_outlined,
+                                                       color: Colors.white,
+                                                       size: 3.5.h),
+                                                 )
                                              )
                                            ],
                                          ),

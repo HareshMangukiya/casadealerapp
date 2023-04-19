@@ -34,6 +34,7 @@ import 'package:http/http.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -108,7 +109,7 @@ class _product_2State extends State<product_2> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   color? colorData;
   bool _customTileExpanded = false;
-
+  int _currentIndex =0;
   int selectindex = 0;
   int btn = 0;
   int gen = 0;
@@ -182,29 +183,34 @@ class _product_2State extends State<product_2> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Row(
+                                Column(
                                   children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        _scaffoldKey.currentState?.openDrawer();
-                                      },
-                                      child: Icon(
-                                        Icons.menu,
-                                        color: Colors.white,
-                                        size: 4.h,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 2.3.h,
-                                    ),
-                                    Container(
-                                      // padding: EdgeInsets.only(top: 1.5.h),
-                                      // alignment: Alignment.center,
-                                      child: Text(
-                                        "Products",
-                                        style:
-                                        TextStyle(fontSize: 2.h, color: Colors.white),
-                                      ),
+                                    SizedBox(height:11),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            _scaffoldKey.currentState?.openDrawer();
+                                          },
+                                          child: Icon(
+                                            Icons.menu,
+                                            color: Colors.white,
+                                            size: 4.h,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 2.3.h,
+                                        ),
+                                        Container(
+                                          // padding: EdgeInsets.only(top: 1.5.h),
+                                          // alignment: Alignment.center,
+                                          child: Text(
+                                            "Products",
+                                            style:
+                                            TextStyle(fontSize: 2.h, color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -519,7 +525,26 @@ class _product_2State extends State<product_2> {
                                                                                               color: Colors.grey,
                                                                                               size: 2.h,
                                                                                             ),
-                                                                                            onPressed: () {},
+                                                                                            onPressed: ()async {
+                                                                                              String file = (displayallcolor
+                                                                                                  ?.mumbaiStock?[
+                                                                                              0]
+                                                                                                  .menImageArray?[_currentIndex])
+                                                                                                  .toString();
+                                                                                             
+
+                                                                                              if (file ==
+                                                                                                  "null") {
+                                                                                                await Share
+                                                                                                    .share(
+                                                                                                    " https://distributor-app.fableadtechnolabs.com/admin/src/img/Category/Screenshot_16.png");
+                                                                                              }
+                                                                                              else {
+                                                                                                await Share
+                                                                                                    .share(
+                                                                                                    file);
+                                                                                              }
+                                                                                            }
                                                                                           ),
                                                                                         ),
                                                                                       ],
@@ -539,7 +564,7 @@ class _product_2State extends State<product_2> {
                                                               height: 45.h,
                                                               enlargeCenterPage:
                                                                   false,
-                                                              autoPlay: true,
+                                                              autoPlay: false,
                                                               aspectRatio: 16 / 9,
                                                               autoPlayCurve: Curves
                                                                   .fastOutSlowIn,
@@ -547,9 +572,15 @@ class _product_2State extends State<product_2> {
                                                                   true,
                                                               autoPlayAnimationDuration:
                                                                   Duration(
-                                                                      milliseconds:
-                                                                          800),
+                                                                  seconds:
+                                                                          10),
                                                               viewportFraction: 1,
+                                                              onPageChanged: (index, reason) {
+
+                                                                setState((){
+                                                                  _currentIndex = index;
+                                                                });
+                                                              },
                                                             ),
                                                           ),
                                                       )
@@ -561,13 +592,7 @@ class _product_2State extends State<product_2> {
                                                                   ?.length !=
                                                               0)
                                                           ? GestureDetector(
-                                                // onTap:(){
-                                                //   print("1234");
-                                                //   print(displayallcolor
-                                                //       ?.mumbaiStock?[
-                                                //   0]
-                                                //       .menImageArray);
-                                                // },
+
                                                             child: CarouselSlider(
                                                                 items:
                                                                 (displayallcolor
@@ -603,7 +628,6 @@ class _product_2State extends State<product_2> {
                                                                                   BorderRadius.circular(28),
                                                                               child:  CachedNetworkImage(
                                                                                 imageUrl:e,
-
                                                                                 imageBuilder: (context, imageProvider) =>
                                                                                     Container(
                                                                                       decoration:
@@ -619,7 +643,6 @@ class _product_2State extends State<product_2> {
                                                                                 errorWidget: (context, url, error) =>
                                                                                     Image.asset(
                                                                                       "assets/product_1_img2.png",
-
                                                                                       fit:
                                                                                       BoxFit.cover,
                                                                                     ),
@@ -708,7 +731,25 @@ class _product_2State extends State<product_2> {
                                                                                                   color: Colors.grey,
                                                                                                   size: 2.h,
                                                                                                 ),
-                                                                                                onPressed: () {},
+                                                                                                onPressed: () async{
+                                                                                                  String file = (displayallcolor
+                                                                                                      ?.tripurStock?[
+                                                                                                  0]
+                                                                                                      .menImageArray?[_currentIndex])
+                                                                                                      .toString();
+
+                                                                                                  if (file ==
+                                                                                                      "null") {
+                                                                                                    await Share
+                                                                                                        .share(
+                                                                                                        " https://distributor-app.fableadtechnolabs.com/admin/src/img/Category/Screenshot_16.png");
+                                                                                                  }
+                                                                                                  else {
+                                                                                                    await Share
+                                                                                                        .share(
+                                                                                                        file);
+                                                                                                  }
+                                                                                                },
                                                                                               ),
                                                                                             ),
                                                                                           ],
@@ -728,7 +769,7 @@ class _product_2State extends State<product_2> {
                                                                   height: 45.h,
                                                                   enlargeCenterPage:
                                                                       false,
-                                                                  autoPlay: true,
+                                                                  autoPlay: false,
                                                                   aspectRatio: 16 / 9,
                                                                   autoPlayCurve: Curves
                                                                       .fastOutSlowIn,
@@ -736,20 +777,20 @@ class _product_2State extends State<product_2> {
                                                                       true,
                                                                   autoPlayAnimationDuration:
                                                                       Duration(
-                                                                          milliseconds:
-                                                                              800),
+                                                                       seconds:
+                                                                              10),
                                                                   viewportFraction: 1,
+                                                                      onPageChanged: (index, reason) {
+
+                                                                        setState((){
+                                                                          _currentIndex = index;
+                                                                        });
+                                                                      },
                                                                 ),
                                                               ),
                                                           )
                                                           : GestureDetector(
-                                                // onTap:(){
-                                                //   print("1234");
-                                                //   print(displayallcolor
-                                                //       ?.mumbaiStock?[
-                                                //   0]
-                                                //       .menImageArray);
-                                                // },
+
                                                             child: CarouselSlider(
                                                                 items: images
                                                                     .map((e) {
@@ -892,7 +933,22 @@ class _product_2State extends State<product_2> {
                                                                                                   color: Colors.grey,
                                                                                                   size: 2.h,
                                                                                                 ),
-                                                                                                onPressed: () {},
+                                                                                                onPressed: () async {
+                                                                                                  String file = e.image
+                                                                                                      .toString();
+
+                                                                                                  if (file ==
+                                                                                                      "null") {
+                                                                                                    await Share
+                                                                                                        .share(
+                                                                                                        " https://distributor-app.fableadtechnolabs.com/admin/src/img/Category/Screenshot_16.png");
+                                                                                                  }
+                                                                                                  else {
+                                                                                                    await Share
+                                                                                                        .share(
+                                                                                                        file);
+                                                                                                  }
+                                                                                                },
                                                                                               ),
                                                                                             ),
                                                                                           ],
@@ -913,7 +969,7 @@ class _product_2State extends State<product_2> {
                                                                   height: 45.h,
                                                                   enlargeCenterPage:
                                                                       false,
-                                                                  autoPlay: true,
+                                                                  autoPlay: false,
                                                                   aspectRatio: 16 / 9,
                                                                   autoPlayCurve: Curves
                                                                       .fastOutSlowIn,
@@ -921,8 +977,8 @@ class _product_2State extends State<product_2> {
                                                                       true,
                                                                   autoPlayAnimationDuration:
                                                                       Duration(
-                                                                          milliseconds:
-                                                                              800),
+                                                                          seconds:
+                                                                              10),
                                                                   viewportFraction: 1,
                                                                 ),
                                                               ),
@@ -1056,186 +1112,93 @@ class _product_2State extends State<product_2> {
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 2.h),
                                             child: Container(
-                                                height: 20.h,
+                                                height: 17.w,
                                                 width: 90.w,
-                                                // child: GridView.builder(
-                                                //   itemCount:
-                                                //       product2color?.data?.length,
-                                                //   gridDelegate:
-                                                //       SliverGridDelegateWithFixedCrossAxisCount(
-                                                //           crossAxisCount: 7,
-                                                //           crossAxisSpacing: 12.0,
-                                                //           childAspectRatio: 3 / 3,
-                                                //           mainAxisSpacing: 6.0),
-                                                //   itemBuilder:
-                                                //       (BuildContext context,
-                                                //           int index) {
-                                                //     return GestureDetector(
-                                                //         onTap: () {
-                                                //           setState(() {
-                                                //             btn = index;
-                                                //             selectbtn = index;
-                                                //           });
-                                                //           selectimageapi();
-                                                //           displaycolor();
-                                                //         },
-                                                //         child: Stack(
-                                                //           children: [
-                                                //             Container(
-                                                //               // height: 10.h,
-                                                //               // width: 20.w,
-                                                //               child: CircleAvatar(
-                                                //                 // radius: 7.w,
-                                                //                 child: ClipOval(
-                                                //                   child:
-                                                //                       Image.network(
-                                                //                     product2color
-                                                //                             ?.data?[
-                                                //                                 index]
-                                                //                             .colorImage ??
-                                                //                         "",
-                                                //
-                                                //                     // 'assets/Red_Color.jpg',
-                                                //                     width: 10.w,
-                                                //                     height: 13.w,
-                                                //                     fit: BoxFit
-                                                //                         .cover,
-                                                //                   ),
-                                                //
-                                                //                 ),
-                                                //               ),
-                                                //               decoration:
-                                                //                   BoxDecoration(
-                                                //                       shape: BoxShape
-                                                //                           .circle,
-                                                //                       // color: tripur[index],
-                                                //                       border: Border.all(
-                                                //                           color: Color(
-                                                //                               0xffbababa))),
-                                                //             ),
-                                                //             (btn == index)
-                                                //                 ? Container(
-                                                //                     height: 10.h,
-                                                //                     width: 20.w,
-                                                //                     decoration: BoxDecoration(
-                                                //                         shape: BoxShape
-                                                //                             .circle,
-                                                //                         color: Colors
-                                                //                             .transparent),
-                                                //                     child: Icon(
-                                                //                       Icons.check,
-                                                //                       color: Colors
-                                                //                           .white,
-                                                //                       size: 15.sp,
-                                                //                     ),
-                                                //                   )
-                                                //                 : Container()
-                                                //           ],
-                                                //         ));
-                                                //   },
-                                                // )
-                                                child: CarouselSlider(
-
-                                                  options: CarouselOptions(
-                                                    height: 30.h,
-                                                    enlargeCenterPage:
-                                                    false,
-                                                    autoPlay: true,
-                                                    aspectRatio: 16 / 9,
-
-                                                    autoPlayCurve: Curves
-                                                        .fastOutSlowIn,
-                                                    enableInfiniteScroll:
-                                                    true,
-                                                    autoPlayAnimationDuration:
-                                                    Duration(
-                                                        milliseconds:
-                                                        800),
-                                                    viewportFraction: 1,
-                                                  ),
-                                                  items: [
-                                                    GridView.builder(
-                                                      itemCount:
-                                                          product2color?.data?.length,
-                                                      gridDelegate:
-                                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                                              crossAxisCount: 7,
-                                                              crossAxisSpacing: 12.0,
-                                                              childAspectRatio: 3 / 3,
-                                                              mainAxisSpacing: 6.0),
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                btn = index;
-                                                                selectbtn = index;
-                                                              });
-                                                              selectimageapi();
-                                                              displaycolor();
-                                                            },
-                                                            child: Stack(
-                                                              children: [
-                                                                Container(
-                                                                  // height: 10.h,
-                                                                  // width: 20.w,
-                                                                  child: CircleAvatar(
-                                                                    // radius: 7.w,
-                                                                    child: ClipOval(
-                                                                      child:
-                                                                          Image.network(
-                                                                        product2color
+                                                child:GridView(
+                                                  physics: ScrollPhysics(),
+                                                  // padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                                    scrollDirection: Axis.horizontal,
+                                                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                                        maxCrossAxisExtent: 200,
+                                                        childAspectRatio: 2.2 / 2,
+                                                        crossAxisSpacing: 0,
+                                                        mainAxisSpacing: 0
+                                                    ),
+                                                    children:List.generate(product2color?.data?.length ?? 0,(index){
+                                                      return GestureDetector(
+                                                                      onTap: () {
+                                                                        setState(() {
+                                                                          btn = index;
+                                                                          selectbtn = index;
+                                                                        });
+                                                                        selectimageapi();
+                                                                        displaycolor();
+                                                                      },
+                                                                      child: Stack(
+                                                                        children: [
+                                                                          CircleAvatar(
+                                                                            radius: 5.5.w,
+                                                                            backgroundImage: NetworkImage(product2color
                                                                                 ?.data?[
-                                                                                    index]
+                                                                            index]
                                                                                 .colorImage ??
-                                                                            "",
+                                                                                ""),
 
-                                                                        // 'assets/Red_Color.jpg',
-                                                                        width: 10.w,
-                                                                        height: 13.w,
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
+                                                                          ),
+                                                                          (btn == index)
+                                                                              ? Container(
 
-                                                                    ),
-                                                                  ),
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                          shape: BoxShape
-                                                                              .circle,
-                                                                          // color: tripur[index],
-                                                                          border: Border.all(
-                                                                              color: Color(
-                                                                                  0xffbababa))),
-                                                                ),
-                                                                (btn == index)
-                                                                    ? Container(
-                                                                        height: 10.h,
-                                                                        width: 20.w,
-                                                                        decoration: BoxDecoration(
-                                                                            shape: BoxShape
-                                                                                .circle,
-                                                                            color: Colors
-                                                                                .transparent),
-                                                                        child: Icon(
-                                                                          Icons.check,
-                                                                          color: Colors
-                                                                              .white,
-                                                                          size: 15.sp,
-                                                                        ),
-                                                                      )
-                                                                    : Container()
-                                                              ],
-                                                            ));
-                                                      },
-                                                    )
-                                                  ],
+                                                                            width: 11.w,
+                                                                            height: 11.w,
+                                                                                  decoration: BoxDecoration(
+                                                                                      color:Colors.transparent,
+                                                                                      shape: BoxShape
+                                                                                          .circle,
+                                                                                    ),
+                                                                                  child: Icon(
+                                                                                    Icons.check,
+                                                                                    color: Colors
+                                                                                        .white,
+                                                                                    size: 15.sp,
+                                                                                  ),
+                                                                                )
+                                                                              : Container()
+                                                                        ],
+                                                                      ));
+                                                    })
                                                 )
                                                 ),
                                           ),
-                                          
-                                          
+
+                                          Padding(
+                                         padding:EdgeInsets.symmetric(horizontal:2.w),
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                      
+                                       
+                                              // decoration: BoxDecoration(
+                                              //   // border: Border.all(color: Colors.grey.shade200,),
+                                              //   color: Color(0xff333389),
+                                              //   borderRadius: BorderRadius.all(
+                                              //     Radius.circular(10),
+                                              //   ),
+                                              // ),
+                                              child: SmoothPageIndicator(
+                                                controller: controller,
+                                                count:((product2color?.data?.length ?? 1) ~/ 6) +1,
+                                                axisDirection: Axis.horizontal,
+                                                effect: SlideEffect(
+                                                    spacing: 8.0,
+                                                    radius: 15.0,
+                                                    dotWidth: 7.0,
+                                                    dotHeight: 8.0,
+                                                    paintStyle: PaintingStyle.fill,
+                                                    strokeWidth: 1.5,
+                                                    dotColor: Colors.grey.shade300,
+                                                    activeDotColor: Colors.grey.shade300),
+                                              ),
+                                            ),
+                                          ),
 
 
                                           
@@ -1310,7 +1273,7 @@ class _product_2State extends State<product_2> {
                                                     onTap: () {
                                                       setState(() {
                                                         gen = 1;
-                                                        displaycolor();
+                                                      
                                                         _s.text = "";
                                                         _ts.text = "";
                                                         _totalms.text = "";
@@ -1347,6 +1310,7 @@ class _product_2State extends State<product_2> {
                                                         _t5xl.text = "";
                                                         _total_5xl.text = "";
                                                       });
+                                                      displaycolor();
                                                     },
                                                     child: Container(
                                                       padding:
@@ -3418,11 +3382,7 @@ class _product_2State extends State<product_2> {
                                                             height: 61.h,
                                                             alignment:
                                                                 Alignment.center,
-                                                            child: (displayallcolor
-                                                                        ?.mumbaiStock
-                                                                        ?.length !=
-                                                                    0)
-                                                                ? (displayallcolor?.sizeChart?[0].sizeChart==
+                                                            child:  (displayallcolor?.sizeChart?[0].sizeChart==
                                                                         "null")
                                                                     ? Image.asset(
                                                                         "assets/default_product_image.png",
@@ -3479,8 +3439,7 @@ class _product_2State extends State<product_2> {
                                                                 //             height:
                                                                 //                 40.h,
                                                                 //           )
-                                                                    : Text(
-                                                                        "No data found"),
+
                                                           ),
 
                                                           SizedBox(height: 4.h),
@@ -3991,6 +3950,7 @@ class _product_2State extends State<product_2> {
       data['gender_type'] = gen == 0 ? "MEN" : "WOMEN";
       data['color_name'] = product2color?.data?[selectbtn].colorName ?? '';
       data['d_id'] = (userData?.logindata?.dId).toString();
+      print(data);
       checkInternet().then((internet) async {
         if (internet) {
           Productprovider()
@@ -4000,6 +3960,7 @@ class _product_2State extends State<product_2> {
                 colorDisplayClass.fromJson(json.decode(response.body));
             if (response.statusCode == 200 &&
                 displayallcolor?.status == "success") {
+
               print(displayallcolor?.tripurStock?[0].menImageArray ?? '');
               isLoading = false;
               // colorapi();

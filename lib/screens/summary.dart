@@ -137,29 +137,34 @@ double? paymentv=0.0 ;
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Row(
+                        Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                _scaffoldKey.currentState?.openDrawer();
-                              },
-                              child: Icon(
-                                Icons.menu,
-                                color: Colors.white,
-                                size: 4.h,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 2.3.h,
-                            ),
-                            Container(
-                              // padding: EdgeInsets.only(top: 1.5.h),
-                              // alignment: Alignment.center,
-                              child: Text(
-                                "Summary",
-                                style:
-                                TextStyle(fontSize: 2.h, color: Colors.white),
-                              ),
+                            SizedBox(height: 11.0),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _scaffoldKey.currentState?.openDrawer();
+                                  },
+                                  child: Icon(
+                                    Icons.menu,
+                                    color: Colors.white,
+                                    size: 4.h,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.3.h,
+                                ),
+                                Container(
+                                  // padding: EdgeInsets.only(top: 1.5.h),
+                                  // alignment: Alignment.center,
+                                  child: Text(
+                                    "Summary",
+                                    style:
+                                    TextStyle(fontSize: 2.h, color: Colors.white),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

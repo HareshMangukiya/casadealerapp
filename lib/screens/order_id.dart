@@ -89,29 +89,34 @@ cartcount? count;
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Row(
+                        Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                _scaffoldKey.currentState?.openDrawer();
-                              },
-                              child: Icon(
-                                Icons.menu,
-                                color: Colors.white,
-                                size: 4.h,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 2.3.h,
-                            ),
-                            Container(
-                              // padding: EdgeInsets.only(top: 1.5.h),
-                              // alignment: Alignment.center,
-                              child: Text(
-                                "Your Orders",
-                                style:
-                                TextStyle(fontSize: 2.h, color: Colors.white),
-                              ),
+                            SizedBox(height:11.0),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _scaffoldKey.currentState?.openDrawer();
+                                  },
+                                  child: Icon(
+                                    Icons.menu,
+                                    color: Colors.white,
+                                    size: 4.h,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.3.h,
+                                ),
+                                Container(
+                                  // padding: EdgeInsets.only(top: 1.5.h),
+                                  // alignment: Alignment.center,
+                                  child: Text(
+                                    "Your Orders",
+                                    style:
+                                    TextStyle(fontSize: 2.h, color: Colors.white),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -1022,31 +1027,33 @@ cartcount? count;
                       ),
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 3.h),
-                          child: GestureDetector(
-                            onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => summary_b_edit()));
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Color(0xff333389),
-                              ),
-                              height: 6.h,
-                              width: 40.w,
-                              child: Text(
-                                'Edit',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(horizontal: 3.h),
+                        //   child: GestureDetector(
+                        //     onTap: () {
+                        //       // Navigator.push(
+                        //       //     context,
+                        //       //     MaterialPageRoute(
+                        //       //         builder: (context) => summary_b_edit()));
+                        //     },
+                        //     child: Container(
+                        //       alignment: Alignment.center,
+                        //       decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(8),
+                        //         color: Color(0xff333389),
+                        //       ),
+                        //       height: 6.h,
+                        //       width: 40.w,
+                        //       child: Text(
+                        //         'Edit',
+                        //         style: TextStyle(color: Colors.white),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         GestureDetector(
                           onTap: () {
                             cancelrequest();

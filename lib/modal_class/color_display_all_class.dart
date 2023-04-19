@@ -99,7 +99,7 @@ class MumbaiStock {
     s5xl = json['5xl'];
     mApId = json['m_ap_id'];
     mApdId = json['m_apd_id'];
-    menImageArray = json['Men_image_array'].cast<String>();
+    menImageArray = json['Men_image_array'] == null ?[]: json['Men_image_array'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -160,7 +160,7 @@ class TripurStock {
     s5xl = json['5xl'];
     tApId = json['t_ap_id'];
     tApdId = json['t_apd_id'];
-    menImageArray = json['Men_image_array'].cast<String>();
+    menImageArray =json['Men_image_array'] == null ?[]: json['Men_image_array'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {

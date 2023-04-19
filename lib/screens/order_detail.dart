@@ -87,29 +87,34 @@ class _order_detail_cState extends State<order_detail_c> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
+                      Column(
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              _scaffoldKey.currentState?.openDrawer();
-                            },
-                            icon: Icon(
-                              Icons.menu,
-                              color: Colors.white,
-                              size: 4.h,
-                            ),
-                          ),
-                          // SizedBox(
-                          //   width: 2.3.h,
-                          // ),
-                          Container(
-                            // padding: EdgeInsets.only(top: 1.5.h),
-                            // alignment: Alignment.center,
-                            child: Text(
-                              "Order Details",
-                              style:
-                              TextStyle(fontSize: 2.h, color: Colors.white),
-                            ),
+                          SizedBox(height:8.0),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  _scaffoldKey.currentState?.openDrawer();
+                                },
+                                icon: Icon(
+                                  Icons.menu,
+                                  color: Colors.white,
+                                  size: 4.h,
+                                ),
+                              ),
+                              // SizedBox(
+                              //   width: 2.3.h,
+                              // ),
+                              Container(
+                                // padding: EdgeInsets.only(top: 1.5.h),
+                                // alignment: Alignment.center,
+                                child: Text(
+                                  "Order Details",
+                                  style:
+                                  TextStyle(fontSize: 2.h, color: Colors.white),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
