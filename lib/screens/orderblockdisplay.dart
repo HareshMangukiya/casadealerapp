@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:casadealerapp/main.dart';
 import 'package:casadealerapp/modal_class/ViewCart.dart';
+import 'package:casadealerapp/modal_class/block_orderView.dart';
 import 'package:casadealerapp/modal_class/cartcount.dart';
 import 'package:casadealerapp/modal_class/convertblockorder.dart';
 import 'package:casadealerapp/modal_class/order_detail_class.dart';
@@ -31,7 +32,9 @@ import 'package:badges/badges.dart' as badges;
 
 class orderblockdisplay extends StatefulWidget {
   String? id;
-  orderblockdisplay({Key? key,this.id}) : super(key: key);
+  String? displayid ;
+  String? status;
+  orderblockdisplay({Key? key,this.id,this.displayid,this.status}) : super(key: key);
 
   @override
   State<orderblockdisplay> createState() => _orderblockdisplayState();
@@ -49,6 +52,7 @@ class _orderblockdisplayState extends State<orderblockdisplay> {
 
 
 convertblockorder? convertorder;
+  viewBlockOrder? blockview2;
 
 
   orderdetail? detail;
@@ -59,6 +63,7 @@ convertblockorder? convertorder;
     super.initState();
     orederdetailapiblock();
     viewcount();
+    print("£££££££££££££££££££" + (widget.status).toString());
   }
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -262,17 +267,78 @@ convertblockorder? convertorder;
                                 Container(
                                   alignment: Alignment.center,
                                   height: 3.4.h,
-                                  width: 18.w,
+                                  width: 27.w,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15),
-                                      color: Color(0xfffaede7)),
+                                      color: (widget.status ==
+                                          "Blocked")
+                                          ? Color(0xfffaede7)
+                                          : (widget.status  ==
+                                          "Placed")
+                                          ? Color(0xffe1f5e2):(widget.status  ==
+                                          "Confirmed")?
+                                      Color(0xffe1f5e2):(widget.status  ==
+                                          "Confirmed") ?Color(0xfffaede7)
+                                          : Color(0xfffae7e7)),
                                   child: Text(
-                                    'Placed',
+
+                                    widget.status.toString(),
                                     style: TextStyle(
-                                        color: Color(0xfff98346),
-                                        fontWeight: FontWeight.bold),
+                                        color: (widget.status ==
+                                            "Blocked")
+                                            ? Color(0xfff98b54)
+                                            : (widget.status ==
+                                            "Placed")
+                                            ? Color(0xff48d34d):(widget.status ==
+                                            "Confirmed")
+                                            ? Color(0xff48d34d):(widget.status ==
+                                            "3")? Color(0xfff98b54):
+                                        Color(0xfff97070),
+                                        fontWeight: FontWeight.bold
+                                        ),
                                   ),
                                 )
+
+                                // Container(
+                                //   padding: EdgeInsets.symmetric(horizontal: 2.w,vertical:1.w),
+                                //   alignment: Alignment.center,
+                                //   // height: 3.4.h,
+                                //   // width: 21.w,
+                                //   decoration: BoxDecoration(
+                                //       borderRadius:
+                                //       BorderRadius.circular(15),
+                                //       color: (blockview2?.data?[0].status ==
+                                //           "1")
+                                //           ? Color(0xfffaede7)
+                                //           : (blockview2?.data?[0].status ==
+                                //           "2")
+                                //           ? Color(0xffe1f5e2):(blockview2?.data?[0].status ==
+                                //           "3")?
+                                //       Color(0xffe1f5e2):(blockview2?.data?[0].status ==
+                                //           "5") ?Color(0xfffaede7)
+                                //           : Color(0xfffae7e7)),
+                                //   child: Text(
+                                //     (blockview2?.data?[0].status == "1")
+                                //         ? "Blocked"
+                                //         : (blockview2?.data?[0].status == "2")
+                                //         ? "Placed":(blockview2?.data?[0].status == "3")
+                                //         ? "Confirmed":(blockview2?.data?[0].status == "5")?"unblock order"
+                                //         : "Cancel",
+                                //     // 'Placed',
+                                //     style: TextStyle(
+                                //         color: (blockview2?.data?[0].status ==
+                                //             "1")
+                                //             ? Color(0xfff98b54)
+                                //             : (blockview2?.data?[0].status ==
+                                //             "2")
+                                //             ? Color(0xff48d34d):(blockview2?.data?[0].status ==
+                                //             "3")
+                                //             ? Color(0xff48d34d):(blockview2?.data?[0].status ==
+                                //             "3")? Color(0xfff98b54):
+                                //         Color(0xfff97070),
+                                //         fontWeight: FontWeight.bold),
+                                //   ),
+                                // )
                               ],
                             ),
                           ),
@@ -417,34 +483,35 @@ convertblockorder? convertorder;
                                           ],
                                         ),
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      order_detail_c(
-                                                          val:0,
+                                    widget.status != "unblocked order" ?GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    order_detail_c(
+                                                        val:0,
                                                         oreder :widget.id.toString(),
-                                                        id:index
-                                                      )));
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          height: 3.5.h,
-                                          width: 20.5.w,
-                                          child: Text(
-                                            'Edit',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 1.5.h),
-                                          ),
-                                          decoration: BoxDecoration(
-                                              color: Color(0xff333389),
-                                              borderRadius:
-                                              BorderRadius.circular(15)),
+                                                        id:index,
+                                                      status: widget.status.toString()
+                                                    )));
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        height: 3.5.h,
+                                        width: 20.5.w,
+                                        child: Text(
+                                          'Edit',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 1.5.h),
                                         ),
-                                      )
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff333389),
+                                            borderRadius:
+                                            BorderRadius.circular(15)),
+                                      ),
+                                    ): Container()
                                     ],
                                   ),
                                 ),
@@ -921,13 +988,14 @@ convertblockorder? convertorder;
               Padding(
                 padding: EdgeInsets.only(top:93.h),
                 child: Container(
-                  child: Row(
+                  child: widget.status!= "unblocked order" ?
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       GestureDetector(
                         onTap: () {
-                          buildErrorDialog2(context,"Alert!","Aer you sure? want to block.");
+                          buildErrorDialog2(context,"Alert!","Aer you sure? want to convert order.");
                           // converttoorder();
 
                         },
@@ -983,7 +1051,8 @@ convertblockorder? convertorder;
                         ),
                       ),
                     ],
-                  ),
+                  ) : Container()
+
                 ),
               ),
               Padding(
@@ -1204,6 +1273,35 @@ converttoorder(){
     }
   });
 }
+  blockViewOrderapi() async {
+    final Map<String, String> data = {};
+    data['action'] = "view_order_block";
+    data['d_id'] = (userData?.logindata?.dId).toString();
+
+    checkInternet().then((internet) async {
+      if (internet) {
+        Productprovider().blockViewProvider(data).then((Response response) async {
+          blockview2 = viewBlockOrder.fromJson(json.decode(response.body));
+          print(blockview2?.status);
+
+          if (response.statusCode == 200 && blockview2?.status == "success") {
+            setState(() {
+              isLoading =false;
+            });
+
+          } else {
+            setState(() {
+              isLoading =false;
+            });
+          }
+        });
+      } else {
+        setState(() {
+          isLoading =false;
+        });
+      }
+    });
+  }
 
   // search
   searchapi(body) async {
@@ -1266,7 +1364,7 @@ converttoorder(){
             backgroundColor: Colors.transparent,
             child: Container(
               width: 73.w,
-              height: (title == "")?21.h :22.h,
+              height: (title == "")?21.h :25.h,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),

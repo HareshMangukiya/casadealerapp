@@ -485,31 +485,34 @@ class _product_2State extends State<product_2> {
                                                                                     .center,
                                                                             children: [
                                                                               Container(
-                                                                                width: MediaQuery.of(context)
-                                                                                    .size
-                                                                                    .width,
+                                                                                // width: MediaQuery.of(context)
+                                                                                //     .size
+                                                                                //     .width,
                                                                                 child:
                                                                                     Row(
                                                                                   mainAxisAlignment:
                                                                                       MainAxisAlignment.spaceBetween,
                                                                                   children: [
-                                                                                    Column(
-                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                      children: [
+                                                                                    Expanded(
+                                                                                      child: Column(
+                                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                        children: [
 
-                                                                                        Container(
-                                                                                          child: Text(
-                                                                                            widget.pronamenevigatior ?? 'N/A',
-                                                                                            style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
+                                                                                          Container(
+                                                                                            child: Text(
+                                                                                              widget.pronamenevigatior ?? 'N/A',
+                                                                                              maxLines: 3,
+                                                                                              style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
+                                                                                            ),
                                                                                           ),
-                                                                                        ),
-                                                                                        // Container(
-                                                                                        //   child: Text(
-                                                                                        //     "Artist Name",
-                                                                                        //     style: TextStyle(fontSize: 1.9.h, color: Colors.grey.shade300),
-                                                                                        //   ),
-                                                                                        // ),
-                                                                                      ],
+                                                                                          // Container(
+                                                                                          //   child: Text(
+                                                                                          //     "Artist Name",
+                                                                                          //     style: TextStyle(fontSize: 1.9.h, color: Colors.grey.shade300),
+                                                                                          //   ),
+                                                                                          // ),
+                                                                                        ],
+                                                                                      ),
                                                                                     ),
                                                                                     Row(
                                                                                       children: [
@@ -591,398 +594,399 @@ class _product_2State extends State<product_2> {
                                                                   .menImageArray
                                                                   ?.length !=
                                                               0)
-                                                          ? GestureDetector(
-
-                                                            child: CarouselSlider(
-                                                                items:
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .menImageArray ??
-                                                                    []).map((e) {
-                                                                  return ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(
-                                                                                  28),
-                                                                      child: Stack(
-                                                                        children: [
-                                                                          Container(
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              borderRadius:
-                                                                                  BorderRadius.circular(28),
-                                                                            ),
-                                                                            height:
-                                                                                54.h,
-                                                                            width: MediaQuery.of(
-                                                                                    context)
-                                                                                .size
-                                                                                .width,
-                                                                            margin: EdgeInsets.symmetric(
-                                                                                horizontal:
-                                                                                    5.w),
-                                                                            child:
-                                                                                ClipRRect(
-                                                                              borderRadius:
-                                                                                  BorderRadius.circular(28),
-                                                                              child:  CachedNetworkImage(
-                                                                                imageUrl:e,
-                                                                                imageBuilder: (context, imageProvider) =>
-                                                                                    Container(
-                                                                                      decoration:
-                                                                                      BoxDecoration(
-                                                                                        image: DecorationImage(
-                                                                                          image: imageProvider,
-                                                                                          fit: BoxFit.cover,
-                                                                                        ),
+                                                          ? CarouselSlider(
+                                                              items:
+                                                              (displayallcolor
+                                                                  ?.tripurStock?[
+                                                              0]
+                                                                  .menImageArray ??
+                                                                  []).map((e) {
+                                                                return ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                28),
+                                                                    child: Stack(
+                                                                      children: [
+                                                                        Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(28),
+                                                                          ),
+                                                                          height:
+                                                                              54.h,
+                                                                          width: MediaQuery.of(
+                                                                                  context)
+                                                                              .size
+                                                                              .width,
+                                                                          margin: EdgeInsets.symmetric(
+                                                                              horizontal:
+                                                                                  5.w),
+                                                                          child:
+                                                                              ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(28),
+                                                                            child:  CachedNetworkImage(
+                                                                              imageUrl:e,
+                                                                              imageBuilder: (context, imageProvider) =>
+                                                                                  Container(
+                                                                                    decoration:
+                                                                                    BoxDecoration(
+                                                                                      image: DecorationImage(
+                                                                                        image: imageProvider,
+                                                                                        fit: BoxFit.cover,
                                                                                       ),
                                                                                     ),
-                                                                                placeholder: (context, url) =>
-                                                                                    CircularProgressIndicator(),
-                                                                                errorWidget: (context, url, error) =>
-                                                                                    Image.asset(
-                                                                                      "assets/product_1_img2.png",
-                                                                                      fit:
-                                                                                      BoxFit.cover,
-                                                                                    ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Opacity(
-                                                                            opacity:
-                                                                                0.8,
-                                                                            child:
-                                                                                Padding(
-                                                                              padding:
-                                                                                  EdgeInsets.symmetric(horizontal: 5.w),
-                                                                              child:
-                                                                                  Align(
-                                                                                alignment:
-                                                                                    Alignment.bottomCenter,
-                                                                                child:
-                                                                                    Container(
-                                                                                  decoration:
-                                                                                      BoxDecoration(
-                                                                                    gradient: LinearGradient(begin: Alignment.topRight, colors: [
-                                                                                      Colors.transparent,
-                                                                                      Colors.black
-                                                                                    ]),
-                                                                                    borderRadius: BorderRadius.only(
-                                                                                      bottomRight: Radius.circular(28),
-                                                                                      bottomLeft: Radius.circular(28),
-                                                                                      topRight: Radius.circular(28),
-                                                                                      topLeft: Radius.circular(28),
-                                                                                    ),
                                                                                   ),
-                                                                                  height:
-                                                                                      23.h,
-                                                                                  width:
-                                                                                      MediaQuery.of(context).size.width,
-                                                                                ),
-                                                                              ),
+                                                                              placeholder: (context, url) =>
+                                                                                  CircularProgressIndicator(),
+                                                                              errorWidget: (context, url, error) =>
+                                                                                  Image.asset(
+                                                                                    "assets/product_1_img2.png",
+                                                                                    fit:
+                                                                                    BoxFit.cover,
+                                                                                  ),
                                                                             ),
                                                                           ),
-                                                                          Positioned(
-                                                                            top: 35.h,
-                                                                            left: 8.w,
-                                                                            right:
-                                                                                8.w,
+                                                                        ),
+                                                                        Opacity(
+                                                                          opacity:
+                                                                              0.8,
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(horizontal: 5.w),
                                                                             child:
-                                                                                Container(
-                                                                              // height: 10.h,
-                                                                              width: MediaQuery.of(context)
-                                                                                  .size
-                                                                                  .width,
-                                                                              // color:Colors.red,
+                                                                                Align(
+                                                                              alignment:
+                                                                                  Alignment.bottomCenter,
                                                                               child:
-                                                                                  Column(
-                                                                                crossAxisAlignment:
-                                                                                    CrossAxisAlignment.center,
-                                                                                children: [
                                                                                   Container(
-                                                                                    width: MediaQuery.of(context).size.width,
-                                                                                    child: Row(
-                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                      children: [
-                                                                                        Column(
-                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                          children: [
-
-                                                                                            Container(
-                                                                                              child: Text(
-                                                                                                widget.pronamenevigatior ?? 'N/A',
-                                                                                                style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                        Row(
-                                                                                          children: [
-                                                                                            SizedBox(width: 3.w),
-                                                                                            Container(
-                                                                                              alignment: Alignment.center,
-                                                                                              height: 4.h,
-                                                                                              width: 9.w,
-                                                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
-                                                                                              child: IconButton(
-                                                                                                icon: Icon(
-                                                                                                  Icons.share,
-                                                                                                  color: Colors.grey,
-                                                                                                  size: 2.h,
-                                                                                                ),
-                                                                                                onPressed: () async{
-                                                                                                  String file = (displayallcolor
-                                                                                                      ?.tripurStock?[
-                                                                                                  0]
-                                                                                                      .menImageArray?[_currentIndex])
-                                                                                                      .toString();
-
-                                                                                                  if (file ==
-                                                                                                      "null") {
-                                                                                                    await Share
-                                                                                                        .share(
-                                                                                                        " https://distributor-app.fableadtechnolabs.com/admin/src/img/Category/Screenshot_16.png");
-                                                                                                  }
-                                                                                                  else {
-                                                                                                    await Share
-                                                                                                        .share(
-                                                                                                        file);
-                                                                                                  }
-                                                                                                },
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
+                                                                                decoration:
+                                                                                    BoxDecoration(
+                                                                                  gradient: LinearGradient(begin: Alignment.topRight, colors: [
+                                                                                    Colors.transparent,
+                                                                                    Colors.black
+                                                                                  ]),
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    bottomRight: Radius.circular(28),
+                                                                                    bottomLeft: Radius.circular(28),
+                                                                                    topRight: Radius.circular(28),
+                                                                                    topLeft: Radius.circular(28),
                                                                                   ),
-                                                                                ],
+                                                                                ),
+                                                                                height:
+                                                                                    23.h,
+                                                                                width:
+                                                                                    MediaQuery.of(context).size.width,
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                        ],
-                                                                      ));
-                                                                }).toList(),
-                                                                options:
-                                                                    CarouselOptions(
-                                                                  height: 45.h,
-                                                                  enlargeCenterPage:
-                                                                      false,
-                                                                  autoPlay: false,
-                                                                  aspectRatio: 16 / 9,
-                                                                  autoPlayCurve: Curves
-                                                                      .fastOutSlowIn,
-                                                                  enableInfiniteScroll:
-                                                                      true,
-                                                                  autoPlayAnimationDuration:
-                                                                      Duration(
-                                                                       seconds:
-                                                                              10),
-                                                                  viewportFraction: 1,
-                                                                      onPageChanged: (index, reason) {
-
-                                                                        setState((){
-                                                                          _currentIndex = index;
-                                                                        });
-                                                                      },
-                                                                ),
-                                                              ),
-                                                          )
-                                                          : GestureDetector(
-
-                                                            child: CarouselSlider(
-                                                                items: images
-                                                                    .map((e) {
-                                                                  return ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(
-                                                                                  28),
-                                                                      child: Stack(
-                                                                        children: [
-                                                                          Container(
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              borderRadius:
-                                                                                  BorderRadius.circular(28),
-                                                                            ),
-                                                                            height:
-                                                                                54.h,
-                                                                            width: MediaQuery.of(
-                                                                                    context)
+                                                                        ),
+                                                                        Positioned(
+                                                                          top: 35.h,
+                                                                          left: 8.w,
+                                                                          right:
+                                                                              8.w,
+                                                                          child:
+                                                                              Container(
+                                                                            // height: 10.h,
+                                                                            width: MediaQuery.of(context)
                                                                                 .size
                                                                                 .width,
-                                                                            margin: EdgeInsets.symmetric(
-                                                                                horizontal:
-                                                                                    5.w),
+                                                                            // color:Colors.red,
                                                                             child:
-                                                                                ClipRRect(
-                                                                              borderRadius:
-                                                                                  BorderRadius.circular(28),
-                                                                              child:
-                                                                                  CachedNetworkImage(
-                                                                                imageUrl:
-                                                                                    e.image.toString(),
-                                                                                imageBuilder: (context, imageProvider) =>
-                                                                                    Container(
-                                                                                  decoration:
-                                                                                      BoxDecoration(
-                                                                                    image: DecorationImage(
-                                                                                      image: imageProvider,
-                                                                                      fit: BoxFit.cover,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                placeholder: (context, url) =>
-                                                                                    CircularProgressIndicator(),
-                                                                                errorWidget: (context, url, error) =>
-                                                                                    Image.asset(
-                                                                                  "assets/product_1_img2.png",
-
-                                                                                  fit:
-                                                                                      BoxFit.cover,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Opacity(
-                                                                            opacity:
-                                                                                0.8,
-                                                                            child:
-                                                                                Padding(
-                                                                              padding:
-                                                                                  EdgeInsets.symmetric(horizontal: 5.w),
-                                                                              child:
-                                                                                  Align(
-                                                                                alignment:
-                                                                                    Alignment.bottomCenter,
-                                                                                child:
-                                                                                    Container(
-                                                                                  decoration:
-                                                                                      BoxDecoration(
-                                                                                    gradient: LinearGradient(begin: Alignment.topRight, colors: [
-                                                                                      Colors.transparent,
-                                                                                      Colors.black
-                                                                                    ]),
-                                                                                    borderRadius: BorderRadius.only(
-                                                                                      bottomRight: Radius.circular(28),
-                                                                                      bottomLeft: Radius.circular(28),
-                                                                                      topRight: Radius.circular(28),
-                                                                                      topLeft: Radius.circular(28),
-                                                                                    ),
-                                                                                  ),
-                                                                                  height:
-                                                                                      23.h,
-                                                                                  width:
-                                                                                      MediaQuery.of(context).size.width,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Positioned(
-                                                                            top: 35.h,
-                                                                            left: 8.w,
-                                                                            right:
-                                                                                8.w,
-                                                                            child:
+                                                                                Column(
+                                                                              crossAxisAlignment:
+                                                                                  CrossAxisAlignment.center,
+                                                                              children: [
                                                                                 Container(
-                                                                              // height: 10.h,
-                                                                              width: MediaQuery.of(context)
-                                                                                  .size
-                                                                                  .width,
-                                                                              // color:Colors.red,
-                                                                              child:
-                                                                                  Column(
-                                                                                crossAxisAlignment:
-                                                                                    CrossAxisAlignment.center,
-                                                                                children: [
+                                                                                  // width: MediaQuery.of(context).size.width,
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    children: [
+                                                                                      Expanded(
+                                                                                        child: Column(
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          children: [
+
+                                                                                            Container(
+
+                                                                                              child: Text(
+                                                                                                widget.pronamenevigatior ?? 'N/A',
+                                                                                                maxLines: 3,
+                                                                                                style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          SizedBox(width: 3.w),
+                                                                                          Container(
+                                                                                            alignment: Alignment.center,
+                                                                                            height: 4.h,
+                                                                                            width: 9.w,
+                                                                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
+                                                                                            child: IconButton(
+                                                                                              icon: Icon(
+                                                                                                Icons.share,
+                                                                                                color: Colors.grey,
+                                                                                                size: 2.h,
+                                                                                              ),
+                                                                                              onPressed: () async{
+                                                                                                String file = (displayallcolor
+                                                                                                    ?.tripurStock?[
+                                                                                                0]
+                                                                                                    .menImageArray?[_currentIndex])
+                                                                                                    .toString();
+
+                                                                                                if (file ==
+                                                                                                    "null") {
+                                                                                                  await Share
+                                                                                                      .share(
+                                                                                                      " https://distributor-app.fableadtechnolabs.com/admin/src/img/Category/Screenshot_16.png");
+                                                                                                }
+                                                                                                else {
+                                                                                                  await Share
+                                                                                                      .share(
+                                                                                                      file);
+                                                                                                }
+                                                                                              },
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ));
+                                                              }).toList(),
+                                                              options:
+                                                                  CarouselOptions(
+                                                                height: 45.h,
+                                                                enlargeCenterPage:
+                                                                    false,
+                                                                autoPlay: false,
+                                                                aspectRatio: 16 / 9,
+                                                                autoPlayCurve: Curves
+                                                                    .fastOutSlowIn,
+                                                                enableInfiniteScroll:
+                                                                    true,
+                                                                autoPlayAnimationDuration:
+                                                                    Duration(
+                                                                     seconds:
+                                                                            10),
+                                                                viewportFraction: 1,
+                                                                    onPageChanged: (index, reason) {
+
+                                                                      setState((){
+                                                                        _currentIndex = index;
+                                                                      });
+                                                                    },
+                                                              ),
+                                                            )
+                                                          : CarouselSlider(
+                                                              items: images
+                                                                  .map((e) {
+                                                                return ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                28),
+                                                                    child: Stack(
+                                                                      children: [
+                                                                        Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(28),
+                                                                          ),
+                                                                          height:
+                                                                              54.h,
+                                                                          width: MediaQuery.of(
+                                                                                  context)
+                                                                              .size
+                                                                              .width,
+                                                                          margin: EdgeInsets.symmetric(
+                                                                              horizontal:
+                                                                                  5.w),
+                                                                          child:
+                                                                              ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(28),
+                                                                            child:
+                                                                                CachedNetworkImage(
+                                                                              imageUrl:
+                                                                                  e.image.toString(),
+                                                                              imageBuilder: (context, imageProvider) =>
                                                                                   Container(
-                                                                                    width: MediaQuery.of(context).size.width,
-                                                                                    child: Row(
-                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                      children: [
-                                                                                        Column(
+                                                                                decoration:
+                                                                                    BoxDecoration(
+                                                                                  image: DecorationImage(
+                                                                                    image: imageProvider,
+                                                                                    fit: BoxFit.cover,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              placeholder: (context, url) =>
+                                                                                  CircularProgressIndicator(),
+                                                                              errorWidget: (context, url, error) =>
+                                                                                  Image.asset(
+                                                                                "assets/product_1_img2.png",
+
+                                                                                fit:
+                                                                                    BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Opacity(
+                                                                          opacity:
+                                                                              0.8,
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(horizontal: 5.w),
+                                                                            child:
+                                                                                Align(
+                                                                              alignment:
+                                                                                  Alignment.bottomCenter,
+                                                                              child:
+                                                                                  Container(
+                                                                                decoration:
+                                                                                    BoxDecoration(
+                                                                                  gradient: LinearGradient(begin: Alignment.topRight, colors: [
+                                                                                    Colors.transparent,
+                                                                                    Colors.black
+                                                                                  ]),
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    bottomRight: Radius.circular(28),
+                                                                                    bottomLeft: Radius.circular(28),
+                                                                                    topRight: Radius.circular(28),
+                                                                                    topLeft: Radius.circular(28),
+                                                                                  ),
+                                                                                ),
+                                                                                height:
+                                                                                    23.h,
+                                                                                width:
+                                                                                    MediaQuery.of(context).size.width,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Positioned(
+                                                                          top: 35.h,
+                                                                          left: 8.w,
+                                                                          right:
+                                                                              8.w,
+                                                                          child:
+                                                                              Container(
+                                                                            // height: 10.h,
+                                                                            width: MediaQuery.of(context)
+                                                                                .size
+                                                                                .width,
+                                                                            // color:Colors.red,
+                                                                            child:
+                                                                                Column(
+                                                                              crossAxisAlignment:
+                                                                                  CrossAxisAlignment.center,
+                                                                              children: [
+                                                                                Container(
+                                                                                  // width: MediaQuery.of(context).size.width,
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    children: [
+                                                                                      Expanded(
+                                                                                        child: Column(
                                                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                                                           children: [
                                                                                             Container(
                                                                                               child: Text(
                                                                                                 widget.pronamenevigatior ?? 'N/A',
+                                                                                                maxLines: 3,
 
                                                                                                 style: TextStyle(fontSize: 3.h, fontWeight: FontWeight.bold, color: Colors.white),
                                                                                               ),
                                                                                             ),
                                                                                           ],
                                                                                         ),
+                                                                                      ),
 
-                                                                                        // SizedBox(
-                                                                                        //   width: 20.w,
-                                                                                        // ),
+                                                                                      // SizedBox(
+                                                                                      //   width: 20.w,
+                                                                                      // ),
 
-                                                                                        Row(
-                                                                                          children: [
-                                                                                            SizedBox(width: 3.w),
-                                                                                            Container(
-                                                                                              alignment: Alignment.center,
-                                                                                              height: 4.h,
-                                                                                              width: 9.w,
-                                                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
-                                                                                              child: IconButton(
-                                                                                                icon: Icon(
-                                                                                                  Icons.share,
-                                                                                                  color: Colors.grey,
-                                                                                                  size: 2.h,
-                                                                                                ),
-                                                                                                onPressed: () async {
-                                                                                                  String file = e.image
-                                                                                                      .toString();
-
-                                                                                                  if (file ==
-                                                                                                      "null") {
-                                                                                                    await Share
-                                                                                                        .share(
-                                                                                                        " https://distributor-app.fableadtechnolabs.com/admin/src/img/Category/Screenshot_16.png");
-                                                                                                  }
-                                                                                                  else {
-                                                                                                    await Share
-                                                                                                        .share(
-                                                                                                        file);
-                                                                                                  }
-                                                                                                },
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          SizedBox(width: 3.w),
+                                                                                          Container(
+                                                                                            alignment: Alignment.center,
+                                                                                            height: 4.h,
+                                                                                            width: 9.w,
+                                                                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: Colors.white),
+                                                                                            child: IconButton(
+                                                                                              icon: Icon(
+                                                                                                Icons.share,
+                                                                                                color: Colors.grey,
+                                                                                                size: 2.h,
                                                                                               ),
+                                                                                              onPressed: () async {
+                                                                                                String file = e.image
+                                                                                                    .toString();
+
+                                                                                                if (file ==
+                                                                                                    "null") {
+                                                                                                  await Share
+                                                                                                      .share(
+                                                                                                      " https://distributor-app.fableadtechnolabs.com/admin/src/img/Category/Screenshot_16.png");
+                                                                                                }
+                                                                                                else {
+                                                                                                  await Share
+                                                                                                      .share(
+                                                                                                      file);
+                                                                                                }
+                                                                                              },
                                                                                             ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
                                                                                   ),
-                                                                                  // SizedBox()
-                                                                                ],
-                                                                              ),
+                                                                                ),
+                                                                                // SizedBox()
+                                                                              ],
                                                                             ),
                                                                           ),
-                                                                        ],
-                                                                      ));
-                                                                }).toList(),
-                                                                options:
-                                                                    CarouselOptions(
-                                                                  height: 45.h,
-                                                                  enlargeCenterPage:
-                                                                      false,
-                                                                  autoPlay: false,
-                                                                  aspectRatio: 16 / 9,
-                                                                  autoPlayCurve: Curves
-                                                                      .fastOutSlowIn,
-                                                                  enableInfiniteScroll:
-                                                                      true,
-                                                                  autoPlayAnimationDuration:
-                                                                      Duration(
-                                                                          seconds:
-                                                                              10),
-                                                                  viewportFraction: 1,
-                                                                ),
+                                                                        ),
+                                                                      ],
+                                                                    ));
+                                                              }).toList(),
+                                                              options:
+                                                                  CarouselOptions(
+                                                                height: 45.h,
+                                                                enlargeCenterPage:
+                                                                    false,
+                                                                autoPlay: false,
+                                                                aspectRatio: 16 / 9,
+                                                                autoPlayCurve: Curves
+                                                                    .fastOutSlowIn,
+                                                                enableInfiniteScroll:
+                                                                    true,
+                                                                autoPlayAnimationDuration:
+                                                                    Duration(
+                                                                        seconds:
+                                                                            10),
+                                                                viewportFraction: 1,
                                                               ),
-                                                          )
+                                                            )
 
 
                                               ),
@@ -1573,29 +1577,29 @@ class _product_2State extends State<product_2> {
                                                         CrossAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        regex.hasMatch((displayallcolor
+                                                        (displayallcolor
                                                                     ?.mumbaiStock?[
                                                                         0]
                                                                     .xs)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .xs)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.mumbaiStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .xs ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
+                                                                .toString(),
+                                                            // ? int.parse((displayallcolor
+                                                            //                 ?.mumbaiStock?[
+                                                            //                     0]
+                                                            //                 .xs)
+                                                            //             .toString()) >=
+                                                            //         0
+                                                            //     ? (displayallcolor
+                                                            //                 ?.mumbaiStock
+                                                            //                 ?.length !=
+                                                            //             0)
+                                                            //         ? (displayallcolor
+                                                            //                 ?.mumbaiStock?[
+                                                            //                     0]
+                                                            //                 .xs ??
+                                                            //             '')
+                                                            //         : ""
+                                                            //     : "0"
+                                                            // : "0",
                                                         style:textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -1605,20 +1609,21 @@ class _product_2State extends State<product_2> {
                                                           width: 10.h,
                                                           height: 4.h,
                                                           child:TextField(
-                                                            readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                0]
-                                                                    .xs)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.mumbaiStock?[0]
-                                                                .xs)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                            readOnly:displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                            // regex.hasMatch(
+                                                            //     (displayallcolor
+                                                            //         ?.mumbaiStock?[
+                                                            //     0]
+                                                            //         .xs)
+                                                            //         .toString())
+                                                            //     ? (int.parse((displayallcolor
+                                                            //     ?.mumbaiStock?[0]
+                                                            //     .xs)
+                                                            //     .toString()) >
+                                                            //     0)
+                                                            //     ? false
+                                                            //     : true
+                                                            //     : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
@@ -1642,29 +1647,29 @@ class _product_2State extends State<product_2> {
                                                         CrossAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        regex.hasMatch((displayallcolor
+                                                        (displayallcolor
                                                                     ?.tripurStock?[
                                                                         0]
                                                                     .xs)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .xs)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.tripurStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .xs ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",                                                        // '432',
+                                                                .toString(),
+                                                            // ? int.parse((displayallcolor
+                                                            //                 ?.tripurStock?[
+                                                            //                     0]
+                                                            //                 .xs)
+                                                            //             .toString()) >=
+                                                            //         0
+                                                            //     ? (displayallcolor
+                                                            //                 ?.tripurStock
+                                                            //                 ?.length !=
+                                                            //             0)
+                                                            //         ? (displayallcolor
+                                                            //                 ?.tripurStock?[
+                                                            //                     0]
+                                                            //                 .xs ??
+                                                            //             '')
+                                                            //         : ""
+                                                            //     : "0"
+                                                            // : "0",                                                        // '432',
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -1674,20 +1679,21 @@ class _product_2State extends State<product_2> {
                                                           width: 10.h,
                                                           height: 4.h,
                                                           child: TextField(
-                                                             readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .xs)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .xs)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                             readOnly: displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                             // regex.hasMatch(
+                                                             //    (displayallcolor
+                                                             //        ?.tripurStock?[
+                                                             //    0]
+                                                             //        .xs)
+                                                             //        .toString())
+                                                             //    ? (int.parse((displayallcolor
+                                                             //    ?.tripurStock?[0]
+                                                             //    .xs)
+                                                             //    .toString()) >
+                                                             //    0)
+                                                             //    ? false
+                                                             //    : true
+                                                             //    : true,
                                                             onChanged: (value) {
 
                                                                // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
@@ -1766,30 +1772,30 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
-                                                        regex.hasMatch((displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                        0]
-                                                                    .s)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .s)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.mumbaiStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .s ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
+                                                      Text((displayallcolor
+                                                      ?.mumbaiStock?[
+                                                  0]
+                                                      .s)
+                                                      .toString(),
+                                                        // regex.hasMatch(
+                                                        //     ? int.parse((displayallcolor
+                                                        //                     ?.mumbaiStock?[
+                                                        //                         0]
+                                                        //                     .s)
+                                                        //                 .toString()) >=
+                                                        //             0
+                                                        //         ? (displayallcolor
+                                                        //                     ?.mumbaiStock
+                                                        //                     ?.length !=
+                                                        //                 0)
+                                                        //             ? (displayallcolor
+                                                        //                     ?.mumbaiStock?[
+                                                        //                         0]
+                                                        //                     .s ??
+                                                        //                 '')
+                                                        //             : ""
+                                                        //         : "0"
+                                                        //     : "0",
                                                         // '432',
                                                         style: textstyle3,
                                                       ),
@@ -1808,20 +1814,23 @@ class _product_2State extends State<product_2> {
                                                               // }
                                                               updateTotal(value);
                                                             },
-                                                            readOnly: regex.hasMatch(
-                                                                    (displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .s)
-                                                                        .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                                ?.mumbaiStock?[0]
-                                                                                .s)
-                                                                            .toString()) >
-                                                                        0)
-                                                                    ? false
-                                                                    : true
-                                                                : true,
+                                                            readOnly:
+                                                            displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+
+                                                                // regex.hasMatch(
+                                                                //     (displayallcolor
+                                                                //             ?.mumbaiStock?[
+                                                                //                 0]
+                                                                //             .s)
+                                                                //         .toString())
+                                                                // ? (int.parse((displayallcolor
+                                                                //                 ?.mumbaiStock?[0]
+                                                                //                 .s)
+                                                                //             .toString()) >
+                                                                //         0)
+                                                                //     ? false
+                                                                //     : true
+                                                                // : true,
                                                             controller: _s,
                                                             textAlign:
                                                                 TextAlign.center,
@@ -1837,31 +1846,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
-                                                        regex.hasMatch((displayallcolor
-                                                                    ?.tripurStock?[
-                                                                        0]
-                                                                    .s)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .s)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.tripurStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .s ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
-                                                        // '432',
+                                                      Text((displayallcolor
+                                                      ?.tripurStock?[
+                                                  0]
+                                                      .s)
+                                                      .toString(),
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //                     ?.tripurStock?[
+                                                        //                         0]
+                                                        //                     .s)
+                                                        //                 .toString()) >=
+                                                        //             0
+                                                        //         ? (displayallcolor
+                                                        //                     ?.tripurStock
+                                                        //                     ?.length !=
+                                                        //                 0)
+                                                        //             ? (displayallcolor
+                                                        //                     ?.tripurStock?[
+                                                        //                         0]
+                                                        //                     .s ??
+                                                        //                 '')
+                                                        //             : ""
+                                                        //         : "0"
+                                                        //     : "0",
+                                                        // // '432',
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -1872,20 +1881,23 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                         
                                                           child: TextField(
-                                                                  readOnly: regex.hasMatch(
-                                                                  (displayallcolor
-                                                                      ?.tripurStock?[
-                                                                  0]
-                                                                      .s)
-                                                                      .toString())
-                                                                  ? (int.parse((displayallcolor
-                                                                  ?.tripurStock?[0]
-                                                                  .s)
-                                                                  .toString()) >
-                                                                  0)
-                                                                  ? false
-                                                                  : true
-                                                                  : true,
+                                                                  readOnly:
+                                                                  displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+
+                                                                  // regex.hasMatch(
+                                                                  // (displayallcolor
+                                                                  //     ?.tripurStock?[
+                                                                  // 0]
+                                                                  //     .s)
+                                                                  //     .toString())
+                                                                  // ? (int.parse((displayallcolor
+                                                                  // ?.tripurStock?[0]
+                                                                  // .s)
+                                                                  // .toString()) >
+                                                                  // 0)
+                                                                  // ? false
+                                                                  // : true
+                                                                  // : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
@@ -1965,30 +1977,30 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
-                                                        regex.hasMatch((displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                        0]
-                                                                    .m)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .m)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.mumbaiStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .m ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
+                                                      Text((displayallcolor
+                                                      ?.mumbaiStock?[
+                                                  0]
+                                                      .m)
+                                                      .toString(),
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //                     ?.mumbaiStock?[
+                                                        //                         0]
+                                                        //                     .m)
+                                                        //                 .toString()) >=
+                                                        //             0
+                                                        //         ? (displayallcolor
+                                                        //                     ?.mumbaiStock
+                                                        //                     ?.length !=
+                                                        //                 0)
+                                                        //             ? (displayallcolor
+                                                        //                     ?.mumbaiStock?[
+                                                        //                         0]
+                                                        //                     .m ??
+                                                        //                 '')
+                                                        //             : ""
+                                                        //         : "0"
+                                                        //     : "0",
                                                         // '432',
                                                         style:textstyle3,
                                                       ),
@@ -2000,20 +2012,23 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                        
                                                           child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                0]
-                                                                    .m)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.mumbaiStock?[0]
-                                                                .m)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                            readOnly:
+                                                            displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+
+                                                            // regex.hasMatch(
+                                                            //     (displayallcolor
+                                                            //         ?.mumbaiStock?[
+                                                            //     0]
+                                                            //         .m)
+                                                            //         .toString())
+                                                            //     ? (int.parse((displayallcolor
+                                                            //     ?.mumbaiStock?[0]
+                                                            //     .m)
+                                                            //     .toString()) >
+                                                            //     0)
+                                                            //     ? false
+                                                            //     : true
+                                                            //     : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
@@ -2036,31 +2051,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.tripurStock?[
+                                                  0]
+                                                      .m)
+                                                      .toString(),
                                                
-                                                        regex.hasMatch((displayallcolor
-                                                                    ?.tripurStock?[
-                                                                        0]
-                                                                    .m)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .m)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.tripurStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .m ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //                     ?.tripurStock?[
+                                                        //                         0]
+                                                        //                     .m)
+                                                        //                 .toString()) >=
+                                                        //             0
+                                                        //         ? (displayallcolor
+                                                        //                     ?.tripurStock
+                                                        //                     ?.length !=
+                                                        //                 0)
+                                                        //             ? (displayallcolor
+                                                        //                     ?.tripurStock?[
+                                                        //                         0]
+                                                        //                     .m ??
+                                                        //                 '')
+                                                        //             : ""
+                                                        //         : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2071,20 +2086,23 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                     
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .m)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .m)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.tripurStock?[
+                                                              //   0]
+                                                              //       .m)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.tripurStock?[0]
+                                                              //   .m)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                               //   buildErrorDialog(context, "", "please enter the lower value than available stock.");
@@ -2158,31 +2176,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.mumbaiStock?[
+                                                  0]
+                                                      .l)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                        0]
-                                                                    .l)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .l)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.mumbaiStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .l ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //                     ?.mumbaiStock?[
+                                                        //                         0]
+                                                        //                     .l)
+                                                        //                 .toString()) >=
+                                                        //             0
+                                                        //         ? (displayallcolor
+                                                        //                     ?.mumbaiStock
+                                                        //                     ?.length !=
+                                                        //                 0)
+                                                        //             ? (displayallcolor
+                                                        //                     ?.mumbaiStock?[
+                                                        //                         0]
+                                                        //                     .l ??
+                                                        //                 '')
+                                                        //             : ""
+                                                        //         : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2193,20 +2211,23 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                        
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                0]
-                                                                    .l)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.mumbaiStock?[0]
-                                                                .l)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.mumbaiStock?[
+                                                              //   0]
+                                                              //       .l)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.mumbaiStock?[0]
+                                                              //   .l)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
@@ -2230,31 +2251,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.tripurStock?[
+                                                  0]
+                                                      .l)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                                    ?.tripurStock?[
-                                                                        0]
-                                                                    .l)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .l)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.tripurStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .l ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //                     ?.tripurStock?[
+                                                        //                         0]
+                                                        //                     .l)
+                                                        //                 .toString()) >=
+                                                        //             0
+                                                        //         ? (displayallcolor
+                                                        //                     ?.tripurStock
+                                                        //                     ?.length !=
+                                                        //                 0)
+                                                        //             ? (displayallcolor
+                                                        //                     ?.tripurStock?[
+                                                        //                         0]
+                                                        //                     .l ??
+                                                        //                 '')
+                                                        //             : ""
+                                                        //         : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2265,20 +2286,23 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                         
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .l)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .l)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+
+// regex.hasMatch(
+//                                                                 (displayallcolor
+//                                                                     ?.tripurStock?[
+//                                                                 0]
+//                                                                     .l)
+//                                                                     .toString())
+//                                                                 ? (int.parse((displayallcolor
+//                                                                 ?.tripurStock?[0]
+//                                                                 .l)
+//                                                                 .toString()) >
+//                                                                 0)
+//                                                                 ? false
+//                                                                 : true
+//                                                                 : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
@@ -2358,31 +2382,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.mumbaiStock?[
+                                                  0]
+                                                      .xl)
+                                                      .toString(),
                                                        
-                                                        regex.hasMatch((displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                        0]
-                                                                    .xl)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .xl)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.mumbaiStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.mumbaiStock?[
-                                                                                0]
-                                                                            .xl ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //                     ?.mumbaiStock?[
+                                                        //                         0]
+                                                        //                     .xl)
+                                                        //                 .toString()) >=
+                                                        //             0
+                                                        //         ? (displayallcolor
+                                                        //                     ?.mumbaiStock
+                                                        //                     ?.length !=
+                                                        //                 0)
+                                                        //             ? (displayallcolor
+                                                        //                     ?.mumbaiStock?[
+                                                        //                         0]
+                                                        //                     .xl ??
+                                                        //                 '')
+                                                        //             : ""
+                                                        //         : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2393,20 +2417,23 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                          
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                0]
-                                                                    .xl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.mumbaiStock?[0]
-                                                                .xl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+                                                                  displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.mumbaiStock?[
+                                                              //   0]
+                                                              //       .xl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.mumbaiStock?[0]
+                                                              //   .xl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
@@ -2430,31 +2457,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.tripurStock?[
+                                                  0]
+                                                      .xl)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                                    ?.tripurStock?[
-                                                                        0]
-                                                                    .xl)
-                                                                .toString())
-                                                            ? int.parse((displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .xl)
-                                                                        .toString()) >=
-                                                                    0
-                                                                ? (displayallcolor
-                                                                            ?.tripurStock
-                                                                            ?.length !=
-                                                                        0)
-                                                                    ? (displayallcolor
-                                                                            ?.tripurStock?[
-                                                                                0]
-                                                                            .xl ??
-                                                                        '')
-                                                                    : ""
-                                                                : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //                     ?.tripurStock?[
+                                                        //                         0]
+                                                        //                     .xl)
+                                                        //                 .toString()) >=
+                                                        //             0
+                                                        //         ? (displayallcolor
+                                                        //                     ?.tripurStock
+                                                        //                     ?.length !=
+                                                        //                 0)
+                                                        //             ? (displayallcolor
+                                                        //                     ?.tripurStock?[
+                                                        //                         0]
+                                                        //                     .xl ??
+                                                        //                 '')
+                                                        //             : ""
+                                                        //         : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2465,20 +2492,24 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                        
                                                           child: TextField(
-                                                            readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .xl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .xl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                            readOnly:
+                                                                displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.tripurStock?[
+                                                              //   0]
+                                                              //       .xl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.tripurStock?[0]
+                                                              //   .xl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
@@ -2552,30 +2583,30 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
-                                                        regex.hasMatch((displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .xxl)
-                                                            .toString())
-                                                            ? int.parse((displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .xxl)
-                                                            .toString()) >=
-                                                            0
-                                                            ? (displayallcolor
-                                                            ?.mumbaiStock
-                                                            ?.length !=
-                                                            0)
-                                                            ? (displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .xxl ??
-                                                            '')
-                                                            : ""
-                                                            : "0"
-                                                            : "0",
+                                                      Text((displayallcolor
+                                                      ?.mumbaiStock?[
+                                                  0]
+                                                      .xxl)
+                                                      .toString(),
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //     ?.mumbaiStock?[
+                                                        // 0]
+                                                        //     .xxl)
+                                                        //     .toString()) >=
+                                                        //     0
+                                                        //     ? (displayallcolor
+                                                        //     ?.mumbaiStock
+                                                        //     ?.length !=
+                                                        //     0)
+                                                        //     ? (displayallcolor
+                                                        //     ?.mumbaiStock?[
+                                                        // 0]
+                                                        //     .xxl ??
+                                                        //     '')
+                                                        //     : ""
+                                                        //     : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2586,20 +2617,25 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                 
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                0]
-                                                                    .xxl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.mumbaiStock?[0]
-                                                                .xxl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+
+
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.mumbaiStock?[
+                                                              //   0]
+                                                              //       .xxl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.mumbaiStock?[0]
+                                                              //   .xxl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
                                                               //   buildErrorDialog(context, "", "please enter the lower value than available stock.");
@@ -2622,31 +2658,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.tripurStock?[
+                                                  0]
+                                                      .xxl)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .xxl)
-                                                            .toString())
-                                                            ? int.parse((displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .xxl)
-                                                            .toString()) >=
-                                                            0
-                                                            ? (displayallcolor
-                                                            ?.tripurStock
-                                                            ?.length !=
-                                                            0)
-                                                            ? (displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .xxl ??
-                                                            '')
-                                                            : ""
-                                                            : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //     ?.tripurStock?[
+                                                        // 0]
+                                                        //     .xxl)
+                                                        //     .toString()) >=
+                                                        //     0
+                                                        //     ? (displayallcolor
+                                                        //     ?.tripurStock
+                                                        //     ?.length !=
+                                                        //     0)
+                                                        //     ? (displayallcolor
+                                                        //     ?.tripurStock?[
+                                                        // 0]
+                                                        //     .xxl ??
+                                                        //     '')
+                                                        //     : ""
+                                                        //     : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2657,20 +2693,24 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                        
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .xxl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .xxl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.tripurStock?[
+                                                              //   0]
+                                                              //       .xxl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.tripurStock?[0]
+                                                              //   .xxl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
                                                               //   buildErrorDialog(context, "", "please enter the lower value than available stock.");
@@ -2750,31 +2790,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.mumbaiStock?[
+                                                  0]
+                                                      .s3xl)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s3xl)
-                                                            .toString())
-                                                            ? int.parse((displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s3xl)
-                                                            .toString()) >=
-                                                            0
-                                                            ? (displayallcolor
-                                                            ?.mumbaiStock
-                                                            ?.length !=
-                                                            0)
-                                                            ? (displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s3xl ??
-                                                            '')
-                                                            : ""
-                                                            : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //     ?.mumbaiStock?[
+                                                        // 0]
+                                                        //     .s3xl)
+                                                        //     .toString()) >=
+                                                        //     0
+                                                        //     ? (displayallcolor
+                                                        //     ?.mumbaiStock
+                                                        //     ?.length !=
+                                                        //     0)
+                                                        //     ? (displayallcolor
+                                                        //     ?.mumbaiStock?[
+                                                        // 0]
+                                                        //     .s3xl ??
+                                                        //     '')
+                                                        //     : ""
+                                                        //     : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2785,20 +2825,28 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                                                                                
 
-                                                          child: TextField(                                                                           readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                0]
-                                                                    .s3xl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.mumbaiStock?[0]
-                                                                .s3xl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                          child: TextField(
+
+
+
+                                                                 readOnly:
+
+                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.mumbaiStock?[
+                                                              //   0]
+                                                              //       .s3xl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.mumbaiStock?[0]
+                                                              //   .s3xl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))) {
@@ -2824,31 +2872,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.tripurStock?[
+                                                  0]
+                                                      .s3xl)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s3xl)
-                                                            .toString())
-                                                            ? int.parse((displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s3xl)
-                                                            .toString()) >=
-                                                            0
-                                                            ? (displayallcolor
-                                                            ?.tripurStock
-                                                            ?.length !=
-                                                            0)
-                                                            ? (displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s3xl ??
-                                                            '')
-                                                            : ""
-                                                            : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //     ?.tripurStock?[
+                                                        // 0]
+                                                        //     .s3xl)
+                                                        //     .toString()) >=
+                                                        //     0
+                                                        //     ? (displayallcolor
+                                                        //     ?.tripurStock
+                                                        //     ?.length !=
+                                                        //     0)
+                                                        //     ? (displayallcolor
+                                                        //     ?.tripurStock?[
+                                                        // 0]
+                                                        //     .s3xl ??
+                                                        //     '')
+                                                        //     : ""
+                                                        //     : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2859,20 +2907,24 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                          
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .s3xl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .s3xl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+
+
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.tripurStock?[
+                                                              //   0]
+                                                              //       .s3xl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.tripurStock?[0]
+                                                              //   .s3xl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
@@ -2948,31 +3000,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.mumbaiStock?[
+                                                  0]
+                                                      .s4xl)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s4xl)
-                                                            .toString())
-                                                            ? int.parse((displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s4xl)
-                                                            .toString()) >=
-                                                            0
-                                                            ? (displayallcolor
-                                                            ?.mumbaiStock
-                                                            ?.length !=
-                                                            0)
-                                                            ? (displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s4xl ??
-                                                            '')
-                                                            : ""
-                                                            : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //     ?.mumbaiStock?[
+                                                        // 0]
+                                                        //     .s4xl)
+                                                        //     .toString()) >=
+                                                        //     0
+                                                        //     ? (displayallcolor
+                                                        //     ?.mumbaiStock
+                                                        //     ?.length !=
+                                                        //     0)
+                                                        //     ? (displayallcolor
+                                                        //     ?.mumbaiStock?[
+                                                        // 0]
+                                                        //     .s4xl ??
+                                                        //     '')
+                                                        //     : ""
+                                                        //     : "0"
+                                                        //     : "0",
                                                         style:textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -2983,20 +3035,24 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                          
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                0]
-                                                                    .s4xl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.mumbaiStock?[0]
-                                                                .s4xl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly: displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+
+
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.mumbaiStock?[
+                                                              //   0]
+                                                              //       .s4xl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.mumbaiStock?[0]
+                                                              //   .s4xl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
@@ -3020,31 +3076,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.tripurStock?[
+                                                  0]
+                                                      .s4xl)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s4xl)
-                                                            .toString())
-                                                            ? int.parse((displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s4xl)
-                                                            .toString()) >=
-                                                            0
-                                                            ? (displayallcolor
-                                                            ?.tripurStock
-                                                            ?.length !=
-                                                            0)
-                                                            ? (displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s4xl ??
-                                                            '')
-                                                            : ""
-                                                            : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //     ?.tripurStock?[
+                                                        // 0]
+                                                        //     .s4xl)
+                                                        //     .toString()) >=
+                                                        //     0
+                                                        //     ? (displayallcolor
+                                                        //     ?.tripurStock
+                                                        //     ?.length !=
+                                                        //     0)
+                                                        //     ? (displayallcolor
+                                                        //     ?.tripurStock?[
+                                                        // 0]
+                                                        //     .s4xl ??
+                                                        //     '')
+                                                        //     : ""
+                                                        //     : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -3055,20 +3111,24 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                         
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .s4xl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .s4xl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.tripurStock?[
+                                                              //   0]
+                                                              //       .s4xl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.tripurStock?[0]
+                                                              //   .s4xl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){
@@ -3148,31 +3208,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.mumbaiStock?[
+                                                  0]
+                                                      .s5xl)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s5xl)
-                                                            .toString())
-                                                            ? int.parse((displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s5xl)
-                                                            .toString()) >=
-                                                            0
-                                                            ? (displayallcolor
-                                                            ?.mumbaiStock
-                                                            ?.length !=
-                                                            0)
-                                                            ? (displayallcolor
-                                                            ?.mumbaiStock?[
-                                                        0]
-                                                            .s5xl ??
-                                                            '')
-                                                            : ""
-                                                            : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //     ?.mumbaiStock?[
+                                                        // 0]
+                                                        //     .s5xl)
+                                                        //     .toString()) >=
+                                                        //     0
+                                                        //     ? (displayallcolor
+                                                        //     ?.mumbaiStock
+                                                        //     ?.length !=
+                                                        //     0)
+                                                        //     ? (displayallcolor
+                                                        //     ?.mumbaiStock?[
+                                                        // 0]
+                                                        //     .s5xl ??
+                                                        //     '')
+                                                        //     : ""
+                                                        //     : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -3183,20 +3243,25 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                        
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.mumbaiStock?[
-                                                                0]
-                                                                    .s5xl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.mumbaiStock?[0]
-                                                                .s5xl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+
+                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.mumbaiStock?[
+                                                              //   0]
+                                                              //       .s5xl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.mumbaiStock?[0]
+                                                              //   .s5xl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.mumbaiStock?[0].xs).toString()))){
@@ -3220,31 +3285,31 @@ class _product_2State extends State<product_2> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.center,
                                                     children: [
-                                                      Text(
+                                                      Text((displayallcolor
+                                                      ?.tripurStock?[
+                                                  0]
+                                                      .s5xl)
+                                                      .toString(),
                                                         // '432',
-                                                        regex.hasMatch((displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s5xl)
-                                                            .toString())
-                                                            ? int.parse((displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s5xl)
-                                                            .toString()) >=
-                                                            0
-                                                            ? (displayallcolor
-                                                            ?.tripurStock
-                                                            ?.length !=
-                                                            0)
-                                                            ? (displayallcolor
-                                                            ?.tripurStock?[
-                                                        0]
-                                                            .s5xl ??
-                                                            '')
-                                                            : ""
-                                                            : "0"
-                                                            : "0",
+                                                        // regex.hasMatch()
+                                                        //     ? int.parse((displayallcolor
+                                                        //     ?.tripurStock?[
+                                                        // 0]
+                                                        //     .s5xl)
+                                                        //     .toString()) >=
+                                                        //     0
+                                                        //     ? (displayallcolor
+                                                        //     ?.tripurStock
+                                                        //     ?.length !=
+                                                        //     0)
+                                                        //     ? (displayallcolor
+                                                        //     ?.tripurStock?[
+                                                        // 0]
+                                                        //     .s5xl ??
+                                                        //     '')
+                                                        //     : ""
+                                                        //     : "0"
+                                                        //     : "0",
                                                         style: textstyle3,
                                                       ),
                                                       SizedBox(height: 1.h),
@@ -3255,20 +3320,23 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                          
                                                           child: TextField(
-                                                              readOnly: regex.hasMatch(
-                                                                (displayallcolor
-                                                                    ?.tripurStock?[
-                                                                0]
-                                                                    .s5xl)
-                                                                    .toString())
-                                                                ? (int.parse((displayallcolor
-                                                                ?.tripurStock?[0]
-                                                                .s5xl)
-                                                                .toString()) >
-                                                                0)
-                                                                ? false
-                                                                : true
-                                                                : true,
+                                                              readOnly:
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+
+                                                              // regex.hasMatch(
+                                                              //   (displayallcolor
+                                                              //       ?.tripurStock?[
+                                                              //   0]
+                                                              //       .s5xl)
+                                                              //       .toString())
+                                                              //   ? (int.parse((displayallcolor
+                                                              //   ?.tripurStock?[0]
+                                                              //   .s5xl)
+                                                              //   .toString()) >
+                                                              //   0)
+                                                              //   ? false
+                                                              //   : true
+                                                              //   : true,
                                                             onChanged: (value) {
 
                                                               // if(int.parse(value) > (int.parse((displayallcolor?.tripurStock?[0].xs).toString()))){

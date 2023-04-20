@@ -29,7 +29,11 @@ class order_detail_c extends StatefulWidget {
   String? total;
   int? id;
   int? val;
-   order_detail_c({Key? key,this.id,this.oreder,this.total,this.val}) : super(key: key);
+  String? status;
+  String? o_status;
+  String? status2;
+   order_detail_c({Key? key,this.id,this.oreder,this.total,this.val, this.status, this.o_status, this
+   .status2}) : super(key: key);
 
   @override
   State<order_detail_c> createState() => _order_detail_cState();
@@ -78,7 +82,7 @@ class _order_detail_cState extends State<order_detail_c> {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 1,
-            height: 11.h,
+            height: 11.5.h,
             child: Column(
               children: [
                 SizedBox(height: 4.h),
@@ -242,20 +246,90 @@ class _order_detail_cState extends State<order_detail_c> {
                                     fontSize: 2.h,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xff333389))),
-                            Container(
-                              alignment: Alignment.center,
-                              height: 3.4.h,
-                              width: 18.w,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Color(0xfffaede7)),
-                              child: Text(
-                                'Placed',
-                                style: TextStyle(
-                                    color: Color(0xfff98346),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
+    widget.val ==0?
+    Container(
+      alignment: Alignment.center,
+      height: 3.4.h,
+      width: 27.w,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: (widget.status ==
+              "Blocked")
+              ? Color(0xfffaede7)
+              : (widget.status  ==
+              "Placed")
+              ? Color(0xffe1f5e2):(widget.status  ==
+              "Confirmed")?
+          Color(0xffe1f5e2):(widget.status  ==
+              "Confirmed") ?Color(0xfffaede7)
+              : Color(0xfffae7e7)),
+      child: Text(
+
+        widget.status.toString(),
+        style: TextStyle(
+            color: (widget.status ==
+                "Blocked")
+                ? Color(0xfff98b54)
+                : (widget.status ==
+                "Placed")
+                ? Color(0xff48d34d):(widget.status ==
+                "Confirmed")
+                ? Color(0xff48d34d):(widget.status ==
+                "3")? Color(0xfff98b54):
+            Color(0xfff97070),
+            fontWeight: FontWeight.bold
+        ),
+      ),
+    ) :  Container(
+      alignment: Alignment.center,
+      height: 3.4.h,
+      width: 27.w,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: (widget.o_status ==
+              "Blocked")
+              ? Color(0xfffaede7)
+              : (widget.o_status  ==
+              "Placed")
+              ? Color(0xffe1f5e2):(widget.o_status  ==
+              "Confirmed")?
+          Color(0xffe1f5e2):(widget.o_status  ==
+              "Confirmed") ?Color(0xfffaede7)
+              : Color(0xfffae7e7)),
+      child: Text(
+
+        widget.o_status.toString(),
+        style: TextStyle(
+            color: (widget.o_status ==
+                "Blocked")
+                ? Color(0xfff98b54)
+                : (widget.o_status ==
+                "Placed")
+                ? Color(0xff48d34d):(widget.o_status ==
+                "Confirmed")
+                ? Color(0xff48d34d):(widget.o_status ==
+                "3")? Color(0xfff98b54):
+            Color(0xfff97070),
+            fontWeight: FontWeight.bold
+        ),
+      ),
+    )
+
+
+                            // Container(
+                            //   alignment: Alignment.center,
+                            //   height: 3.4.h,
+                            //   width: 18.w,
+                            //   decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(15),
+                            //       color: Color(0xfffaede7)),
+                            //   child: Text(
+                            //     'Placed',
+                            //     style: TextStyle(
+                            //         color: Color(0xfff98346),
+                            //         fontWeight: FontWeight.bold),
+                            //   ),
+                            // )
                           ],
                         ),
                       ),
@@ -375,6 +449,8 @@ class _order_detail_cState extends State<order_detail_c> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
+
+
                                           orderdetailblockeditapi();
 
                                         },
@@ -1134,7 +1210,7 @@ class _order_detail_cState extends State<order_detail_c> {
             setState(() {
             });
             widget.val ==0?
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>orderblockdisplay(id: widget.oreder.toString(),))) : Navigator.of(context).push(MaterialPageRoute(builder: (context)=>order_id(id: widget.oreder.toString(),)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>orderblockdisplay(id: widget.oreder.toString(), status: widget.status.toString(),))) : Navigator.of(context).push(MaterialPageRoute(builder: (context)=>order_id(id: widget.oreder.toString(), o_status: widget.o_status.toString())));
 
           } else {
             buildErrorDialog(context, "", "your edited stock is not available.");

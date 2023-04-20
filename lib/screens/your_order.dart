@@ -22,7 +22,8 @@ import 'package:badges/badges.dart' as badges;
 
 
 class your_order extends StatefulWidget {
-  const your_order({Key? key}) : super(key: key);
+  String? o_status;
+   your_order({Key? key, this.o_status}) : super(key: key);
 
   @override
   State<your_order> createState() => _your_orderState();
@@ -49,6 +50,8 @@ cartcount? count;
     super.initState();
     viewapi();
     viewcount();
+
+    print("£££££££££££££" + widget.o_status.toString());
   }
 
   @override
@@ -225,8 +228,17 @@ cartcount? count;
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => order_id(id:view?.data?[index].ordNo,
+                                  MaterialPageRoute(builder: (context) => order_id(
+                                    id:view?.data?[index].ordNo,
                                     index1:index,
+                                    o_status:  (view?.data?[index].status == "1")
+                                        ? "Blocked"
+                                        : (view?.data?[index].status == "2")
+                                        ? "Placed":(view?.data?[index].status == "3")
+                                        ? "Confirmed":(view?.data?[index].status == "5")?"unblock order"
+                                        : "Cancel",
+
+
                                   )));
                             },
                             child: Container(
@@ -306,10 +318,10 @@ cartcount? count;
                                           ],
                                         ),
                                         Container(
-                                          padding: EdgeInsets.all(0.6.h),
+                                          padding: EdgeInsets.symmetric(horizontal: 2.w,vertical:1.w),
                                           alignment: Alignment.center,
-                                          height: 3.4.h,
-                                          width: 21.w,
+                                          // height: 3.4.h,
+                                          // width: 21.w,
                                           decoration: BoxDecoration(
                                               borderRadius:
                                               BorderRadius.circular(15),
@@ -319,10 +331,10 @@ cartcount? count;
                                                   : (view?.data?[index].status ==
                                                   "2")
                                                   ? Color(0xffe1f5e2):(view?.data?[index].status ==
-                                                  "3")
-                                                  ? Color(0xffe1f5e2)
+                                                  "3")?
+                                                   Color(0xffe1f5e2):(view?.data?[index].status ==
+                                                  "5") ?Color(0xfffaede7)
                                                   : Color(0xfffae7e7)),
-
                                           child: Text(
                                             (view?.data?[index].status == "1")
                                                 ? "Blocked"
@@ -339,7 +351,8 @@ cartcount? count;
                                                     "2")
                                                     ? Color(0xff48d34d):(view?.data?[index].status ==
                                                     "3")
-                                                    ? Color(0xff48d34d):
+                                                    ? Color(0xff48d34d):(view?.data?[index].status ==
+                                                    "3")? Color(0xfff98b54):
                                                     Color(0xfff97070),
                                                 fontWeight: FontWeight.bold),
                                           ),

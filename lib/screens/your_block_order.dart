@@ -29,7 +29,8 @@ import 'package:badges/badges.dart' as badges;
 
 
 class your_block_order extends StatefulWidget {
-  const your_block_order({Key? key}) : super(key: key);
+  String? status;
+   your_block_order({Key? key, this.status}) : super(key: key);
 
   @override
   State<your_block_order> createState() => _your_block_orderState();
@@ -240,7 +241,14 @@ bool isLoading=true;
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => orderblockdisplay(
-                                            id:blockview2?.data?[index].ordNo
+                                            id:blockview2?.data?[index].ordNo,
+                                          status: (blockview2?.data?[index].status == "1")
+                                              ? "Blocked"
+                                              : (blockview2?.data?[index].status == "2")
+                                              ? "Placed":(blockview2?.data?[index].status == "3")
+                                              ? "Confirmed":(blockview2?.data?[index].status == "5")?"unblocked order"
+                                              : "Cancel",
+
                                         )));
                               },
                               child: Container(
@@ -327,6 +335,47 @@ bool isLoading=true;
                                                   ),
                                                 ],
                                               ),
+                                                SizedBox(height: 1.h,),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 2.w,vertical:1.w),
+                                                alignment: Alignment.center,
+                                                // height: 3.4.h,
+                                                // width: 21.w,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                    BorderRadius.circular(15),
+                                                    color: (blockview2?.data?[index].status ==
+                                                        "1")
+                                                        ? Color(0xfffaede7)
+                                                        : (blockview2?.data?[index].status ==
+                                                        "2")
+                                                        ? Color(0xffe1f5e2):(blockview2?.data?[index].status ==
+                                                        "3")?
+                                                    Color(0xffe1f5e2):(blockview2?.data?[index].status ==
+                                                        "5") ?Color(0xfffaede7)
+                                                        : Color(0xfffae7e7)),
+                                                child: Text(
+                                                  (blockview2?.data?[index].status == "1")
+                                                      ? "Blocked"
+                                                      : (blockview2?.data?[index].status == "2")
+                                                      ? "Placed":(blockview2?.data?[index].status == "3")
+                                                      ? "Confirmed":(blockview2?.data?[index].status == "5")?"unblocked order"
+                                                      : "Confirmed",
+                                                  // 'Placed',
+                                                  style: TextStyle(
+                                                      color: (blockview2?.data?[index].status ==
+                                                          "1")
+                                                          ? Color(0xfff98b54)
+                                                          : (blockview2?.data?[index].status ==
+                                                          "2")
+                                                          ? Color(0xff48d34d):(blockview2?.data?[index].status ==
+                                                          "3")
+                                                          ? Color(0xff48d34d):(blockview2?.data?[index].status ==
+                                                          "3")? Color(0xfff98b54):
+                                                      Color(0xfff97070),
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                              )
 
                                             ],
                                           ),

@@ -35,6 +35,7 @@ buildErrorDialog(BuildContext context,String title, String contant,
                 decorationColor: Colors.black,
                 fontFamily: 'poppins')),
       ),
+
     ),
     onTap: () {
       // if (callback == null) {
@@ -56,7 +57,7 @@ buildErrorDialog(BuildContext context,String title, String contant,
           backgroundColor: Colors.transparent,
           child: Container(
             width: 73.w,
-            height: (title == "")?20.h :22.h,
+            height: (title == "")?25.h :28.h,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -1342,5 +1343,206 @@ buildErrorDialog2(BuildContext context,String title, String contant) {
 //   });
 // }
 
+summaryconfirm(BuildContext context,String title, String contant,int cart,
+    {VoidCallback? callback, String? buttonname}) {
+  Widget okButton = GestureDetector(
+    child: Container(
+      height: 40.0,
+      width: 30.w,
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(20.0),
+        color: Color(0xff333389),
+      ),
+      child: Center(
+        child: Text(buttonname ?? 'OK',
+            textAlign: TextAlign.center,
+            style:  TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                decorationColor: Colors.black,
+                fontFamily: 'poppins')),
+      ),
+    ),
+    onTap: () {
+      Navigator.of(context).pop();      // if (callback == null) {
+      // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>summary(cart:cart)));
+      // } else {
 
+      // }
+    },
+  );
+
+  if (Platform.isAndroid) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: 73.w,
+            height: (title == "")?18.5.h :22.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    Row(
+                      children: [
+                        // Icon(Icons.edit,color:Colors.white ,),
+                        Text(
+                          "",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins"),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.black,
+                        ))
+                  ],
+                ),
+                (title != "")?Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:3.w),
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style:  TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            decorationColor: Colors.black,
+                            fontFamily: 'poppins'),
+                      ),
+                    ),
+                    SizedBox(height: 1.h),
+                  ],
+                ):Container(),
+
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal:3.w),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 1.h),
+                      Text(
+                        contant,
+                        textAlign: TextAlign.center,
+                        style:  TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            decorationColor: Colors.black,
+                            fontFamily: 'poppins'),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                okButton,
+                SizedBox(height: 2.h,),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  if (Platform.isIOS) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: 70.w,
+            height: (title == "")?15.5.h :19.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 3.h,),
+                (title != "")?Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal:3.w),
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style:  TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            decorationColor: Colors.black,
+                            fontFamily: 'poppins'),
+                      ),
+                    ),
+                    SizedBox(height: 1.h),
+                  ],
+                ):Container(),
+
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal:3.w),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 1.h),
+                      Text(
+                        contant,
+                        textAlign: TextAlign.center,
+                        style:  TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            decorationColor: Colors.black,
+                            fontFamily: 'poppins'),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Divider(
+                  height: 1.0,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 2.h),
+                okButton,
+                SizedBox(height: 2.h,),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+  }
+  // show the dialog
+}
 

@@ -32,8 +32,9 @@ import 'package:badges/badges.dart' as badges;
 class order_id extends StatefulWidget {
   String? id;
   int? index1;
+  String? o_status;
    order_id({
-    Key? key,this.id,this.index1
+    Key? key,this.id,this.index1,this.o_status
   }) : super(key: key);
 
   @override
@@ -61,6 +62,7 @@ class _order_idState extends State<order_id> {
     super.initState();
     orederdetailapiblock();
     viewcount();
+    print("£££££££££££££" + widget.o_status.toString());
   }
 
   int? total1 = 0;
@@ -278,10 +280,45 @@ class _order_idState extends State<order_id> {
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xff333389)
                                   )),
+
+                              Container(
+                                alignment: Alignment.center,
+                                height: 3.4.h,
+                                width: 27.w,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: (widget.o_status ==
+                                        "Blocked")
+                                        ? Color(0xfffaede7)
+                                        : (widget.o_status ==
+                                        "Placed")
+                                        ? Color(0xffe1f5e2):(widget.o_status ==
+                                        "Confirmed")?
+                                    Color(0xffe1f5e2):(widget.o_status ==
+                                        "unblock order") ?Color(0xfffaede7)
+                                        : Color(0xfffae7e7)),
+                                child: Text(
+
+                                  widget.o_status.toString(),
+                                  style: TextStyle(
+                                      color: (widget.o_status ==
+                                          "Blocked")
+                                          ? Color(0xfff98b54)
+                                          : (widget.o_status ==
+                                          "Placed")
+                                          ? Color(0xff48d34d):(widget.o_status ==
+                                          "Confirmed")
+                                          ? Color(0xff48d34d):(widget.o_status ==
+                                          "unblock order")? Color(0xfff98b54):
+                                      Color(0xfff97070),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
                             ],
                           ),
                         ),
                       ),
+
                     ),
                     Container(
                       height: 50.h,
@@ -435,37 +472,38 @@ class _order_idState extends State<order_id> {
                                         ],
                                       ),
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    order_detail_c(
-                                                      val: 1,
-                                                      oreder: widget.id
-                                                          .toString(),
-                                                      id: index,
-                                                    )
-                                            )
-                                        );
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        height: 3.5.h,
-                                        width: 20.5.w,
-                                        child: Text(
-                                          'Edit',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 1.5.h),
-                                        ),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xff333389),
-                                            borderRadius:
-                                            BorderRadius.circular(15)),
+                                  widget.o_status!= "Cancel"?GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  order_detail_c(
+                                                    val: 1,
+                                                    oreder: widget.id
+                                                        .toString(),
+                                                    id: index,
+                                                    o_status: widget.o_status.toString(),
+                                                  )
+                                          )
+                                      );
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: 3.5.h,
+                                      width: 20.5.w,
+                                      child: Text(
+                                        'Edit',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 1.5.h),
                                       ),
-                                    )
+                                      decoration: BoxDecoration(
+                                          color: Color(0xff333389),
+                                          borderRadius:
+                                          BorderRadius.circular(15)),
+                                    ),
+                                  ): Container()
                                   ],
                                 ),
                               ),
@@ -1109,26 +1147,29 @@ class _order_idState extends State<order_id> {
                         //     ),
                         //   ),
                         // ),
-                        GestureDetector(
-                          onTap: () {
-                            navDialog(this.context, "", "Are You Sure Cancel This  order");
-                            // Navigator.push(context,
-                            //     MaterialPageRoute(builder: (context) => products_1()));
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Color(0xff333389),
-                            ),
-                            height: 6.h,
-                            width: 40.w,
-                            child: Text(
-                              'Cancel Request',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+
+                        widget.o_status != "Cancel" ? GestureDetector(
+                        onTap: () {
+            navDialog(this.context, "", "Are You Sure Cancel This  order");
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => products_1()));
+            },
+              child:
+              Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Color(0xff333389),
+                ),
+                height: 6.h,
+                width: 40.w,
+                child: Text(
+                  'Cancel Request',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ): Container()
+
                       ],
                     ),
                     SizedBox(height: 1.h),
@@ -2005,7 +2046,7 @@ class _order_idState extends State<order_id> {
       {VoidCallback? callback, String? buttonname}) {
     Widget okButton = GestureDetector(
       child: Container(
-        height: 40.0,
+        height: 35.0,
         width: 30.w,
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
@@ -2026,8 +2067,8 @@ class _order_idState extends State<order_id> {
       onTap: () {
         cancelrequest();
         // if (callback == null) {
-        Navigator.pop(context);
-        Navigator.pop(context);
+        // Navigator.pop(context);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>your_order()));
         // } else {
 
         // }
@@ -2045,7 +2086,7 @@ class _order_idState extends State<order_id> {
             backgroundColor: Colors.transparent,
             child: Container(
               width: 73.w,
-              height: (title == "")?20.h :22.h,
+              height: (title == "")?25.h :50.h,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),

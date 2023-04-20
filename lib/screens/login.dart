@@ -110,27 +110,29 @@ class _loginState extends State<login> {
                       height: MediaQuery.of(context).size.height * 0.08,
                       child: TextFormField(
                         validator: (value) {
-                          String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
-                              "\\@" +
-                              "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                              "(" +
-                              "\\." +
-                              "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                              ")+";
-                          //Convert string p to a RegE  x
-                          RegExp regExp = RegExp(p);
+                          // String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
+                          //     "\\@" +
+                          //     "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                          //     "(" +
+                          //     "\\." +
+                          //     "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                          //     ")+";
+                          // //Convert string p to a RegE  x
+                          // RegExp regExp = RegExp(p);
 
                           if (value!.isEmpty) {
-                            return 'Please enter Your Email';
-                          } else {
-                            //If email address matches pattern
-                            if (regExp.hasMatch(value)) {
-                              return null;
-                            } else {
-                              //If it doesn't match
-                              return 'Email is not valid';
-                            }
+                            return 'Please enter Your Email/Password';
                           }
+                          return null;
+                          // else {
+                            //If email address matches pattern
+                            // if (regExp.hasMatch(value)) {
+                            //   return null;
+                            // } else {
+                            //   //If it doesn't match
+                            //   return 'Email is not valid';
+                            // }
+                          // }
                         },
                         controller: _email,
                         decoration: InputDecoration(
