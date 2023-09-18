@@ -148,9 +148,11 @@ class _product_2State extends State<product_2> {
     // TODO: implement initState
     super.initState();
     getdata();
+    gen = 0;
   }
 
   getdata() async {
+
     await viewcount();
     await displaycolor();
     // await imageapi();
@@ -1110,86 +1112,108 @@ class _product_2State extends State<product_2> {
                                             child: Divider(
                                                 color: Colors.grey.shade400),
                                           ),
-
-
                                           Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 2.h),
+                                            padding:EdgeInsets.symmetric(horizontal:2.w),
                                             child: Container(
-                                                height: 17.w,
-                                                width: 90.w,
-                                                child:GridView(
-                                                  physics: ScrollPhysics(),
-                                                  // padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                                                    scrollDirection: Axis.horizontal,
-                                                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                                        maxCrossAxisExtent: 200,
-                                                        childAspectRatio: 2.2 / 2,
-                                                        crossAxisSpacing: 0,
-                                                        mainAxisSpacing: 0
-                                                    ),
-                                                    children:List.generate(product2color?.data?.length ?? 0,(index){
-                                                      return GestureDetector(
-                                                                      onTap: () {
-                                                                        setState(() {
-                                                                          btn = index;
-                                                                          selectbtn = index;
-                                                                        });
-                                                                        selectimageapi();
-                                                                        displaycolor();
-                                                                      },
-                                                                      child: Stack(
-                                                                        children: [
-                                                                          CircleAvatar(
-                                                                            radius: 5.5.w,
-                                                                            backgroundImage: NetworkImage(product2color
-                                                                                ?.data?[
-                                                                            index]
-                                                                                .colorImage ??
-                                                                                ""),
+                                               
+                                                height: ((product2color?.data?.length  ?? 0 )< 7) ? 12.w : ((product2color?.data?.length  ?? 0 ) >6 && (product2color?.data?.length  ?? 0 )<13 )? 25.w : 40.w ,
+                                              width: 90.w,
+                                              margin: EdgeInsets.only(
+                                                  right: 3.w),
+                                              child: ListView.builder(
+                                                  padding:EdgeInsets.zero,
+                                                scrollDirection:Axis.horizontal,
+                                                itemCount: ((product2color?.data?.length) ?? 0) ~/18 +1 ,
+                                                itemBuilder: (context,index){
 
-                                                                          ),
-                                                                          (btn == index)
-                                                                              ? Container(
+                                                  return Container(
+                                                      height: ((product2color?.data?.length  ?? 0 )< 7) ? 12.w : ((product2color?.data?.length  ?? 0 ) >6 && (product2color?.data?.length  ?? 0 )<13 )? 25.w : 43.w ,
+                                                      width: 85.w,
+                                                      child:GridView.builder(
+                                                        physics: NeverScrollableScrollPhysics(),
+                                                        padding:  EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                        // scrollDirection: Axis.vertical,
+                                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 6,
+                                                            childAspectRatio: 3/ 2,
+                                                            crossAxisSpacing: 4.0,
+                                                            mainAxisSpacing:4.0
+                                                        ),
+                                                        itemCount: 18,
+                                                        itemBuilder: (context,index1) {
+                                                          return GestureDetector(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  btn = index1+index*18;
+                                                                  selectbtn = index1+index*18;
+                                                                });
+                                                                selectimageapi();
+                                                                displaycolor();
+                                                              },
+                                                              child:
+                                                              // Text((index1+index*18).toString())
+                                                              Stack(
+                                                                children: [
+                                                                  Container(
+                                                                    height:10.w,
+                                                                    width:10.w,
+                                                                    decoration:BoxDecoration(
+                                                                      // color:index1+index*18 < (product2color?.data?.length ?? 0 ) ? Colors.black :Colors.transparent,
+                                                                     border: Border.all(color:index1+index*18 < (product2color?.data?.length ?? 0 ) ? Colors.black :Colors.transparent,),
+                                                                      shape:BoxShape.circle
+                                                                    ),
+                                                                     child:
 
-                                                                            width: 11.w,
-                                                                            height: 11.w,
-                                                                                  decoration: BoxDecoration(
-                                                                                      color:Colors.transparent,
-                                                                                      shape: BoxShape
-                                                                                          .circle,
-                                                                                    ),
-                                                                                  child: Icon(
-                                                                                    Icons.check,
-                                                                                    color: Colors
-                                                                                        .white,
-                                                                                    size: 15.sp,
-                                                                                  ),
-                                                                                )
-                                                                              : Container()
-                                                                        ],
-                                                                      ));
-                                                    })
-                                                )
-                                                ),
+                                                                     CircleAvatar(
+                                                                      radius: 4.5.w,
+                                                                      backgroundImage:   index1+index*18 < (product2color?.data?.length ?? 0 ) ?
+                                                                      NetworkImage(
+                                                                          product2color
+                                                                          ?.data?[
+                                                                      index1+index*18]
+                                                                          .colorImage ??
+                                                                          "") : NetworkImage(""),
+                                                                      backgroundColor: Colors.transparent,
+
+                                                                    ),),
+
+                                                                  (btn == index1+index*18)
+                                                                      ? Container(
+
+                                                                    width: 10.w,
+                                                                    height: 10.w,
+                                                                    decoration: BoxDecoration(
+                                                                      color:Colors.transparent,
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                    ),
+                                                                    child: Icon(
+                                                                      Icons.check,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: 15.sp,
+                                                                    ),
+                                                                  )
+                                                                      : Container()
+                                                                ],
+                                                              )
+                                                          );
+                                                        },
+
+                                                      )
+                                                  );
+                                                },
+
+                                              ),
+                                            ),
                                           ),
-
                                           Padding(
-                                         padding:EdgeInsets.symmetric(horizontal:2.w),
+                                         padding:EdgeInsets.symmetric(horizontal:2.w,vertical:2.w),
                                             child: Container(
                                               alignment: Alignment.center,
-                                      
-                                       
-                                              // decoration: BoxDecoration(
-                                              //   // border: Border.all(color: Colors.grey.shade200,),
-                                              //   color: Color(0xff333389),
-                                              //   borderRadius: BorderRadius.all(
-                                              //     Radius.circular(10),
-                                              //   ),
-                                              // ),
                                               child: SmoothPageIndicator(
                                                 controller: controller,
-                                                count:((product2color?.data?.length ?? 1) ~/ 6) +1,
+                                                count:((product2color?.data?.length) ?? 0) ~/18 +1,
                                                 axisDirection: Axis.horizontal,
                                                 effect: SlideEffect(
                                                     spacing: 8.0,
@@ -1203,11 +1227,7 @@ class _product_2State extends State<product_2> {
                                               ),
                                             ),
                                           ),
-
-
                                           
-
-
                                           Padding(
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 2.h),
@@ -1235,12 +1255,13 @@ class _product_2State extends State<product_2> {
                                             child: Container(
                                               child: Row(
                                                 children: [
+                                                  (product2color?.checkGender == 1)?  
                                                   GestureDetector(
                                                     onTap: () {
                                                       setState(() {
-                                                        gen = 0;
+
                                                       });
-                                                      displaycolor();
+
                                                     },
                                                     child: Container(
                                                       padding:
@@ -1249,9 +1270,8 @@ class _product_2State extends State<product_2> {
                                                       width: 10.h,
                                                       height: 5.h,
                                                       decoration: BoxDecoration(
-                                                          color: (gen == 1)
-                                                              ? Colors.white
-                                                              : Color(0xfff333389),
+                                                          color:
+                                                               Color(0xfff333389),
                                                           borderRadius:
                                                               BorderRadius.circular(
                                                                   10),
@@ -1261,91 +1281,122 @@ class _product_2State extends State<product_2> {
                                                       child: Text(
                                                         'Men',
                                                         style: TextStyle(
-                                                            color: (gen == 1)
-                                                                ? Color(0xff333389)
-                                                                : Colors.white,
+                                                            color:
+                                                                 Colors.white,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 2.h),
                                                       ),
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 0.6.h,
-                                                  ),
+                                                  ):(product2color?.checkGender == 2) ?
                                                   GestureDetector(
                                                     onTap: () {
                                                       setState(() {
-                                                        gen = 1;
-                                                      
-                                                        _s.text = "";
-                                                        _ts.text = "";
-                                                        _totalms.text = "";
 
-                                                        _xs.text = "";
-                                                        _txs.text = "";
-                                                        _totalxs.text = "";
-
-                                                        _m.text = "";
-                                                        _tm.text = "";
-                                                        _totalmm.text = "";
-
-                                                        _l.text = "";
-                                                        _tl.text = "";
-                                                        _total_ll.text = "";
-
-                                                        _xl.text = "";
-                                                        _txl.text = "";
-                                                        _total_xl.text = "";
-
-                                                        _xxl.text = "";
-                                                        _txxl.text = "";
-                                                        _total_xxl.text = "";
-
-                                                        _3xl.text = "";
-                                                        _t3xl.text = "";
-                                                        _total_3xl.text = "";
-
-                                                        _4xl.text = "";
-                                                        _t4xl.text = "";
-                                                        _total_4xl.text = "";
-
-                                                        _5xl.text = "";
-                                                        _t5xl.text = "";
-                                                        _total_5xl.text = "";
                                                       });
-                                                      displaycolor();
+
                                                     },
                                                     child: Container(
                                                       padding:
-                                                          EdgeInsets.all(0.1.h),
+                                                      EdgeInsets.all(0.1.h),
                                                       alignment: Alignment.center,
-                                                      width: 14.h,
+                                                      width: 10.h,
                                                       height: 5.h,
                                                       decoration: BoxDecoration(
-                                                          color: (gen == 0)
-                                                              ? Colors.white
-                                                              : Color(0xfff333389),
-                                                          // color:_selectedColor,
-
+                                                          color:
+                                                               Color(0xfff333389),
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                  10),
+                                                          BorderRadius.circular(
+                                                              10),
                                                           border: Border.all(
                                                               color: Color(
                                                                   0xff333389))),
                                                       child: Text(
                                                         'Women',
                                                         style: TextStyle(
-                                                            color: (gen == 0)
-                                                                ? Color(0xff333389)
-                                                                : Colors.white,
+                                                            color:  Colors.white,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                             fontSize: 2.h),
                                                       ),
                                                     ),
-                                                  ),
+                                                  ):
+                                                  Row(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            gen = 0;
+                                                          });
+                                                          displaycolor();
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                          EdgeInsets.all(0.1.h),
+                                                          alignment: Alignment.center,
+                                                          width: 10.h,
+                                                          height: 5.h,
+                                                          decoration: BoxDecoration(
+                                                              color: (gen == 1)
+                                                                  ? Colors.white
+                                                                  : Color(0xfff333389),
+                                                              borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xff333389))),
+                                                          child: Text(
+                                                            'Men',
+                                                            style: TextStyle(
+                                                                color: (gen == 1)
+                                                                    ? Color(0xff333389)
+                                                                    : Colors.white,
+                                                                fontWeight:
+                                                                FontWeight.bold,
+                                                                fontSize: 2.h),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width:10.w),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            gen = 1;
+                                                          });
+                                                          displaycolor();
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                          EdgeInsets.all(0.1.h),
+                                                          alignment: Alignment.center,
+                                                          width: 10.h,
+                                                          height: 5.h,
+                                                          decoration: BoxDecoration(
+                                                              color: (gen == 0)
+                                                                  ? Colors.white
+                                                                  : Color(0xfff333389),
+                                                              borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10),
+                                                              border: Border.all(
+                                                                  color: Color(
+                                                                      0xff333389))),
+                                                          child: Text(
+                                                            'Women',
+                                                            style: TextStyle(
+                                                                color: (gen == 0)
+                                                                    ? Color(0xff333389)
+                                                                    : Colors.white,
+                                                                fontWeight:
+                                                                FontWeight.bold,
+                                                                fontSize: 2.h),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                
                                                 ],
                                               ),
                                             ),
@@ -1382,7 +1433,7 @@ class _product_2State extends State<product_2> {
                                                         Container(
                                                           width: 30.w,
                                                           child: Text(
-                                                            "S - XL :",
+                                                            "S - 3XL :",
                                                             style: TextStyle(
                                                               fontSize: 1.8.h,
                                                             ),
@@ -1395,7 +1446,7 @@ class _product_2State extends State<product_2> {
                                                         Container(
                                                           width: 30.w,
                                                           child: Text(
-                                                            " 2XL - 3XL :",
+                                                            " 4XL - 5XL :",
                                                             style: TextStyle(
                                                               fontSize: 1.8.h,
                                                             ),
@@ -1609,7 +1660,7 @@ class _product_2State extends State<product_2> {
                                                           width: 10.h,
                                                           height: 4.h,
                                                           child:TextField(
-                                                            readOnly:displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                            readOnly:displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
                                                             // regex.hasMatch(
                                                             //     (displayallcolor
                                                             //         ?.mumbaiStock?[
@@ -1679,7 +1730,7 @@ class _product_2State extends State<product_2> {
                                                           width: 10.h,
                                                           height: 4.h,
                                                           child: TextField(
-                                                             readOnly: displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                             readOnly: displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
                                                              // regex.hasMatch(
                                                              //    (displayallcolor
                                                              //        ?.tripurStock?[
@@ -1732,6 +1783,7 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                         
                                                           child: TextField(
+                                                              readOnly:true,
 
                                                             onChanged: (value) {
                                                               updateTotal(value);
@@ -1815,7 +1867,7 @@ class _product_2State extends State<product_2> {
                                                               updateTotal(value);
                                                             },
                                                             readOnly:
-                                                            displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                            displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
 
                                                                 // regex.hasMatch(
                                                                 //     (displayallcolor
@@ -1882,7 +1934,7 @@ class _product_2State extends State<product_2> {
                                                         
                                                           child: TextField(
                                                                   readOnly:
-                                                                  displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                                  displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
 
                                                                   // regex.hasMatch(
                                                                   // (displayallcolor
@@ -1934,6 +1986,7 @@ class _product_2State extends State<product_2> {
                                                           width: 10.h,
                                                           height: 4.h,
                                                           child: TextField(
+                                                              readOnly:true,
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
@@ -2013,7 +2066,7 @@ class _product_2State extends State<product_2> {
                                                        
                                                           child: TextField(
                                                             readOnly:
-                                                            displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                            displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
 
                                                             // regex.hasMatch(
                                                             //     (displayallcolor
@@ -2087,7 +2140,7 @@ class _product_2State extends State<product_2> {
                                                     
                                                           child: TextField(
                                                               readOnly:
-                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
 
                                                               // regex.hasMatch(
                                                               //   (displayallcolor
@@ -2138,6 +2191,7 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                     
                                                           child: TextField(
+                                                          readOnly:true,
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
@@ -2212,7 +2266,7 @@ class _product_2State extends State<product_2> {
                                                        
                                                           child: TextField(
                                                               readOnly:
-                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
 
                                                               // regex.hasMatch(
                                                               //   (displayallcolor
@@ -2287,7 +2341,7 @@ class _product_2State extends State<product_2> {
                                                         
                                                           child: TextField(
                                                               readOnly:
-                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
 
 // regex.hasMatch(
 //                                                                 (displayallcolor
@@ -2339,6 +2393,7 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                    
                                                           child: TextField(
+                                                              readOnly:true,
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
@@ -2418,7 +2473,7 @@ class _product_2State extends State<product_2> {
                                                          
                                                           child: TextField(
                                                               readOnly:
-                                                                  displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                                  displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
 
                                                               // regex.hasMatch(
                                                               //   (displayallcolor
@@ -2493,7 +2548,7 @@ class _product_2State extends State<product_2> {
                                                        
                                                           child: TextField(
                                                             readOnly:
-                                                                displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                                displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
 
 
                                                               // regex.hasMatch(
@@ -2545,6 +2600,7 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                        
                                                           child: TextField(
+                                                              readOnly:true,
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
@@ -2618,7 +2674,7 @@ class _product_2State extends State<product_2> {
                                                 
                                                           child: TextField(
                                                               readOnly:
-                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
 
 
 
@@ -2695,7 +2751,7 @@ class _product_2State extends State<product_2> {
                                                           child: TextField(
                                                               readOnly:
 
-                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
 
                                                               // regex.hasMatch(
                                                               //   (displayallcolor
@@ -2747,6 +2803,7 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                          
                                                           child: TextField(
+                                                              readOnly:true,
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
@@ -2831,7 +2888,7 @@ class _product_2State extends State<product_2> {
 
                                                                  readOnly:
 
-                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
 
                                                               // regex.hasMatch(
                                                               //   (displayallcolor
@@ -2910,7 +2967,7 @@ class _product_2State extends State<product_2> {
                                                               readOnly:
 
 
-                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
                                                               // regex.hasMatch(
                                                               //   (displayallcolor
                                                               //       ?.tripurStock?[
@@ -2961,6 +3018,7 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                        
                                                           child: TextField(
+                                                              readOnly:true,
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
@@ -3035,7 +3093,7 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                          
                                                           child: TextField(
-                                                              readOnly: displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                              readOnly: displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
 
 
 
@@ -3113,7 +3171,7 @@ class _product_2State extends State<product_2> {
                                                           child: TextField(
                                                               readOnly:
 
-                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
 
                                                               // regex.hasMatch(
                                                               //   (displayallcolor
@@ -3164,6 +3222,7 @@ class _product_2State extends State<product_2> {
                                                           width: 10.h,
                                                           height: 4.h,
                                                           child: TextField(
+                                                              readOnly:true,
 
                                                             onChanged: (value) {
                                                               updateTotal(value);
@@ -3245,7 +3304,7 @@ class _product_2State extends State<product_2> {
                                                           child: TextField(
                                                               readOnly:
 
-                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? false: true ,
+                                                              displayallcolor?.mumbaiStock?[0].mApdId== "0" && displayallcolor?.mumbaiStock?[0].mApId== "0"? true: false ,
 
 
                                                               // regex.hasMatch(
@@ -3321,7 +3380,7 @@ class _product_2State extends State<product_2> {
                                                          
                                                           child: TextField(
                                                               readOnly:
-                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? false: true ,
+                                                              displayallcolor?.tripurStock?[0].tApdId== "0" && displayallcolor?.tripurStock?[0].tApId== "0"? true: false ,
 
                                                               // regex.hasMatch(
                                                               //   (displayallcolor
@@ -3373,6 +3432,7 @@ class _product_2State extends State<product_2> {
                                                           height: 4.h,
                                                       
                                                           child: TextField(
+                                                              readOnly:true,
                                                             onChanged: (value) {
                                                               updateTotal(value);
                                                             },
@@ -3409,7 +3469,7 @@ class _product_2State extends State<product_2> {
                                                           title: Column(
                                                         children: [
                                                           Text(
-                                                            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                                                            displayallcolor?.sizeChart?[0].Sizechartdesc.toString() != "null" ? (displayallcolor?.sizeChart?[0].Sizechartdesc).toString():"No Description available.",
                                                             style: TextStyle(
                                                                 fontSize: 2.h,
                                                                 color: Colors
@@ -3447,6 +3507,7 @@ class _product_2State extends State<product_2> {
                                                           // SizedBox(height: 1.h),
                                                             SizedBox(height: 1.h),
                                                           Container(
+
                                                             height: 61.h,
                                                             alignment:
                                                                 Alignment.center,
@@ -3454,7 +3515,7 @@ class _product_2State extends State<product_2> {
                                                                         "null")
                                                                     ? Image.asset(
                                                                         "assets/default_product_image.png",
-                                                              fit: BoxFit.contain,
+                                                              fit: BoxFit.cover,
                                                               height:
                                                               60.h,
                                                               width: MediaQuery.of(
@@ -3951,6 +4012,7 @@ class _product_2State extends State<product_2> {
   colorapi() async {
     final Map<String, String> data = {};
     data['action'] = 'all_color_display';
+    data['product_name'] = widget.pronamenevigatior.toString();
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider().product2_color(data).then((Response response) async {
@@ -4015,7 +4077,7 @@ class _product_2State extends State<product_2> {
       final Map<String, String> data = {};
       data['action'] = 'color_select_display_all_data';
       data['product_name'] = widget.pronamenevigatior.toString();
-      data['gender_type'] = gen == 0 ? "MEN" : "WOMEN";
+      data['gender_type'] = product2color?.checkGender == 1 ?"MEN" : product2color?.checkGender == 2 ?"WOMEN" : (gen == 0) ? "MEN" : "WOMEN";
       data['color_name'] = product2color?.data?[selectbtn].colorName ?? '';
       data['d_id'] = (userData?.logindata?.dId).toString();
       print(data);

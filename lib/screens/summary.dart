@@ -48,6 +48,7 @@ class summary extends StatefulWidget {
   int? cart;
 
 
+
   summary({Key? key ,this.pronamenevigatior,
     this.coloridnevigator,
   this.gender,this.cart
@@ -57,6 +58,13 @@ class summary extends StatefulWidget {
   State<summary> createState() => _summaryState();
 }
 
+class counter {
+  String? name;
+String? count1;
+
+  counter(this.name, this.count1);
+}
+
 class _summaryState extends State<summary> {
 
   // Mumbai contriller
@@ -64,6 +72,8 @@ class _summaryState extends State<summary> {
   search? searchproperty;
   bool se_icon = false;
   double? tot = 0.0;
+  String? blockstatus;
+  String? viewstatus;
 
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -76,9 +86,10 @@ double? paymentv=0.0 ;
 
   int? cart=0;
   RegExp regex = RegExp(r'^\d+$');
-  List<String> tabs = ["Blocked", "Cart"];
   viewBlockProduct? blockView;
   ViewCart? viewaddtocart;
+
+
   confirmblockdata? confirm;
   double? grandtotal= 0.0;
   int? total1m=0;
@@ -101,7 +112,7 @@ double? paymentv=0.0 ;
   bool isLoading = true;
   double? gstf=0.0;
   cartcount? count;
-
+  List<counter> tabs = [];
   void initState() {
     // TODO: implement initState
 
@@ -109,8 +120,20 @@ double? paymentv=0.0 ;
     setState(() {
       sumindex = 0;
     });
-    sumindex == 0 ? viewBlockSummary() :viewcart();
-    viewcount();
+    getdata();
+
+
+
+  }
+  getdata()async{
+    sumindex == 0 ?await viewBlockSummary() :await viewcart();
+    await viewBlockSummary();
+    await viewcount();
+    await viewcart();
+    tabs = [
+      counter("Blocked", blockView?.count.toString()),
+      counter("cart", viewaddtocart?.addToCartNumber.toString()),
+    ];
   }
   Future<void> Cont() async {
     await Future.delayed(Duration(seconds: 1));
@@ -406,6 +429,7 @@ double? paymentv=0.0 ;
                                  setState((){
                                    sumindex = index;
                                  });
+                                 print(tabs[index].count1);
                                  sumindex ==0?  viewBlockSummary():viewcart();
                                },
                                child: Column(
@@ -427,7 +451,7 @@ double? paymentv=0.0 ;
 
                                      // padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 0.h),
                                      child: Text(
-                                       tabs[index],
+                                       tabs[index].name.toString()+ "  " + "("+  tabs[index].count1.toString() +")" ,
                                        style: TextStyle(
                                          fontFamily: "Poppins",
                                          fontWeight: FontWeight.bold,
@@ -541,8 +565,9 @@ double? paymentv=0.0 ;
                                                      fontSize: 2.h,
                                                      fontWeight: FontWeight.bold)),
                                            ),
-                                           SizedBox(
+                                           Container(
                                              width: 40.w,
+                                             alignment:Alignment.centerRight,
 
 
                                              child: Text( blockView?.dataProduct?[index].colorName ?? "N/A",
@@ -3018,8 +3043,6 @@ double? paymentv=0.0 ;
     // data['gender_type'] = widget.gender.toString();
     // data['color_name'] =  widget.coloridnevigator.toString();
     data['d_id'] = (userData?.logindata?.dId).toString();
-
-
     checkInternet().then((internet) async {
       if (internet) {
         Productprovider().viewcartapi(data).then((Response response) async {
@@ -3098,6 +3121,7 @@ double? paymentv=0.0 ;
               paymentv;
               gstfv;
               isLoading =false;
+              viewstatus = viewaddtocart?.addToCartNumber.toString();
             });
             if (kDebugMode) {
             }
@@ -3122,6 +3146,7 @@ double? paymentv=0.0 ;
       if (internet) {
         Productprovider().summaryBlockViewProvider(data).then((Response response) async {
           blockView = viewBlockProduct.fromJson(json.decode(response.body));
+
           if (response.statusCode == 200 &&
               blockView?.status == "success") {
             for(int index =0 ;index< (blockView?.dataProduct?.length ?? 0);index++){
@@ -3158,13 +3183,13 @@ double? paymentv=0.0 ;
               gtotal = grandtotal!+ gst!;
               gstfb = gst!+gstfb!;
               paymentb =paymentb! + grandtotal!;
-
             }
-
             setState(() {
               paymentb;
               gstfb;
               isLoading =false;
+              blockstatus = blockView?.count.toString();
+              print(blockstatus);
             });
             if (kDebugMode) {
             }
@@ -3194,11 +3219,13 @@ double? paymentv=0.0 ;
           confirm = confirmblockdata.fromJson(json.decode(response.body));
           if (response.statusCode == 200 &&
               confirm?.status == "successs") {
+
             // buildErrorDialog(context, "", "there is producu in cart");
         // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>your_block_order()));
-            viewaddtocart?.status == "fail" ?summaryconfirm(context, "", "There is product in cart") : "";
+            buildErrorDialog(context, "","Your blocked product is confirmed.");
+            viewBlockSummary();
 
-        setState(() {
+            setState(() {
           isLoading =false;
         });
 
@@ -3232,14 +3259,15 @@ double? paymentv=0.0 ;
       if (internet) {
         Productprovider().confirmaddtocartapi(data).then((Response response) async {
           confirm = confirmblockdata.fromJson(json.decode(response.body));
-          print(confirm?.status);
+
           if (response.statusCode == 200 &&
               confirm?.status == "successs") {
 
             setState(() {
               isLoading =false;
             });
-            blockView?.status != "fail"?   summaryconfirm1(context,"","There is product in block") : "";
+      buildErrorDialog(context,"", "Your product added to cart is confirmed.") ;
+            viewcart();
           } else {
             setState(() {
               isLoading =false;

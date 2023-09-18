@@ -204,13 +204,15 @@ class SizeChart {
   String? sizeChart;
   String? videoSpecification;
   String? catalogue;
+  String? Sizechartdesc;
 
-  SizeChart({this.sizeChart, this.videoSpecification, this.catalogue});
+  SizeChart({this.sizeChart, this.videoSpecification, this.catalogue,this.Sizechartdesc});
 
   SizeChart.fromJson(Map<String, dynamic> json) {
     sizeChart = json['size_chart'];
     videoSpecification = json['video_specification'];
     catalogue = json['catalogue'];
+    Sizechartdesc = json['size_chart_dec'];
   }
 
   Map<String, dynamic> toJson() {
@@ -218,6 +220,7 @@ class SizeChart {
     data['size_chart'] = this.sizeChart;
     data['video_specification'] = this.videoSpecification;
     data['catalogue'] = this.catalogue;
+    data['size_chart_dec'] = this.Sizechartdesc;
     return data;
   }
 }

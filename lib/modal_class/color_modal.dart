@@ -1,8 +1,9 @@
 class colorClass {
   String? status;
   List<Data>? data;
+  int? checkGender;
 
-  colorClass({this.status, this.data});
+  colorClass({this.status, this.data, this.checkGender});
 
   colorClass.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -12,6 +13,7 @@ class colorClass {
         data!.add(new Data.fromJson(v));
       });
     }
+    checkGender = json['check_gender'];
   }
 
   Map<String, dynamic> toJson() {
@@ -20,6 +22,7 @@ class colorClass {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
+    data['check_gender'] = this.checkGender;
     return data;
   }
 }

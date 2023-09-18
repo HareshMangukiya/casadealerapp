@@ -1,8 +1,9 @@
 class viewBlockProduct {
   String? status;
   List<DataProduct>? dataProduct;
+  int? count;
 
-  viewBlockProduct({this.status, this.dataProduct});
+  viewBlockProduct({this.status, this.dataProduct,this.count});
 
   viewBlockProduct.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -12,6 +13,7 @@ class viewBlockProduct {
         dataProduct!.add(new DataProduct.fromJson(v));
       });
     }
+    count = json['block_product_number'];
   }
 
   Map<String, dynamic> toJson() {
@@ -20,6 +22,7 @@ class viewBlockProduct {
     if (this.dataProduct != null) {
       data['data_product'] = this.dataProduct!.map((v) => v.toJson()).toList();
     }
+    data['block_product_number'] =this.count;
     return data;
   }
 }

@@ -453,6 +453,7 @@ class _registerState extends State<register> {
     data['mobile_no_two'] = _phone1.text.trim().toString();
     data['email_id'] = _email.text.trim().toString();
     data['password'] = _password.text.trim().toString();
+    data['address'] =  _companyname1.text.trim().toString();
 
     data['confirm_password'] = _password1.text.trim().toString();
 
