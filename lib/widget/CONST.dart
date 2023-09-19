@@ -35,7 +35,7 @@ catlog(value)async{
   var response =
       await http.get(
       Uri.parse(
-          ("https://www.africau.edu/images/default/sample.pdf")));
+          (value.toString())));
   String fileName =
       url
           .toString()
